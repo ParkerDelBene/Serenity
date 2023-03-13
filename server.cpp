@@ -63,10 +63,57 @@ int main(int argc, char const* argv[]){
             exit(EXIT_FAILURE);
         }
 
+        // Creating the Thread Handler
+
+        if(pthread_create( &thread_id, NULL, connection_handler, (void*) &new_socket) < 0){
+            perror("Thread creation faied");
+            return 1;
+        }
 
 
+    }
 
 
+    return 0;
+}
+
+
+/*
+    Function Name: connection handler
+    Author: Parker DelBene
+    Date: 03/13/2023
+    Description: This function is used to handle the interactions between the server and client.
+        The socket details are passed by value through a void* type. The client is able tosend a message that propogates to all other clients.
+
+*/
+void *connection_handler(void *socket_desc){
+
+    int sock = *(int*)socket_desc;
+    int read_size;
+    char* message, client_message[2000];
+
+    //Send a confirmation message to the client
+    message = "Hey, this is the Server speaking. Type me anything and I will repeat it!";
+    write(sock, message, strlen(message));
+
+    while((read_size = recv(sock, client_message, 2000, 0)) > 0){
+
+        // append null terminated string
+        client_message[read_size] = '\0';
+
+        write(sock, client_message, strlen(client_message));
+
+        //clear the memory buffer
+        memset(client_message, 0 , 2000);
+    }
+
+
+    if(read_size == 0){
+        puts("Client disconnected");
+        fflush(stdout);
+    }
+    else if(read_size == -1){
+        perror("recv failed");
     }
 
 
