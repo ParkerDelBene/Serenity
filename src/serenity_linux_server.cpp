@@ -55,6 +55,7 @@ int main(int argc, char const* argv[]){
         Main Server Loop:
 
     */
+    printf("Listening for Connections\n");
     while(true){
 
         // Accepting connections and checking for success
