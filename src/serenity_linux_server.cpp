@@ -66,7 +66,7 @@ int main(int argc, char const* argv[]){
         }
 
         // Creating the Thread Handler
-
+        printf("New Connection\n");
         if(pthread_create( &thread_id, NULL, connection_handler, (void*) &new_socket) < 0){
             perror("Thread creation faied");
             return 1;

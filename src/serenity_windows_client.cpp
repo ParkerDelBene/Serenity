@@ -57,6 +57,7 @@ int __cdecl main(int argc, char const* argv[]){
     /*
         Initialize Socket
     */
+    printf("Creating Socket\n");
     ConnectSocket = getSOCKET(argv);
 
     if(ConnectSocket == INVALID_SOCKET){
@@ -66,6 +67,7 @@ int __cdecl main(int argc, char const* argv[]){
     /*
         Spawning chat update thread
     */
+    printf("Creating Thread\n");
     hThread = CreateThread(
         NULL,
         0,
@@ -121,6 +123,7 @@ SOCKET getSOCKET(char const* argv[]){
     hints.ai_protocol = IPPROTO_TCP;
 
     // getting the result of getaddrinfo
+    printf("Getting Addr Info\n");
     iResult = getaddrinfo(argv[1],PORT,&hints,&result);
 
     if(iResult != 0){
@@ -133,6 +136,8 @@ SOCKET getSOCKET(char const* argv[]){
     ptr = result;
 
     // creating the socket
+    printf("Creating Socket\n");
+    
     ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 
 
@@ -145,9 +150,12 @@ SOCKET getSOCKET(char const* argv[]){
     }
 
     // connecting to server
+    printf("Connecting to server\n");
+    printf("Server IP: %s\n", argv[1]);
     iResult = connect(ConnectSocket, ptr->ai_addr, (int) ptr->ai_addrlen);
 
     //verifying connection
+    printf("Verifying Connection\n");
     if(iResult == SOCKET_ERROR){
         closesocket(ConnectSocket);
         ConnectSocket = INVALID_SOCKET;
