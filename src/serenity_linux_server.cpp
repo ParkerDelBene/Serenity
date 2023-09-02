@@ -103,7 +103,7 @@ void *connection_handler(void *socket_desc){
         // append null terminated string
         client_message[read_size] = '\0';
 
-        write(sock, client_message, strlen(client_message));
+        write(sock, client_message, strlen(read_size));
 
         //clear the memory buffer
         memset(client_message, 0 , 2000);
