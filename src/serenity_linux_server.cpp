@@ -85,7 +85,7 @@ int main(int argc, char const* argv[]){
     Author: Parker DelBene
     Date: 03/13/2023
     Description: This function is used to handle the interactions between the server and client.
-        The socket details are passed by value through a void* type. The client is able tosend a message that propogates to all other clients.
+        The socket details are passed by value through a void* type. The client is able to send a message that propogates to all other clients.
 
 */
 void *connection_handler(void *socket_desc){

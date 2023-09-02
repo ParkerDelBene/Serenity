@@ -8,6 +8,15 @@
 #include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <mfapi.h>
+#include <mfcaptureengine.h>
+#include <mfmediacapture.h>
+#include <mfobjects.h>
+#include <mfmp2dlna.h>
+#include <codecapi.h>
+#include <mfidl.h>
+#include <mftransform.h>
+
 
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
@@ -41,10 +50,6 @@ int __cdecl main(int argc, char const* argv[]){
         }
 /*----------------------------------------------------------------------------*/
 
-    
-    /*
-        Variables
-    */
     int iResult = 0;
     HANDLE hThread = nullptr;
     LPDWORD threadID = 0;
@@ -194,8 +199,45 @@ DWORD WINAPI updateChat(LPVOID param){
 
         if(result > 0){
             printf("%s\n", message);
+            memset(message,0,bufferLength);
         }
     }
 
     return 0;
+}
+
+HRESULT CreateAudioCaptureDevice(PCWSTR *pszEndPointID, IMFMediaSource **ppSource)
+{
+    *ppSource = NULL;
+    
+    IMFAttributes *pAttributes = NULL;
+    IMFMediaSource *pSource = NULL;
+
+    HRESULT hr = MFCreateAttributes(&pAttributes, 2);
+
+    // Set the device type to audio.
+    if (SUCCEEDED(hr))
+    {
+        hr = pAttributes->SetGUID(
+            MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE,
+            MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_AUDCAP_GUID
+            );
+    }
+
+    // Set the endpoint ID.
+    if (SUCCEEDED(hr))
+    {
+        hr = pAttributes->SetString(
+            MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_AUDCAP_ENDPOINT_ID,
+            (LPCWSTR)pszEndPointID
+            ); 
+    }
+
+    if (SUCCEEDED(hr))
+    {
+        hr = MFCreateDeviceSource(pAttributes, ppSource);
+    }
+
+    SafeRelease(&pAttributes);
+    return hr;    
 }
