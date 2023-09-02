@@ -9,7 +9,7 @@ build-client-linux:
 
 build-client-windows:
 
-g++ ./src/serenity_windows_client.cpp -o serenity.exe
+g++ -Wall ./src/serenity_windows_client.cpp -o serenity.exe -lWS2_32
 
 clean:
 

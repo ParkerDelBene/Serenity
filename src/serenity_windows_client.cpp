@@ -1,13 +1,45 @@
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <Windows.h>
+#define WIN32_LEAN_AND_MEAN
+#define WINVER 0x0A00
+#define _WIN32_WINNT 0x0A00
+
+
+#include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <stdlib.h>
 #include <stdio.h>
+
+#pragma comment (lib, "Ws2_32.lib")
+#pragma comment (lib, "Mswsock.lib")
+#pragma comment (lib, "AdvApi32.lib")
 
 #define PORT "8080"
 #define MAX_THREADS 3
+/*
+    Function Prototypes
+*/
+SOCKET getSOCKET(char const* argv[]);
+
+DWORD WINAPI updateChat(LPVOID param);
 
 
-int main(int argc, char const* argv[]){
+int __cdecl main(int argc, char const* argv[]){
+
+
+        //The winsocks initialization code...
+/*----------------------------------------------------------------------------*/
+    WSADATA wsaData;
+
+
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+        {
+                 //if WSAStartup returns anything but 0, there was an error...
+                 fprintf(stderr, "WSAStartup failed.\n");
+                 system("PAUSE");
+                 WSACleanup();
+                 exit(1);
+        }
+/*----------------------------------------------------------------------------*/
 
     
     /*
@@ -19,6 +51,8 @@ int main(int argc, char const* argv[]){
     SOCKET ConnectSocket = 0;
     const int bufferLength = 1024;
     char message[bufferLength];
+    
+
 
     /*
         Initialize Socket
@@ -26,7 +60,7 @@ int main(int argc, char const* argv[]){
     ConnectSocket = getSOCKET(argv);
 
     if(ConnectSocket == INVALID_SOCKET){
-        return 1;
+        ExitProcess(1);
     }
 
     /*
@@ -41,6 +75,13 @@ int main(int argc, char const* argv[]){
         threadID
 
     );
+
+    /*
+        Testing if thread was created
+    */
+    if(hThread == NULL){
+        ExitProcess(3);
+    }
 
     /*
         Main While loop for connection
@@ -85,7 +126,7 @@ SOCKET getSOCKET(char const* argv[]){
     if(iResult != 0){
         perror("getaddrinfo failed");
         WSACleanup();
-        return 1;
+        ExitProcess(1);
     }
 
     //getting the results from getaddrinfo
@@ -100,7 +141,7 @@ SOCKET getSOCKET(char const* argv[]){
         perror("failed to create socket");
         freeaddrinfo(result);
         WSACleanup();
-        return 1;
+        ExitProcess(1);
     }
 
     // connecting to server
@@ -118,10 +159,11 @@ SOCKET getSOCKET(char const* argv[]){
     if(ConnectSocket == INVALID_SOCKET){
         perror("bad connection");
         WSACleanup();
-        return 1;
+        ExitProcess(1);
 
     }
 
+    return ConnectSocket;
 }
 
 /*
@@ -143,7 +185,7 @@ DWORD WINAPI updateChat(LPVOID param){
         result = recv(ConnectSocket, message, bufferLength,0);
 
         if(result > 0){
-            printf("%s\n", result);
+            printf("%s\n", message);
         }
     }
 
