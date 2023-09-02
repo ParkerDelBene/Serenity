@@ -92,7 +92,7 @@ void *connection_handler(void *socket_desc){
 
     int sock = *(int*)socket_desc;
     int read_size;
-    char message[74] = "Hey, this is the Server speaking. Type me anything and I will repeat it!";
+    const char message[74] = "Hey, this is the Server speaking. Type me anything and I will repeat it!";
     char client_message[2000];
 
     //Send a confirmation message to the client
