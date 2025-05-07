@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:serenity/audio_output.dart';
+import 'package:serenity/globals.dart';
+import 'package:serenity/microphone_recorder.dart';
 
-class ServerView extends StatelessWidget {
-  const ServerView({super.key});
+class ServerView extends StatefulWidget {
+  ServerView({super.key});
+
+  final MicrophoneRecorder mic = MicrophoneRecorder();
+  final AudioOutput output = AudioOutput();
 
   @override
-  Widget build(BuildContext context) {
-    MediaQueryData query = MediaQuery.of(context);
+  State<ServerView> createState() => _ServerViewState();
+}
 
-    double width = query.size.width;
-    double height = query.size.height;
+class _ServerViewState extends State<ServerView> {
+  @override
+  Widget build(BuildContext context) {
+    /*
+      Query the current screen size so we can
+      scale the UI from that.
+    */
+    Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: SizedBox(
-        width: width,
-        height: height,
+        width: size.width,
+        height: size.height,
         child: Row(
           children: [
             SizedBox(
-              width: width * .08,
+              width: screenWidth * .08,
               child: Column(
                 children: [
                   Expanded(
@@ -27,19 +39,29 @@ class ServerView extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              width: width * .72,
+            Expanded(
               child: Column(
                 children: [
                   Expanded(
-                      child: Container(
-                    color: Colors.blue,
-                  ))
+                    child: Container(
+                      color: Colors.blue,
+                      child: InkWell(
+                        onTap: () async {
+                          await widget.mic.startStream();
+
+                          widget.mic.audioStream.listen((data) {
+                            widget.output.playBytes(data);
+                          });
+                        },
+                        child: Text('Click to Record Playback'),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
             SizedBox(
-              width: width * .2,
+              width: screenWidth * .125,
               child: Column(
                 children: [
                   Expanded(

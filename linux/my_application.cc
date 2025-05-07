@@ -1,6 +1,7 @@
 #include "my_application.h"
 
 #include <flutter_linux/flutter_linux.h>
+#include <pipewire/pipewire.h>
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
@@ -10,15 +11,70 @@
 struct _MyApplication {
   GtkApplication parent_instance;
   char** dart_entrypoint_arguments;
+  flMethodChannel* pipewire_init_channel;
+  flMethodChannel* pipewire_list_devices_channel;
+  flMethodChannel* pipewire_get_device_stream_channel;
 };
 
+/*
+  Types for listening to microphone and retrieving buffer
+*/
+struct data {
+  struct pw_main_loop* loop;
+  struct pw_stream* stream;
+  double accumulator;
+};
+
+static const struct pw_stream_events stream_events = {
+  PW_VERSION_STREAM_EVENTS,
+  .process = on_process,
+};
+
+struct data* data;
+
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
+
+/*
+  Implement the pipewire method handlers
+*/
+static FlMethodResponse* pipewire_init(){
+  data = {0,}
+  uint8_t buffer[1024];
+
+  pw_init(NULL, NULL);
+
+  data->loop = pw_main_loop_new(NULL);
+  data->stream = pw_stream_new(pw_main_loop_get_loop(data->loop), "capture-stream", 
+    pw_properties_new(
+      PW_KEY_MEDIA_TYPE, "Audio",
+      PW_KEY_MEDIA_CATEGORY, "Capture",
+      PW_KEY_MEDIA_ROLE, "Audio/Source",
+      NULL
+    ),
+    );
+
+  pw_stream_add_listener(stream, NULL, [](void *data, pw_stream_state_t old, pw_stream_state_t state, const char *error) {
+        if (state == PW_STREAM_STATE_ERROR) {
+            return FL_METHOD_RESPONSE(fl_method_error_response_new(
+              "ERROR", "Error with Initializing Stream", nullptr));
+        }
+    }, NULL);
+
+  pw_stream_connect(stream, PW_DIRECTION_INPUT, PW_ID_ANY, PW_STREAM_FLAG_AUTOCONNECT, NULL);
+
+  pw_main_loop_run(main_loop);
+
+  return FL_METHOD_RESPONSE(fl_method_success_response_new(0));
+}
+
 
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
   MyApplication* self = MY_APPLICATION(application);
   GtkWindow* window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
+
+  
 
   // Use a header bar when running in GNOME as this is the common style used
   // by applications and is the setup most users will be using (e.g. Ubuntu
@@ -48,6 +104,7 @@ static void my_application_activate(GApplication* application) {
   }
 
   gtk_window_set_default_size(window, 1280, 720);
+   gtk_window_maximize(window);
   gtk_widget_show(GTK_WIDGET(window));
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();
@@ -58,6 +115,28 @@ static void my_application_activate(GApplication* application) {
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
+
+  /*
+    Initializing the pipewire channels
+  */
+  self->pipewire_init_channel = fl_method_channel_new(
+    fl_engine_get_binary_messenger(fl_view_get_engine(view)),
+    "serenity.microphone/pipewire_init", FL_METHOD_CODEC(codec));
+  self->pipewire_list_devices_channel = fl_method_channel_new(
+    fl_engine_get_binary_messenger(fl_view_get_engine(view)),
+    "serenity.microphone/pipewire_list_devices", FL_METHOD_CODEC(codec));
+  self->pipewire_get_device_stream_channel = fl_event_channel_new(
+    fl_engine_get_binary_messenger(fl_view_get_engine(view)),
+    "serenity.microphone/pipewire_get_device_stream", FL_METHOD_CODEC(codec));
+
+
+  /*
+    Initializing the fl_remethods for using pipewire on linux
+  */
+  fl_method_channel_set_method_call_handler(self->pipewire_init_channel,pipewire_init_method_call_handler, self, nullptr);
+  fl_method_channel_set_method_call_handler(self->pipewire_list_devices_channel,pipewire_list_devices_method_call_handler, self, nullptr);
+  fl_event_channel_set_event_call_handler(self->pipewire_get_device_stream_channel,pipewire_get_device_stream_method_call_handler, self, nullptr);
+
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
@@ -103,6 +182,9 @@ static void my_application_shutdown(GApplication* application) {
 static void my_application_dispose(GObject* object) {
   MyApplication* self = MY_APPLICATION(object);
   g_clear_pointer(&self->dart_entrypoint_arguments, g_strfreev);
+  g_clear_object(&self->pipewire_init_channel);
+  g_clear_object($self->pipewire_list_devices_channel);
+  g_clear_object($self->pipewire_get_device_stream_channel);
   G_OBJECT_CLASS(my_application_parent_class)->dispose(object);
 }
 
