@@ -36,8 +36,14 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   web_socket_channel: ^3.0.1
-  record: ^5.2.0
-  audioplayers: ^6.1.0
+  record:
+    path: ./record/record
+  record_linux:
+    path: ./record/record_linux
+  mp_audio_stream : ^0.2.2
+  ffi: ^2.1.4
+  win32: ^5.13.0
+  
 
 dev_dependencies:
   flutter_test:

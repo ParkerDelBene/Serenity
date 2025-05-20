@@ -1,0 +1,191 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Serenity",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "Serenity (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "Serenity (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "record",
+            "cwd": "record",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "record",
+            "cwd": "record/record",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "record (profile mode)",
+            "cwd": "record/record",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "record (release mode)",
+            "cwd": "record/record",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "record_android",
+            "cwd": "record/record_android",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "record_android (profile mode)",
+            "cwd": "record/record_android",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "record_android (release mode)",
+            "cwd": "record/record_android",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "record_ios",
+            "cwd": "record/record_ios",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "record_ios (profile mode)",
+            "cwd": "record/record_ios",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "record_ios (release mode)",
+            "cwd": "record/record_ios",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "record_linux",
+            "cwd": "record/record_linux",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "record_linux (profile mode)",
+            "cwd": "record/record_linux",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "record_linux (release mode)",
+            "cwd": "record/record_linux",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "record_macos",
+            "cwd": "record/record_macos",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "record_macos (profile mode)",
+            "cwd": "record/record_macos",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "record_macos (release mode)",
+            "cwd": "record/record_macos",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "record_platform_interface",
+            "cwd": "record/record_platform_interface",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "record_platform_interface (profile mode)",
+            "cwd": "record/record_platform_interface",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "record_platform_interface (release mode)",
+            "cwd": "record/record_platform_interface",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "record_web",
+            "cwd": "record/record_web",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "record_web (profile mode)",
+            "cwd": "record/record_web",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "record_web (release mode)",
+            "cwd": "record/record_web",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "record_windows",
+            "cwd": "record/record_windows",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "record_windows (profile mode)",
+            "cwd": "record/record_windows",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "record_windows (release mode)",
+            "cwd": "record/record_windows",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

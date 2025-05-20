@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/mimalloc/out/release/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

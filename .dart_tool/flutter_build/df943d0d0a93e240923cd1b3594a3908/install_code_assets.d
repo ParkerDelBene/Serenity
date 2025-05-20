@@ -1,0 +1,1 @@
+ /home/cryptichook/Coding_Folder/Serenity/.dart_tool/flutter_build/df943d0d0a93e240923cd1b3594a3908/native_assets.json: 

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:serenity/audio_output.dart';
+import 'package:serenity/connection.dart';
 import 'package:serenity/globals.dart';
 import 'package:serenity/microphone_recorder.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ServerView extends StatefulWidget {
   ServerView({super.key});
 
   final MicrophoneRecorder mic = MicrophoneRecorder();
   final AudioOutput output = AudioOutput();
+  final Connection server = Connection();
 
   @override
   State<ServerView> createState() => _ServerViewState();
@@ -48,10 +51,13 @@ class _ServerViewState extends State<ServerView> {
                       child: InkWell(
                         onTap: () async {
                           await widget.mic.startStream();
+                          WebSocketSink serverSink =widget.server.getSocketSink();
 
                           widget.mic.audioStream.listen((data) {
-                            widget.output.playBytes(data);
+                            serverSink.add(data);
                           });
+
+                          widget.output.addStream(widget.server.getSocketStream());
                         },
                         child: Text('Click to Record Playback'),
                       ),

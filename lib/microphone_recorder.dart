@@ -2,12 +2,13 @@ import 'dart:typed_data';
 
 import 'package:record/record.dart';
 
+
 class MicrophoneRecorder {
   MicrophoneRecorder();
 
   final AudioRecorder microphone = AudioRecorder();
   late Stream<Uint8List> audioStream;
-  InputDevice device = InputDevice(id: '0', label: 'null');
+  InputDevice device = InputDevice(id: '0', label: 'Default');
 
   Future<List<InputDevice>> getInputDevices() async {
     return await microphone.listInputDevices();
@@ -24,7 +25,9 @@ class MicrophoneRecorder {
       If device.id == '0', start the stream with the system
       default device
     */
+    
     if (device.id == '0') {
+      
       audioStream = await microphone.startStream(RecordConfig());
       return true;
     }

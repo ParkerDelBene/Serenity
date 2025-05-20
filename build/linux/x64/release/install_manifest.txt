@@ -1,0 +1,17 @@
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/serenity
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/icudtl.dat
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib/libflutter_linux_gtk.so
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib/libaudioplayers_linux_plugin.so
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib/librecord_linux_plugin.so
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/fonts/MaterialIcons-Regular.otf
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/version.json
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/AssetManifest.bin
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/FontManifest.json
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/AssetManifest.json
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/shaders/ink_sparkle.frag
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/NOTICES.Z
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/NativeAssetsManifest.json
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/packages/record_web/assets/js/record.worklet.js
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/packages/record_web/assets/js/record.fixwebmduration.js
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib/libapp.so

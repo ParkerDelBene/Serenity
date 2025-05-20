@@ -1,24 +1,19 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/status.dart' as status;
 
 class Connection {
-  Connection(this.server)
+  Connection()
       : socket = WebSocketChannel.connect(
-          Uri.parse(server),
+          Uri.parse("ws://192.168.0.38:12345"),
         ) {
-    listener = socket.stream;
+    _listener = socket.stream;
+    _sink = socket.sink;
   }
 
-  String server;
   WebSocketChannel socket;
-  late Stream listener;
+  late Stream _listener;
+  late WebSocketSink _sink;
 
-  void writeSocket(String type, dynamic data) {
-    String message = jsonEncode(<String, dynamic>{'type': type, 'data': data});
-
+  void writeSocket(dynamic message) {
     socket.sink.add(message);
   }
 
@@ -26,9 +21,12 @@ class Connection {
     socket.sink.close();
   }
 
-  void attachListener(Function function) {
-    listener.listen((data) {
-      function(data);
-    });
+  Stream<dynamic> getSocketStream(){
+    return _listener;
   }
+
+  WebSocketSink getSocketSink(){
+    return _sink;
+  }
+  
 }
