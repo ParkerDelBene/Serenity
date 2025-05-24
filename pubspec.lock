@@ -187,9 +187,10 @@ packages:
   record:
     dependency: "direct main"
     description:
-      path: "record/record"
-      relative: true
-    source: path
+      name: record
+      sha256: daeb3f9b3fea9797094433fe6e49a879d8e4ca4207740bc6dc7e4a58764f0817
+      url: "https://pub.dev"
+    source: hosted
     version: "6.0.0"
   record_android:
     dependency: transitive
@@ -208,12 +209,13 @@ packages:
     source: hosted
     version: "1.0.0"
   record_linux:
-    dependency: "direct main"
+    dependency: transitive
     description:
-      path: "record/record_linux"
-      relative: true
-    source: path
-    version: "1.0.0"
+      name: record_linux
+      sha256: "29e7735b05c1944bb6c9b72a36c08d4a1b24117e712d6a9523c003bde12bf484"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   record_macos:
     dependency: transitive
     description:
@@ -242,10 +244,10 @@ packages:
     dependency: transitive
     description:
       name: record_windows
-      sha256: "26bfebc8899f4fa5b6b044089887dc42115820cd6a907bdf40c16e909e87de0a"
+      sha256: "85a22fc97f6d73ecd67c8ba5f2f472b74ef1d906f795b7970f771a0914167e99"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.5"
+    version: "1.0.6"
   sky_engine:
     dependency: transitive
     description: flutter

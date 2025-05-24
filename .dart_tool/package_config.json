@@ -147,7 +147,7 @@
     },
     {
       "name": "record",
-      "rootUri": "../record/record",
+      "rootUri": "file:///home/cryptichook/.pub-cache/hosted/pub.dev/record-6.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -165,7 +165,7 @@
     },
     {
       "name": "record_linux",
-      "rootUri": "../record/record_linux",
+      "rootUri": "file:///home/cryptichook/.pub-cache/hosted/pub.dev/record_linux-1.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -189,7 +189,7 @@
     },
     {
       "name": "record_windows",
-      "rootUri": "file:///home/cryptichook/.pub-cache/hosted/pub.dev/record_windows-1.0.5",
+      "rootUri": "file:///home/cryptichook/.pub-cache/hosted/pub.dev/record_windows-1.0.6",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -296,7 +296,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2025-05-19T17:09:44.967455Z",
+  "generated": "2025-05-22T19:23:18.668355Z",
   "generator": "pub",
   "generatorVersion": "3.7.2",
   "flutterRoot": "file:///home/cryptichook/Sdk/flutter",

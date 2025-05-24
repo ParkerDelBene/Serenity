@@ -56,7 +56,6 @@ class _ServerViewState extends State<ServerView> {
                           widget.mic.audioStream.listen((data) {
                             serverSink.add(data);
                           });
-
                           widget.output.addStream(widget.server.getSocketStream());
                         },
                         child: Text('Click to Record Playback'),
