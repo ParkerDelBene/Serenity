@@ -47,40 +47,34 @@ cmake_ninja_workdir = /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/r
 #############################################
 # Order-only phony target for serenity
 
-build cmake_object_order_depends_target_serenity: phony || cmake_object_order_depends_target_audioplayers_linux_plugin cmake_object_order_depends_target_record_linux_plugin flutter/flutter_assemble
+build cmake_object_order_depends_target_serenity: phony || cmake_object_order_depends_target_record_linux_plugin flutter/flutter_assemble
 
 build CMakeFiles/serenity.dir/main.cc.o: CXX_COMPILER__serenity_unscanned_Release /home/cryptichook/Coding_Folder/Serenity/linux/main.cc || cmake_object_order_depends_target_serenity
   CONFIG = Release
   DEFINES = -DAPPLICATION_ID=\"com.example.serenity\" -DNDEBUG
   DEP_FILE = CMakeFiles/serenity.dir/main.cc.o.d
   FLAGS = -O3 -DNDEBUG -Wall -Werror -O3 -pthread
-  INCLUDES = -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/audioplayers_linux/linux/include -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/record_linux/linux/include -isystem /usr/include/gtk-3.0 -isystem /usr/include/pango-1.0 -isystem /usr/include/cloudproviders -isystem /usr/include/cairo -isystem /usr/include/gdk-pixbuf-2.0 -isystem /usr/include/at-spi2-atk/2.0 -isystem /usr/include/at-spi-2.0 -isystem /usr/include/atk-1.0 -isystem /usr/include/dbus-1.0 -isystem /usr/lib/dbus-1.0/include -isystem /usr/include/fribidi -isystem /usr/include/pixman-1 -isystem /usr/include/harfbuzz -isystem /usr/include/freetype2 -isystem /usr/include/libpng16 -isystem /usr/include/gio-unix-2.0 -isystem /usr/include/glib-2.0 -isystem /usr/lib/glib-2.0/include -isystem /usr/include/libmount -isystem /usr/include/blkid -isystem /usr/include/sysprof-6
+  INCLUDES = -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/record_linux/linux/include -isystem /usr/include/gtk-3.0 -isystem /usr/include/pango-1.0 -isystem /usr/include/cloudproviders -isystem /usr/include/cairo -isystem /usr/include/gdk-pixbuf-2.0 -isystem /usr/include/at-spi2-atk/2.0 -isystem /usr/include/at-spi-2.0 -isystem /usr/include/atk-1.0 -isystem /usr/include/dbus-1.0 -isystem /usr/lib/dbus-1.0/include -isystem /usr/include/fribidi -isystem /usr/include/pixman-1 -isystem /usr/include/harfbuzz -isystem /usr/include/freetype2 -isystem /usr/include/libpng16 -isystem /usr/include/gio-unix-2.0 -isystem /usr/include/glib-2.0 -isystem /usr/lib/glib-2.0/include -isystem /usr/include/libmount -isystem /usr/include/blkid -isystem /usr/include/sysprof-6
   OBJECT_DIR = CMakeFiles/serenity.dir
   OBJECT_FILE_DIR = CMakeFiles/serenity.dir
-  TARGET_COMPILE_PDB = CMakeFiles/serenity.dir/
-  TARGET_PDB = intermediates_do_not_run/serenity.pdb
 
 build CMakeFiles/serenity.dir/my_application.cc.o: CXX_COMPILER__serenity_unscanned_Release /home/cryptichook/Coding_Folder/Serenity/linux/my_application.cc || cmake_object_order_depends_target_serenity
   CONFIG = Release
   DEFINES = -DAPPLICATION_ID=\"com.example.serenity\" -DNDEBUG
   DEP_FILE = CMakeFiles/serenity.dir/my_application.cc.o.d
   FLAGS = -O3 -DNDEBUG -Wall -Werror -O3 -pthread
-  INCLUDES = -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/audioplayers_linux/linux/include -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/record_linux/linux/include -isystem /usr/include/gtk-3.0 -isystem /usr/include/pango-1.0 -isystem /usr/include/cloudproviders -isystem /usr/include/cairo -isystem /usr/include/gdk-pixbuf-2.0 -isystem /usr/include/at-spi2-atk/2.0 -isystem /usr/include/at-spi-2.0 -isystem /usr/include/atk-1.0 -isystem /usr/include/dbus-1.0 -isystem /usr/lib/dbus-1.0/include -isystem /usr/include/fribidi -isystem /usr/include/pixman-1 -isystem /usr/include/harfbuzz -isystem /usr/include/freetype2 -isystem /usr/include/libpng16 -isystem /usr/include/gio-unix-2.0 -isystem /usr/include/glib-2.0 -isystem /usr/lib/glib-2.0/include -isystem /usr/include/libmount -isystem /usr/include/blkid -isystem /usr/include/sysprof-6
+  INCLUDES = -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/record_linux/linux/include -isystem /usr/include/gtk-3.0 -isystem /usr/include/pango-1.0 -isystem /usr/include/cloudproviders -isystem /usr/include/cairo -isystem /usr/include/gdk-pixbuf-2.0 -isystem /usr/include/at-spi2-atk/2.0 -isystem /usr/include/at-spi-2.0 -isystem /usr/include/atk-1.0 -isystem /usr/include/dbus-1.0 -isystem /usr/lib/dbus-1.0/include -isystem /usr/include/fribidi -isystem /usr/include/pixman-1 -isystem /usr/include/harfbuzz -isystem /usr/include/freetype2 -isystem /usr/include/libpng16 -isystem /usr/include/gio-unix-2.0 -isystem /usr/include/glib-2.0 -isystem /usr/lib/glib-2.0/include -isystem /usr/include/libmount -isystem /usr/include/blkid -isystem /usr/include/sysprof-6
   OBJECT_DIR = CMakeFiles/serenity.dir
   OBJECT_FILE_DIR = CMakeFiles/serenity.dir
-  TARGET_COMPILE_PDB = CMakeFiles/serenity.dir/
-  TARGET_PDB = intermediates_do_not_run/serenity.pdb
 
 build CMakeFiles/serenity.dir/flutter/generated_plugin_registrant.cc.o: CXX_COMPILER__serenity_unscanned_Release /home/cryptichook/Coding_Folder/Serenity/linux/flutter/generated_plugin_registrant.cc || cmake_object_order_depends_target_serenity
   CONFIG = Release
   DEFINES = -DAPPLICATION_ID=\"com.example.serenity\" -DNDEBUG
   DEP_FILE = CMakeFiles/serenity.dir/flutter/generated_plugin_registrant.cc.o.d
   FLAGS = -O3 -DNDEBUG -Wall -Werror -O3 -pthread
-  INCLUDES = -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/audioplayers_linux/linux/include -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/record_linux/linux/include -isystem /usr/include/gtk-3.0 -isystem /usr/include/pango-1.0 -isystem /usr/include/cloudproviders -isystem /usr/include/cairo -isystem /usr/include/gdk-pixbuf-2.0 -isystem /usr/include/at-spi2-atk/2.0 -isystem /usr/include/at-spi-2.0 -isystem /usr/include/atk-1.0 -isystem /usr/include/dbus-1.0 -isystem /usr/lib/dbus-1.0/include -isystem /usr/include/fribidi -isystem /usr/include/pixman-1 -isystem /usr/include/harfbuzz -isystem /usr/include/freetype2 -isystem /usr/include/libpng16 -isystem /usr/include/gio-unix-2.0 -isystem /usr/include/glib-2.0 -isystem /usr/lib/glib-2.0/include -isystem /usr/include/libmount -isystem /usr/include/blkid -isystem /usr/include/sysprof-6
+  INCLUDES = -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/record_linux/linux/include -isystem /usr/include/gtk-3.0 -isystem /usr/include/pango-1.0 -isystem /usr/include/cloudproviders -isystem /usr/include/cairo -isystem /usr/include/gdk-pixbuf-2.0 -isystem /usr/include/at-spi2-atk/2.0 -isystem /usr/include/at-spi-2.0 -isystem /usr/include/atk-1.0 -isystem /usr/include/dbus-1.0 -isystem /usr/lib/dbus-1.0/include -isystem /usr/include/fribidi -isystem /usr/include/pixman-1 -isystem /usr/include/harfbuzz -isystem /usr/include/freetype2 -isystem /usr/include/libpng16 -isystem /usr/include/gio-unix-2.0 -isystem /usr/include/glib-2.0 -isystem /usr/lib/glib-2.0/include -isystem /usr/include/libmount -isystem /usr/include/blkid -isystem /usr/include/sysprof-6
   OBJECT_DIR = CMakeFiles/serenity.dir
   OBJECT_FILE_DIR = CMakeFiles/serenity.dir/flutter
-  TARGET_COMPILE_PDB = CMakeFiles/serenity.dir/
-  TARGET_PDB = intermediates_do_not_run/serenity.pdb
 
 
 # =============================================================================
@@ -90,18 +84,17 @@ build CMakeFiles/serenity.dir/flutter/generated_plugin_registrant.cc.o: CXX_COMP
 #############################################
 # Link the executable intermediates_do_not_run/serenity
 
-build intermediates_do_not_run/serenity: CXX_EXECUTABLE_LINKER__serenity_Release CMakeFiles/serenity.dir/main.cc.o CMakeFiles/serenity.dir/my_application.cc.o CMakeFiles/serenity.dir/flutter/generated_plugin_registrant.cc.o | plugins/audioplayers_linux/libaudioplayers_linux_plugin.so plugins/record_linux/librecord_linux_plugin.so /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/libflutter_linux_gtk.so /usr/lib/libgtk-3.so /usr/lib/libgdk-3.so /usr/lib/libz.so /usr/lib/libpangocairo-1.0.so /usr/lib/libcairo-gobject.so /usr/lib/libgdk_pixbuf-2.0.so /usr/lib/libatk-1.0.so /usr/lib/libpango-1.0.so /usr/lib/libcairo.so /usr/lib/libharfbuzz.so /usr/lib/libgio-2.0.so /usr/lib/libgobject-2.0.so /usr/lib/libglib-2.0.so || flutter/flutter_assemble plugins/audioplayers_linux/libaudioplayers_linux_plugin.so plugins/record_linux/librecord_linux_plugin.so
+build intermediates_do_not_run/serenity: CXX_EXECUTABLE_LINKER__serenity_Release CMakeFiles/serenity.dir/main.cc.o CMakeFiles/serenity.dir/my_application.cc.o CMakeFiles/serenity.dir/flutter/generated_plugin_registrant.cc.o | plugins/record_linux/librecord_linux_plugin.so /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/libflutter_linux_gtk.so /usr/lib/libgtk-3.so /usr/lib/libgdk-3.so /usr/lib/libz.so /usr/lib/libpangocairo-1.0.so /usr/lib/libcairo-gobject.so /usr/lib/libgdk_pixbuf-2.0.so /usr/lib/libatk-1.0.so /usr/lib/libpango-1.0.so /usr/lib/libcairo.so /usr/lib/libharfbuzz.so /usr/lib/libgio-2.0.so /usr/lib/libgobject-2.0.so /usr/lib/libglib-2.0.so || flutter/flutter_assemble plugins/record_linux/librecord_linux_plugin.so
   CONFIG = Release
   DEP_FILE = CMakeFiles/serenity.dir/link.d
   FLAGS = -O3 -DNDEBUG
   LINK_FLAGS = -Xlinker --dependency-file=CMakeFiles/serenity.dir/link.d
-  LINK_LIBRARIES = -Wl,-rpath,/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/audioplayers_linux:/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/record_linux:/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral:  plugins/audioplayers_linux/libaudioplayers_linux_plugin.so  plugins/record_linux/librecord_linux_plugin.so  /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/libflutter_linux_gtk.so  /usr/lib/libgtk-3.so  /usr/lib/libgdk-3.so  /usr/lib/libz.so  /usr/lib/libpangocairo-1.0.so  /usr/lib/libcairo-gobject.so  /usr/lib/libgdk_pixbuf-2.0.so  /usr/lib/libatk-1.0.so  /usr/lib/libpango-1.0.so  /usr/lib/libcairo.so  /usr/lib/libharfbuzz.so  /usr/lib/libgio-2.0.so  /usr/lib/libgobject-2.0.so  /usr/lib/libglib-2.0.so
+  LINK_LIBRARIES = -Wl,-rpath,/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/record_linux:/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral:  plugins/record_linux/librecord_linux_plugin.so  /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/libflutter_linux_gtk.so  /usr/lib/libgtk-3.so  /usr/lib/libgdk-3.so  /usr/lib/libz.so  /usr/lib/libpangocairo-1.0.so  /usr/lib/libcairo-gobject.so  /usr/lib/libgdk_pixbuf-2.0.so  /usr/lib/libatk-1.0.so  /usr/lib/libpango-1.0.so  /usr/lib/libcairo.so  /usr/lib/libharfbuzz.so  /usr/lib/libgio-2.0.so  /usr/lib/libgobject-2.0.so  /usr/lib/libglib-2.0.so
   OBJECT_DIR = CMakeFiles/serenity.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_COMPILE_PDB = CMakeFiles/serenity.dir/
   TARGET_FILE = intermediates_do_not_run/serenity
-  TARGET_PDB = intermediates_do_not_run/serenity.pdb
+  TARGET_PDB = serenity.dbg
 
 
 #############################################
@@ -267,131 +260,6 @@ build /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/libflutte
 # =============================================================================
 
 # =============================================================================
-# Object build statements for SHARED_LIBRARY target audioplayers_linux_plugin
-
-
-#############################################
-# Order-only phony target for audioplayers_linux_plugin
-
-build cmake_object_order_depends_target_audioplayers_linux_plugin: phony || flutter/flutter_assemble
-
-build plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir/audioplayers_linux_plugin.cc.o: CXX_COMPILER__audioplayers_linux_plugin_unscanned_Release /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/audioplayers_linux/linux/audioplayers_linux_plugin.cc || cmake_object_order_depends_target_audioplayers_linux_plugin
-  CONFIG = Release
-  DEFINES = -DAPPLICATION_ID=\"com.example.serenity\" -DFLUTTER_PLUGIN_IMPL -DNDEBUG -Daudioplayers_linux_plugin_EXPORTS
-  DEP_FILE = plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir/audioplayers_linux_plugin.cc.o.d
-  FLAGS = -O3 -DNDEBUG -fPIC -fvisibility=hidden -Wall -Werror -O3 -pthread
-  INCLUDES = -I/usr/include/gstreamer-1.0 -I/usr/include/orc-0.4 -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/audioplayers_linux/linux -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral -isystem /usr/include/glib-2.0 -isystem /usr/lib/glib-2.0/include -isystem /usr/include/sysprof-6 -isystem /usr/include/gtk-3.0 -isystem /usr/include/pango-1.0 -isystem /usr/include/cloudproviders -isystem /usr/include/cairo -isystem /usr/include/gdk-pixbuf-2.0 -isystem /usr/include/at-spi2-atk/2.0 -isystem /usr/include/at-spi-2.0 -isystem /usr/include/atk-1.0 -isystem /usr/include/dbus-1.0 -isystem /usr/lib/dbus-1.0/include -isystem /usr/include/fribidi -isystem /usr/include/pixman-1 -isystem /usr/include/harfbuzz -isystem /usr/include/freetype2 -isystem /usr/include/libpng16 -isystem /usr/include/gio-unix-2.0 -isystem /usr/include/libmount -isystem /usr/include/blkid
-  OBJECT_DIR = plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir
-  OBJECT_FILE_DIR = plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir
-  TARGET_COMPILE_PDB = plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir/
-  TARGET_PDB = plugins/audioplayers_linux/libaudioplayers_linux_plugin.pdb
-
-build plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir/audio_player.cc.o: CXX_COMPILER__audioplayers_linux_plugin_unscanned_Release /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/audioplayers_linux/linux/audio_player.cc || cmake_object_order_depends_target_audioplayers_linux_plugin
-  CONFIG = Release
-  DEFINES = -DAPPLICATION_ID=\"com.example.serenity\" -DFLUTTER_PLUGIN_IMPL -DNDEBUG -Daudioplayers_linux_plugin_EXPORTS
-  DEP_FILE = plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir/audio_player.cc.o.d
-  FLAGS = -O3 -DNDEBUG -fPIC -fvisibility=hidden -Wall -Werror -O3 -pthread
-  INCLUDES = -I/usr/include/gstreamer-1.0 -I/usr/include/orc-0.4 -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/audioplayers_linux/linux -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral -isystem /usr/include/glib-2.0 -isystem /usr/lib/glib-2.0/include -isystem /usr/include/sysprof-6 -isystem /usr/include/gtk-3.0 -isystem /usr/include/pango-1.0 -isystem /usr/include/cloudproviders -isystem /usr/include/cairo -isystem /usr/include/gdk-pixbuf-2.0 -isystem /usr/include/at-spi2-atk/2.0 -isystem /usr/include/at-spi-2.0 -isystem /usr/include/atk-1.0 -isystem /usr/include/dbus-1.0 -isystem /usr/lib/dbus-1.0/include -isystem /usr/include/fribidi -isystem /usr/include/pixman-1 -isystem /usr/include/harfbuzz -isystem /usr/include/freetype2 -isystem /usr/include/libpng16 -isystem /usr/include/gio-unix-2.0 -isystem /usr/include/libmount -isystem /usr/include/blkid
-  OBJECT_DIR = plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir
-  OBJECT_FILE_DIR = plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir
-  TARGET_COMPILE_PDB = plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir/
-  TARGET_PDB = plugins/audioplayers_linux/libaudioplayers_linux_plugin.pdb
-
-
-# =============================================================================
-# Link build statements for SHARED_LIBRARY target audioplayers_linux_plugin
-
-
-#############################################
-# Link the shared library plugins/audioplayers_linux/libaudioplayers_linux_plugin.so
-
-build plugins/audioplayers_linux/libaudioplayers_linux_plugin.so: CXX_SHARED_LIBRARY_LINKER__audioplayers_linux_plugin_Release plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir/audioplayers_linux_plugin.cc.o plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir/audio_player.cc.o | /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/libflutter_linux_gtk.so /usr/lib/libgtk-3.so /usr/lib/libgdk-3.so /usr/lib/libz.so /usr/lib/libpangocairo-1.0.so /usr/lib/libcairo-gobject.so /usr/lib/libgdk_pixbuf-2.0.so /usr/lib/libatk-1.0.so /usr/lib/libpango-1.0.so /usr/lib/libcairo.so /usr/lib/libharfbuzz.so /usr/lib/libgio-2.0.so /usr/lib/libgobject-2.0.so /usr/lib/libglib-2.0.so || flutter/flutter_assemble
-  CONFIG = Release
-  DEP_FILE = plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir/link.d
-  LANGUAGE_COMPILE_FLAGS = -O3 -DNDEBUG
-  LINK_FLAGS = -Xlinker --dependency-file=plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir/link.d
-  LINK_LIBRARIES = -Wl,-rpath,/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral  -lgstapp-1.0  -lgstbase-1.0  -lgstreamer-1.0  -lgobject-2.0  -lglib-2.0  -lglib-2.0  /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/libflutter_linux_gtk.so  /usr/lib/libgtk-3.so  /usr/lib/libgdk-3.so  /usr/lib/libz.so  /usr/lib/libpangocairo-1.0.so  /usr/lib/libcairo-gobject.so  /usr/lib/libgdk_pixbuf-2.0.so  /usr/lib/libatk-1.0.so  /usr/lib/libpango-1.0.so  /usr/lib/libcairo.so  /usr/lib/libharfbuzz.so  /usr/lib/libgio-2.0.so  /usr/lib/libgobject-2.0.so  /usr/lib/libglib-2.0.so
-  OBJECT_DIR = plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  SONAME = libaudioplayers_linux_plugin.so
-  SONAME_FLAG = -Wl,-soname,
-  TARGET_COMPILE_PDB = plugins/audioplayers_linux/CMakeFiles/audioplayers_linux_plugin.dir/
-  TARGET_FILE = plugins/audioplayers_linux/libaudioplayers_linux_plugin.so
-  TARGET_PDB = plugins/audioplayers_linux/libaudioplayers_linux_plugin.pdb
-
-
-#############################################
-# Utility command for edit_cache
-
-build plugins/audioplayers_linux/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/audioplayers_linux && /usr/bin/ccmake -S/home/cryptichook/Coding_Folder/Serenity/linux -B/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release
-  DESC = Running CMake cache editor...
-  pool = console
-  restat = 1
-
-build plugins/audioplayers_linux/edit_cache: phony plugins/audioplayers_linux/CMakeFiles/edit_cache.util
-
-
-#############################################
-# Utility command for rebuild_cache
-
-build plugins/audioplayers_linux/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/audioplayers_linux && /usr/bin/cmake --regenerate-during-build -S/home/cryptichook/Coding_Folder/Serenity/linux -B/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release
-  DESC = Running CMake to regenerate build system...
-  pool = console
-  restat = 1
-
-build plugins/audioplayers_linux/rebuild_cache: phony plugins/audioplayers_linux/CMakeFiles/rebuild_cache.util
-
-
-#############################################
-# Utility command for list_install_components
-
-build plugins/audioplayers_linux/list_install_components: phony
-
-
-#############################################
-# Utility command for install
-
-build plugins/audioplayers_linux/CMakeFiles/install.util: CUSTOM_COMMAND plugins/audioplayers_linux/all
-  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/audioplayers_linux && /usr/bin/cmake -P cmake_install.cmake
-  DESC = Install the project...
-  pool = console
-  restat = 1
-
-build plugins/audioplayers_linux/install: phony plugins/audioplayers_linux/CMakeFiles/install.util
-
-
-#############################################
-# Utility command for install/local
-
-build plugins/audioplayers_linux/CMakeFiles/install/local.util: CUSTOM_COMMAND plugins/audioplayers_linux/all
-  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/audioplayers_linux && /usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-  DESC = Installing only the local directory...
-  pool = console
-  restat = 1
-
-build plugins/audioplayers_linux/install/local: phony plugins/audioplayers_linux/CMakeFiles/install/local.util
-
-
-#############################################
-# Utility command for install/strip
-
-build plugins/audioplayers_linux/CMakeFiles/install/strip.util: CUSTOM_COMMAND plugins/audioplayers_linux/all
-  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/audioplayers_linux && /usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-  DESC = Installing the project stripped...
-  pool = console
-  restat = 1
-
-build plugins/audioplayers_linux/install/strip: phony plugins/audioplayers_linux/CMakeFiles/install/strip.util
-
-# =============================================================================
-# Write statements declared in CMakeLists.txt:
-# /home/cryptichook/Coding_Folder/Serenity/linux/flutter/generated_plugins.cmake
-# =============================================================================
-
-# =============================================================================
 # Object build statements for SHARED_LIBRARY target record_linux_plugin
 
 
@@ -408,8 +276,6 @@ build plugins/record_linux/CMakeFiles/record_linux_plugin.dir/record_linux_plugi
   INCLUDES = -I/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral -isystem /usr/include/gtk-3.0 -isystem /usr/include/pango-1.0 -isystem /usr/include/cloudproviders -isystem /usr/include/cairo -isystem /usr/include/gdk-pixbuf-2.0 -isystem /usr/include/at-spi2-atk/2.0 -isystem /usr/include/at-spi-2.0 -isystem /usr/include/atk-1.0 -isystem /usr/include/dbus-1.0 -isystem /usr/lib/dbus-1.0/include -isystem /usr/include/fribidi -isystem /usr/include/pixman-1 -isystem /usr/include/harfbuzz -isystem /usr/include/freetype2 -isystem /usr/include/libpng16 -isystem /usr/include/gio-unix-2.0 -isystem /usr/include/glib-2.0 -isystem /usr/lib/glib-2.0/include -isystem /usr/include/libmount -isystem /usr/include/blkid -isystem /usr/include/sysprof-6
   OBJECT_DIR = plugins/record_linux/CMakeFiles/record_linux_plugin.dir
   OBJECT_FILE_DIR = plugins/record_linux/CMakeFiles/record_linux_plugin.dir
-  TARGET_COMPILE_PDB = plugins/record_linux/CMakeFiles/record_linux_plugin.dir/
-  TARGET_PDB = plugins/record_linux/librecord_linux_plugin.pdb
 
 
 # =============================================================================
@@ -430,9 +296,8 @@ build plugins/record_linux/librecord_linux_plugin.so: CXX_SHARED_LIBRARY_LINKER_
   PRE_LINK = :
   SONAME = librecord_linux_plugin.so
   SONAME_FLAG = -Wl,-soname,
-  TARGET_COMPILE_PDB = plugins/record_linux/CMakeFiles/record_linux_plugin.dir/
   TARGET_FILE = plugins/record_linux/librecord_linux_plugin.so
-  TARGET_PDB = plugins/record_linux/librecord_linux_plugin.pdb
+  TARGET_PDB = record_linux_plugin.so.dbg
 
 
 #############################################
@@ -501,15 +366,195 @@ build plugins/record_linux/CMakeFiles/install/strip.util: CUSTOM_COMMAND plugins
 build plugins/record_linux/install/strip: phony plugins/record_linux/CMakeFiles/install/strip.util
 
 # =============================================================================
-# Target aliases.
+# Write statements declared in CMakeLists.txt:
+# /home/cryptichook/Coding_Folder/Serenity/linux/flutter/generated_plugins.cmake
+# =============================================================================
 
-build audioplayers_linux_plugin: phony plugins/audioplayers_linux/libaudioplayers_linux_plugin.so
+
+#############################################
+# Utility command for edit_cache
+
+build plugins/mp_audio_stream/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream && /usr/bin/ccmake -S/home/cryptichook/Coding_Folder/Serenity/linux -B/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release
+  DESC = Running CMake cache editor...
+  pool = console
+  restat = 1
+
+build plugins/mp_audio_stream/edit_cache: phony plugins/mp_audio_stream/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build plugins/mp_audio_stream/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream && /usr/bin/cmake --regenerate-during-build -S/home/cryptichook/Coding_Folder/Serenity/linux -B/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build plugins/mp_audio_stream/rebuild_cache: phony plugins/mp_audio_stream/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build plugins/mp_audio_stream/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build plugins/mp_audio_stream/CMakeFiles/install.util: CUSTOM_COMMAND plugins/mp_audio_stream/all
+  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream && /usr/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build plugins/mp_audio_stream/install: phony plugins/mp_audio_stream/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build plugins/mp_audio_stream/CMakeFiles/install/local.util: CUSTOM_COMMAND plugins/mp_audio_stream/all
+  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream && /usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build plugins/mp_audio_stream/install/local: phony plugins/mp_audio_stream/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build plugins/mp_audio_stream/CMakeFiles/install/strip.util: CUSTOM_COMMAND plugins/mp_audio_stream/all
+  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream && /usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build plugins/mp_audio_stream/install/strip: phony plugins/mp_audio_stream/CMakeFiles/install/strip.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/mp_audio_stream/linux/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for SHARED_LIBRARY target mp_audio_stream
+
+
+#############################################
+# Order-only phony target for mp_audio_stream
+
+build cmake_object_order_depends_target_mp_audio_stream: phony || .
+
+build plugins/mp_audio_stream/shared/CMakeFiles/mp_audio_stream.dir/mp_audio_stream.cc.o: CXX_COMPILER__mp_audio_stream_unscanned_Release /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/mp_audio_stream/src/mp_audio_stream.cc || cmake_object_order_depends_target_mp_audio_stream
+  CONFIG = Release
+  DEFINES = -DAPPLICATION_ID=\"com.example.serenity\" -DDART_SHARED_LIB -Dmp_audio_stream_EXPORTS
+  DEP_FILE = plugins/mp_audio_stream/shared/CMakeFiles/mp_audio_stream.dir/mp_audio_stream.cc.o.d
+  FLAGS = -O3 -DNDEBUG -fPIC
+  OBJECT_DIR = plugins/mp_audio_stream/shared/CMakeFiles/mp_audio_stream.dir
+  OBJECT_FILE_DIR = plugins/mp_audio_stream/shared/CMakeFiles/mp_audio_stream.dir
+
+
+# =============================================================================
+# Link build statements for SHARED_LIBRARY target mp_audio_stream
+
+
+#############################################
+# Link the shared library plugins/mp_audio_stream/shared/libmp_audio_stream.so
+
+build plugins/mp_audio_stream/shared/libmp_audio_stream.so: CXX_SHARED_LIBRARY_LINKER__mp_audio_stream_Release plugins/mp_audio_stream/shared/CMakeFiles/mp_audio_stream.dir/mp_audio_stream.cc.o
+  CONFIG = Release
+  DEP_FILE = plugins/mp_audio_stream/shared/CMakeFiles/mp_audio_stream.dir/link.d
+  LANGUAGE_COMPILE_FLAGS = -O3 -DNDEBUG
+  LINK_FLAGS = -Xlinker --dependency-file=plugins/mp_audio_stream/shared/CMakeFiles/mp_audio_stream.dir/link.d
+  OBJECT_DIR = plugins/mp_audio_stream/shared/CMakeFiles/mp_audio_stream.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  SONAME = libmp_audio_stream.so
+  SONAME_FLAG = -Wl,-soname,
+  TARGET_FILE = plugins/mp_audio_stream/shared/libmp_audio_stream.so
+  TARGET_PDB = mp_audio_stream.so.dbg
+
+
+#############################################
+# Utility command for edit_cache
+
+build plugins/mp_audio_stream/shared/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream/shared && /usr/bin/ccmake -S/home/cryptichook/Coding_Folder/Serenity/linux -B/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release
+  DESC = Running CMake cache editor...
+  pool = console
+  restat = 1
+
+build plugins/mp_audio_stream/shared/edit_cache: phony plugins/mp_audio_stream/shared/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build plugins/mp_audio_stream/shared/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream/shared && /usr/bin/cmake --regenerate-during-build -S/home/cryptichook/Coding_Folder/Serenity/linux -B/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build plugins/mp_audio_stream/shared/rebuild_cache: phony plugins/mp_audio_stream/shared/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build plugins/mp_audio_stream/shared/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build plugins/mp_audio_stream/shared/CMakeFiles/install.util: CUSTOM_COMMAND plugins/mp_audio_stream/shared/all
+  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream/shared && /usr/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build plugins/mp_audio_stream/shared/install: phony plugins/mp_audio_stream/shared/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build plugins/mp_audio_stream/shared/CMakeFiles/install/local.util: CUSTOM_COMMAND plugins/mp_audio_stream/shared/all
+  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream/shared && /usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build plugins/mp_audio_stream/shared/install/local: phony plugins/mp_audio_stream/shared/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build plugins/mp_audio_stream/shared/CMakeFiles/install/strip.util: CUSTOM_COMMAND plugins/mp_audio_stream/shared/all
+  COMMAND = cd /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream/shared && /usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build plugins/mp_audio_stream/shared/install/strip: phony plugins/mp_audio_stream/shared/CMakeFiles/install/strip.util
+
+# =============================================================================
+# Target aliases.
 
 build flutter_assemble: phony flutter/flutter_assemble
 
-build libaudioplayers_linux_plugin.so: phony plugins/audioplayers_linux/libaudioplayers_linux_plugin.so
+build libmp_audio_stream.so: phony plugins/mp_audio_stream/shared/libmp_audio_stream.so
 
 build librecord_linux_plugin.so: phony plugins/record_linux/librecord_linux_plugin.so
+
+build mp_audio_stream: phony plugins/mp_audio_stream/shared/libmp_audio_stream.so
 
 build record_linux_plugin: phony plugins/record_linux/librecord_linux_plugin.so
 
@@ -523,7 +568,7 @@ build serenity: phony intermediates_do_not_run/serenity
 #############################################
 # Folder: /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release
 
-build all: phony intermediates_do_not_run/serenity flutter/all plugins/audioplayers_linux/all plugins/record_linux/all
+build all: phony intermediates_do_not_run/serenity flutter/all plugins/record_linux/all plugins/mp_audio_stream/all
 
 # =============================================================================
 
@@ -535,9 +580,16 @@ build flutter/all: phony
 # =============================================================================
 
 #############################################
-# Folder: /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/audioplayers_linux
+# Folder: /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream
 
-build plugins/audioplayers_linux/all: phony plugins/audioplayers_linux/libaudioplayers_linux_plugin.so
+build plugins/mp_audio_stream/all: phony plugins/mp_audio_stream/shared/all
+
+# =============================================================================
+
+#############################################
+# Folder: /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream/shared
+
+build plugins/mp_audio_stream/shared/all: phony plugins/mp_audio_stream/shared/libmp_audio_stream.so
 
 # =============================================================================
 
@@ -553,14 +605,14 @@ build plugins/record_linux/all: phony plugins/record_linux/librecord_linux_plugi
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/cmake_install.cmake /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/flutter/cmake_install.cmake /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/audioplayers_linux/cmake_install.cmake /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/record_linux/cmake_install.cmake: RERUN_CMAKE | /home/cryptichook/Coding_Folder/Serenity/linux/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/audioplayers_linux/linux/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/record_linux/linux/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/generated_config.cmake /home/cryptichook/Coding_Folder/Serenity/linux/flutter/generated_plugins.cmake /usr/share/cmake/Modules/CMakeCXXCompiler.cmake.in /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp /usr/share/cmake/Modules/CMakeCXXInformation.cmake /usr/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake/Modules/CMakeCompilerIdDetection.cmake /usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake /usr/share/cmake/Modules/CMakeDetermineCompiler.cmake /usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake /usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake /usr/share/cmake/Modules/CMakeDetermineCompilerSupport.cmake /usr/share/cmake/Modules/CMakeDetermineSystem.cmake /usr/share/cmake/Modules/CMakeFindBinUtils.cmake /usr/share/cmake/Modules/CMakeGenericSystem.cmake /usr/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/share/cmake/Modules/CMakeNinjaFindMake.cmake /usr/share/cmake/Modules/CMakeParseImplicitIncludeInfo.cmake /usr/share/cmake/Modules/CMakeParseImplicitLinkInfo.cmake /usr/share/cmake/Modules/CMakeParseLibraryArchitecture.cmake /usr/share/cmake/Modules/CMakeSystem.cmake.in /usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake /usr/share/cmake/Modules/CMakeTestCompilerCommon.cmake /usr/share/cmake/Modules/Compiler/ADSP-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/ARMCC-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/ARMClang-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/AppleClang-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Borland-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake/Modules/Compiler/Clang-CXX-CXXImportStd.cmake /usr/share/cmake/Modules/Compiler/Clang-CXX.cmake /usr/share/cmake/Modules/Compiler/Clang-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /usr/share/cmake/Modules/Compiler/Clang-FindBinUtils.cmake /usr/share/cmake/Modules/Compiler/Clang.cmake /usr/share/cmake/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Cray-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/CrayClang-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/GHS-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/GNU.cmake /usr/share/cmake/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/IAR-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /usr/share/cmake/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Intel-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/MSVC-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/NVHPC-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/OrangeC-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/PGI-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/PathScale-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/SCO-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/TI-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/TIClang-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Tasking-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Watcom-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/ExternalProject/shared_internal_commands.cmake /usr/share/cmake/Modules/FetchContent.cmake /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake/Modules/FindPackageMessage.cmake /usr/share/cmake/Modules/FindPkgConfig.cmake /usr/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake /usr/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake /usr/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake /usr/share/cmake/Modules/Internal/CMakeInspectCXXLinker.cmake /usr/share/cmake/Modules/Internal/FeatureTesting.cmake /usr/share/cmake/Modules/Linker/GNU-CXX.cmake /usr/share/cmake/Modules/Linker/GNU.cmake /usr/share/cmake/Modules/Platform/Linker/GNU.cmake /usr/share/cmake/Modules/Platform/Linker/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linker/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Clang-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-Determine-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake/Modules/Platform/Linux.cmake /usr/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.0.2-dirty/CMakeCXXCompiler.cmake CMakeFiles/4.0.2-dirty/CMakeSystem.cmake
+build build.ninja /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/cmake_install.cmake /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/flutter/cmake_install.cmake /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/record_linux/cmake_install.cmake /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream/cmake_install.cmake /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream/shared/cmake_install.cmake: RERUN_CMAKE | /home/cryptichook/Coding_Folder/Serenity/linux/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/mp_audio_stream/linux/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/mp_audio_stream/src/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/record_linux/linux/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/generated_config.cmake /home/cryptichook/Coding_Folder/Serenity/linux/flutter/generated_plugins.cmake /usr/share/cmake/Modules/CMakeCXXInformation.cmake /usr/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake/Modules/CMakeGenericSystem.cmake /usr/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake/Modules/Compiler/Clang-CXX.cmake /usr/share/cmake/Modules/Compiler/Clang.cmake /usr/share/cmake/Modules/Compiler/GNU.cmake /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake/Modules/FindPackageMessage.cmake /usr/share/cmake/Modules/FindPkgConfig.cmake /usr/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake /usr/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake /usr/share/cmake/Modules/Linker/GNU-CXX.cmake /usr/share/cmake/Modules/Linker/GNU.cmake /usr/share/cmake/Modules/Platform/Linker/GNU.cmake /usr/share/cmake/Modules/Platform/Linker/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linker/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Clang-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake/Modules/Platform/Linux.cmake /usr/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.0.2-dirty/CMakeCXXCompiler.cmake CMakeFiles/4.0.2-dirty/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /home/cryptichook/Coding_Folder/Serenity/linux/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/audioplayers_linux/linux/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/record_linux/linux/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/generated_config.cmake /home/cryptichook/Coding_Folder/Serenity/linux/flutter/generated_plugins.cmake /usr/share/cmake/Modules/CMakeCXXCompiler.cmake.in /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp /usr/share/cmake/Modules/CMakeCXXInformation.cmake /usr/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake/Modules/CMakeCompilerIdDetection.cmake /usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake /usr/share/cmake/Modules/CMakeDetermineCompiler.cmake /usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake /usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake /usr/share/cmake/Modules/CMakeDetermineCompilerSupport.cmake /usr/share/cmake/Modules/CMakeDetermineSystem.cmake /usr/share/cmake/Modules/CMakeFindBinUtils.cmake /usr/share/cmake/Modules/CMakeGenericSystem.cmake /usr/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/share/cmake/Modules/CMakeNinjaFindMake.cmake /usr/share/cmake/Modules/CMakeParseImplicitIncludeInfo.cmake /usr/share/cmake/Modules/CMakeParseImplicitLinkInfo.cmake /usr/share/cmake/Modules/CMakeParseLibraryArchitecture.cmake /usr/share/cmake/Modules/CMakeSystem.cmake.in /usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake /usr/share/cmake/Modules/CMakeTestCompilerCommon.cmake /usr/share/cmake/Modules/Compiler/ADSP-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/ARMCC-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/ARMClang-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/AppleClang-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Borland-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake/Modules/Compiler/Clang-CXX-CXXImportStd.cmake /usr/share/cmake/Modules/Compiler/Clang-CXX.cmake /usr/share/cmake/Modules/Compiler/Clang-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /usr/share/cmake/Modules/Compiler/Clang-FindBinUtils.cmake /usr/share/cmake/Modules/Compiler/Clang.cmake /usr/share/cmake/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Cray-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/CrayClang-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/GHS-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/GNU.cmake /usr/share/cmake/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/IAR-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /usr/share/cmake/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Intel-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/MSVC-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/NVHPC-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/OrangeC-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/PGI-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/PathScale-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/SCO-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/TI-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/TIClang-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Tasking-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/Watcom-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /usr/share/cmake/Modules/ExternalProject/shared_internal_commands.cmake /usr/share/cmake/Modules/FetchContent.cmake /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake/Modules/FindPackageMessage.cmake /usr/share/cmake/Modules/FindPkgConfig.cmake /usr/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake /usr/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake /usr/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake /usr/share/cmake/Modules/Internal/CMakeInspectCXXLinker.cmake /usr/share/cmake/Modules/Internal/FeatureTesting.cmake /usr/share/cmake/Modules/Linker/GNU-CXX.cmake /usr/share/cmake/Modules/Linker/GNU.cmake /usr/share/cmake/Modules/Platform/Linker/GNU.cmake /usr/share/cmake/Modules/Platform/Linker/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linker/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Clang-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-Determine-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake/Modules/Platform/Linux.cmake /usr/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.0.2-dirty/CMakeCXXCompiler.cmake CMakeFiles/4.0.2-dirty/CMakeSystem.cmake: phony
+build /home/cryptichook/Coding_Folder/Serenity/linux/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/mp_audio_stream/linux/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/mp_audio_stream/src/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/record_linux/linux/CMakeLists.txt /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/generated_config.cmake /home/cryptichook/Coding_Folder/Serenity/linux/flutter/generated_plugins.cmake /usr/share/cmake/Modules/CMakeCXXInformation.cmake /usr/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake/Modules/CMakeGenericSystem.cmake /usr/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake/Modules/Compiler/Clang-CXX.cmake /usr/share/cmake/Modules/Compiler/Clang.cmake /usr/share/cmake/Modules/Compiler/GNU.cmake /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake/Modules/FindPackageMessage.cmake /usr/share/cmake/Modules/FindPkgConfig.cmake /usr/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake /usr/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake /usr/share/cmake/Modules/Linker/GNU-CXX.cmake /usr/share/cmake/Modules/Linker/GNU.cmake /usr/share/cmake/Modules/Platform/Linker/GNU.cmake /usr/share/cmake/Modules/Platform/Linker/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linker/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Clang-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake/Modules/Platform/Linux.cmake /usr/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.0.2-dirty/CMakeCXXCompiler.cmake CMakeFiles/4.0.2-dirty/CMakeSystem.cmake: phony
 
 
 #############################################

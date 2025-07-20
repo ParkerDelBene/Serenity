@@ -68,7 +68,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
      NOT IS_SYMLINK "$ENV{DESTDIR}/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/serenity")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/serenity"
-         OLD_RPATH "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/audioplayers_linux:/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/record_linux:/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral:"
+         OLD_RPATH "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/record_linux:/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral:"
          NEW_RPATH "$ORIGIN/lib")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/llvm-strip" "$ENV{DESTDIR}/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/serenity")
@@ -102,18 +102,6 @@ endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib/libaudioplayers_linux_plugin.so")
-  if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
-    message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
-  endif()
-  if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-    message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
-  endif()
-  file(INSTALL DESTINATION "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib" TYPE FILE FILES "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/audioplayers_linux/libaudioplayers_linux_plugin.so")
-endif()
-
-if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
-  list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib/librecord_linux_plugin.so")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
@@ -122,6 +110,18 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   file(INSTALL DESTINATION "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib" TYPE FILE FILES "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/record_linux/librecord_linux_plugin.so")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
+  list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
+   "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib/libmp_audio_stream.so")
+  if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  file(INSTALL DESTINATION "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib" TYPE FILE FILES "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream/shared/libmp_audio_stream.so")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -169,8 +169,8 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/flutter/cmake_install.cmake")
-  include("/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/audioplayers_linux/cmake_install.cmake")
   include("/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/record_linux/cmake_install.cmake")
+  include("/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/plugins/mp_audio_stream/cmake_install.cmake")
 
 endif()
 

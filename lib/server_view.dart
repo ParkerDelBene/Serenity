@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:serenity/audio_output.dart';
-import 'package:serenity/connection.dart';
 import 'package:serenity/globals.dart';
 import 'package:serenity/microphone_recorder.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:serenity/serenity_server.dart';
 
 class ServerView extends StatefulWidget {
   ServerView({super.key});
 
   final MicrophoneRecorder mic = MicrophoneRecorder();
   final AudioOutput output = AudioOutput();
-  final Connection server = Connection();
+  final SerenityServer server = SerenityServer('192.168.0.38',null,'', '', 'Bruno');
 
   @override
   State<ServerView> createState() => _ServerViewState();
@@ -31,16 +30,13 @@ class _ServerViewState extends State<ServerView> {
         height: size.height,
         child: Row(
           children: [
-            SizedBox(
+            Container(
               width: screenWidth * .08,
-              child: Column(
-                children: [
-                  Expanded(
-                      child: Container(
-                    color: Colors.green,
-                  ))
-                ],
-              ),
+              height: screenHeight,
+              decoration: BoxDecoration(color: Colors.blueGrey),
+              child: Center(
+                child: SingleChildScrollView(child: ListBody(),),
+              )
             ),
             Expanded(
               child: Column(
@@ -50,13 +46,7 @@ class _ServerViewState extends State<ServerView> {
                       color: Colors.blue,
                       child: InkWell(
                         onTap: () async {
-                          await widget.mic.startStream();
-                          WebSocketSink serverSink =widget.server.getSocketSink();
-
-                          widget.mic.audioStream.listen((data) {
-                            serverSink.add(data);
-                          });
-                          widget.output.addStream(widget.server.getSocketStream());
+                         
                         },
                         child: Text('Click to Record Playback'),
                       ),

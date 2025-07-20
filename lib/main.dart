@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:serenity/login_view.dart';
+import 'package:serenity/server_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -65,6 +65,6 @@ class MainPage extends StatelessWidget {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return LoginView();
+    return ServerView();
   }
 }

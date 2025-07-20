@@ -1,8 +1,8 @@
 /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/serenity
 /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/icudtl.dat
 /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib/libflutter_linux_gtk.so
-/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib/libaudioplayers_linux_plugin.so
 /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib/librecord_linux_plugin.so
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib/libmp_audio_stream.so
 /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/fonts/MaterialIcons-Regular.otf
 /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/version.json
 /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/AssetManifest.bin
@@ -14,4 +14,5 @@
 /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/packages/record_web/assets/js/record.worklet.js
 /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/packages/record_web/assets/js/record.fixwebmduration.js
 /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
+/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/data/flutter_assets/packages/mp_audio_stream/js/audio_stream.js
 /home/cryptichook/Coding_Folder/Serenity/build/linux/x64/release/bundle/lib/libapp.so
