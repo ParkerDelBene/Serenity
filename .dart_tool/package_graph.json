@@ -7,11 +7,13 @@
       "name": "serenity",
       "version": "1.0.0+1",
       "dependencies": [
+        "crypto",
         "cupertino_icons",
         "ffi",
         "flutter",
         "http",
         "mp_audio_stream",
+        "pointycastle",
         "record",
         "uuid",
         "web_socket_channel",
@@ -45,6 +47,21 @@
         "stream_channel",
         "test_api",
         "vector_math"
+      ]
+    },
+    {
+      "name": "crypto",
+      "version": "3.0.7",
+      "dependencies": [
+        "typed_data"
+      ]
+    },
+    {
+      "name": "pointycastle",
+      "version": "4.0.0",
+      "dependencies": [
+        "collection",
+        "convert"
       ]
     },
     {
@@ -220,16 +237,23 @@
       ]
     },
     {
-      "name": "fixnum",
-      "version": "1.1.1",
-      "dependencies": []
+      "name": "typed_data",
+      "version": "1.4.0",
+      "dependencies": [
+        "collection"
+      ]
     },
     {
-      "name": "crypto",
-      "version": "3.0.6",
+      "name": "convert",
+      "version": "3.1.2",
       "dependencies": [
         "typed_data"
       ]
+    },
+    {
+      "name": "fixnum",
+      "version": "1.1.1",
+      "dependencies": []
     },
     {
       "name": "web",
@@ -383,13 +407,6 @@
       "dependencies": [
         "source_span",
         "string_scanner"
-      ]
-    },
-    {
-      "name": "typed_data",
-      "version": "1.4.0",
-      "dependencies": [
-        "collection"
       ]
     },
     {

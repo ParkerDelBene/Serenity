@@ -1,20 +1,26 @@
 import 'dart:io';
 
-import 'serenity_server.dart';
+import 'class_serenity_server.dart';
 
-void main() async{
+void main() async {
   print('Server Starting');
-  SerenityServer server = SerenityServer(await HttpServer.bind('0.0.0.0', 12345));
+  SerenityServer server = SerenityServer();
 
-  await server.initialize();
+  /*
+    Initialize the server, end program if server failed to initialize
+  */
+  if (!await server.initialize()) {
+    print("Server Failed to initialize");
+    return;
+  }
+
   print('Server Initialized');
 
-  stdin.listen((input){
+  stdin.listen((input) {
     serverCommandLine(String.fromCharCodes(input));
   });
 }
 
-void serverCommandLine(String input){
-
+void serverCommandLine(String input) {
   stdout.write(input);
 }

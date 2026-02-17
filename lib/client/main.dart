@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:serenity/client/dashboard.dart';
+import 'package:serenity/client/view_dashboard.dart';
 import 'package:serenity/client/globals.dart';
+import 'package:serenity/client/view_serenity_server.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,21 +20,6 @@ class MyApp extends StatelessWidget {
         if (constraints.maxWidth != 0) {
           return MaterialApp(
             theme: ThemeData(
-              // This is the theme of your application.
-              //
-              // TRY THIS: Try running your application with "flutter run". You'll see
-              // the application has a purple toolbar. Then, without quitting the app,
-              // try changing the seedColor in the colorScheme below to Colors.green
-              // and then invoke "hot reload" (save your changes or press the "hot
-              // reload" button in a Flutter-supported IDE, or press "r" if you used
-              // the command line to start the app).
-              //
-              // Notice that the counter didn't reset back to zero; the application
-              // state is not lost during the reload. To reset the state, use hot
-              // restart instead.
-              //
-              // This works for code too, not just values: Most code changes can be
-              // tested with just a hot reload.
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
               useMaterial3: true,
             ),
@@ -51,6 +39,8 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    loadServers();
+
     Size maxSize = MediaQuery.sizeOf(context);
     if (!screenSizeInitialized) {
       maxScreenHeight = maxSize.height;
@@ -58,12 +48,35 @@ class MainPage extends StatelessWidget {
       screenSizeInitialized = true;
     }
 
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Dashboard();
+  }
+
+  /*
+    Load the servers from the server directory.
+
+    Checks to see if ther server directory exists, if it does then it loads the 
+    servers present. If it doesn't it assumes that the client is not a part of 
+    any servers.
+  */
+  void loadServers() {
+    Directory serversDirectory = Directory('./servers');
+    bool serversDirectoryCreated = serversDirectory.existsSync();
+    List<FileSystemEntity> listOfServers = [];
+
+    // Check to see if the serverDirectory has been created.
+    if (!serversDirectoryCreated) {
+      return;
+    }
+
+    listOfServers = serversDirectory.listSync(followLinks: false);
+
+    //Find all of the directories
+    for (FileSystemEntity entity in listOfServers) {
+      if (entity is! Directory) {
+        listOfServers.remove(entity);
+      } else {
+        serverList.add(SerenityServer.fromDirectory(entity));
+      }
+    }
   }
 }
