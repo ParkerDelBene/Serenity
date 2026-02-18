@@ -295,7 +295,7 @@ class SerenityServer {
       /// Wait for the password input
       inputPassword = stdin.readLineSync() as String;
 
-      stdin.print("Confirm the password");
+      print("Confirm the password");
 
       /// Confirm the password
       confirmPassword = stdin.readLineSync() as String;
