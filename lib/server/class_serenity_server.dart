@@ -293,12 +293,12 @@ class SerenityServer {
       print("Create the password for the server");
 
       /// Wait for the password input
-      inputPassword = String.fromCharCodes(await stdin.first);
+      inputPassword = stdin.readLineSync() as String;
 
       print("Confirm the password");
 
       /// Confirm the password
-      confirmPassword = String.fromCharCodes(await stdin.first);
+      confirmPassword = stdin.readLineSync() as String;
 
       if (inputPassword == confirmPassword) {
         /// Set variable to break from the while loop
@@ -383,10 +383,8 @@ class SerenityServer {
     List<FileSystemEntity> directoryList = usersDirectory.listSync();
 
     for (FileSystemEntity entity in directoryList) {
-      /// Check if the entity is a Directory, if it isn't, remove it from the list
-      if (entity is! Directory) {
-        directoryList.remove(entity);
-      } else {
+      /// Check if the entity is a Directory
+      if (entity is Directory) {
         /// Split the path and grab the last split, this should give us the userID
         List<String> splitPath = entity.path.split('/');
         String userID = splitPath[splitPath.length - 1];
@@ -406,7 +404,6 @@ class SerenityServer {
     }
   }
 
-  ///
   ///Name: checkClientData
   ///
   ///Date Last Updated: 11/17/25
@@ -452,7 +449,7 @@ class SerenityServer {
   ///  Function: Handles Generating the unique userID and userPAT.
   ///
   /// Format -> ["userID","userPAT"]
-  Future<List<String>> generateClientData() async {
+  List<String> generateClientData() {
     List<String> userData = [];
 
     //Create the userID based on Time.
@@ -463,12 +460,10 @@ class SerenityServer {
     userData.add(Uuid().v4());
 
     //Create the user's Directory to store their data.
-    Directory userDirectory =
-        await Directory('./users/${userData[0]}').create();
+    Directory userDirectory = Directory('./users/${userData[0]}')..createSync();
 
-    // Write the PAT to a plain text file
-    File patFile = await File("${userDirectory.path}/PAT").create();
-
+    /// Write the PAT Hash to a plain text file
+    File patFile = File("${userDirectory.path}/PAT")..createSync();
     patFile.writeAsString(sha256.convert(userData[1].codeUnits).toString());
 
     return userData;
@@ -611,9 +606,13 @@ class SerenityServer {
         config.textChannels,
         config.voiceChannels);
 
-    /// Send the Init Packet
-    webSocket.add(SerenityPacket(SerenityPacketTypeEnum.serenityInitPacket,
-        jsonEncode(initPacket.toMap())));
+    /// Build the Packet
+    SerenityPacket packet = SerenityPacket(
+        SerenityPacketTypeEnum.serenityInitPacket,
+        jsonEncode(initPacket.toMap()));
+
+    /// Send the Packet
+    webSocket.add(jsonEncode(packet.toMap()));
 
     /// Wipe the userPAT just in case
     userPAT = "";
@@ -660,7 +659,7 @@ class SerenityServer {
 
   /// Name: userUpdateHandler
   ///
-  /// Date Last Updated: 02/12/26
+  /// Date Last Updated: 02/17/26
   ///
   /// Last Updater: Parker DelBene
   ///
@@ -676,23 +675,53 @@ class SerenityServer {
     /// Then find the endex of that user
     int indexOfOldUser = userList.indexWhere((user) => user.userID == userID);
 
-    /// Then replace the user
-    userList[indexOfOldUser] = userInfo;
+    /// If the userID cannot be found, then we need to add the
+    /// user to the userList. This would happen on a first connection
+    /// of a user.
+    if (indexOfOldUser == -1) {
+      userList.add(userInfo);
+    } else {
+      /// Then replace the user
+      userList[indexOfOldUser] = userInfo;
+    }
 
     /// Then, make sure to save all of the userData to their server file
+    saveUserData(userInfo);
+
+    return;
   }
 
-  /// Name: writeTextData
+  /// Name: saveUserData
   ///
-  /// Date Last Updated: 02/12/26
+  /// Date Last Updated: 02/17/26
   ///
   /// Last Updater: Parker DelBene
   ///
-  /// Function: This function is called by the .listen
-  /// function on the websockets. It replicates the data to
-  /// the rest of the clients on the server.
+  /// Function: This function is given a Serenity user, and saves the data to
+  /// the correct user directory
   void saveUserData(SerenityUser user) {
-    asdasd
+    /// Get the user Directory
+    Directory userDirectory =
+        Directory("${usersDirectory.path}/${user.userID}");
+
+    /// If the directory does not exist, return
+    if (!userDirectory.existsSync()) {
+      return;
+    }
+
+    /// Get the user Files
+    File usernameFile = File("${userDirectory.path}/username")..createSync();
+    File userIconFile = File("${userDirectory.path}/userIcon.jpg")
+      ..createSync();
+    File userBannerFile = File("${userDirectory.path}/userBanner.jpg")
+      ..createSync();
+
+    /// Output the user Data to the files.
+    usernameFile.writeAsStringSync(user.userName);
+    userIconFile.writeAsBytesSync(user.userIcon);
+    userBannerFile.writeAsBytesSync(user.userBanner);
+
+    return;
   }
 
   /// Name: writeTextData
