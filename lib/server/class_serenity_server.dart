@@ -295,12 +295,14 @@ class SerenityServer {
       /// Wait for the password input
       inputPassword = stdin.readLineSync() as String;
 
-      print("Confirm the password");
+      stdin.print("Confirm the password");
 
       /// Confirm the password
       confirmPassword = stdin.readLineSync() as String;
 
-      if (inputPassword == confirmPassword) {
+      /// if the passwords match, then hash the password and store it
+      /// the passwords cannot be empty
+      if (inputPassword == confirmPassword && inputPassword != "") {
         /// Set variable to break from the while loop
         passwordMatch = true;
 
