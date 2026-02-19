@@ -234,7 +234,6 @@ class AddserverView extends StatelessWidget {
     Directory serverChatsDirectory;
     File serverBanner;
     File serverIcon;
-    File serverConfig;
     File userIDFile;
     File userPATFile;
 
@@ -266,20 +265,6 @@ class AddserverView extends StatelessWidget {
       */
       serverConfigDirectory = Directory('${serverDirectory.path}/config')
         ..createSync();
-
-      serverConfig = File('${serverConfigDirectory.path}/config')..createSync();
-
-      /// Create the clienside config
-      SerenityClientsideConfig clientsideConfig = SerenityClientsideConfig(
-        uriController.text,
-        portController.text,
-        initPacket.textChannels,
-        initPacket.voiceChannels,
-        initPacket.saveContent,
-      );
-
-      /// Write the clientSideConfig to the serverConfig file
-      serverConfig.writeAsString(jsonEncode(clientsideConfig.toMap()));
 
       /*
         Create the user directory and populate it with the UUID and PAT

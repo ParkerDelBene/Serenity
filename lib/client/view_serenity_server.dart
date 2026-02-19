@@ -44,8 +44,8 @@ class SerenityServer extends StatefulWidget {
       Creating the SerenityConfig
     */
     String serverConfigString = serverConfigFile.readAsStringSync();
-    SerenityConfig serverConfig =
-        SerenityConfig.fromMap(jsonDecode(serverConfigString));
+    SerenityClientsideConfig serverConfig =
+        SerenityClientsideConfig.fromMap(jsonDecode(serverConfigString));
 
     /*
       Getting the uri
