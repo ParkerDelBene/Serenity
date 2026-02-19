@@ -35,28 +35,22 @@ class AddserverView extends StatelessWidget {
                 controller: uriController,
                 textAlign: TextAlign.center,
                 decoration: InputDecoration(
-                    hint: Text(
-                  'URL',
-                  textAlign: TextAlign.center,
-                )),
+                  hintText: 'URL',
+                ),
               ),
               TextField(
                 controller: portController,
                 textAlign: TextAlign.center,
                 decoration: InputDecoration(
-                    hint: Text(
-                  'PORT',
-                  textAlign: TextAlign.center,
-                )),
+                  hintText: 'PORT',
+                ),
               ),
               TextField(
                 controller: passwordController,
                 textAlign: TextAlign.center,
                 decoration: InputDecoration(
-                    hint: Text(
-                  'PASSWORD',
-                  textAlign: TextAlign.center,
-                )),
+                  hintText: 'PASSWORD',
+                ),
               ),
               TextButton(
                   onPressed: () => setupConnectionHandler(context),
@@ -110,15 +104,28 @@ class AddserverView extends StatelessWidget {
             MaterialPageRoute(
                 builder: (BuildContext context) => addServerFailed(context)));
       }
-    } else {
-      ///Get the stream and then read the first few messages that will
-      ///initialize the Server Config and UUID
+      return;
+    }
+
+    ///Get the stream and then read the first few messages that will
+    ///initialize the Server Config and UUID
+    try {
       SerenityServer newServer = await initServer(newConnection);
 
+      /// If initializing the server succeeded, add it to the serverList.
       serverList.add(newServer);
 
+      /// Then pop back to the dashboard
       if (context.mounted) {
         Navigator.popUntil(context, (route) => route.settings.name == "/");
+      }
+    } catch (e) {
+      /// If initializing the server failed somehow. Push the ServerFailed view
+      if (context.mounted) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => addServerFailed(context)));
       }
     }
   }
@@ -146,15 +153,31 @@ class AddserverView extends StatelessWidget {
 
     /// Call to create the necessary Server Directories
     List<Directory> directoryList =
-        createServerDirectory(initPacket, userID, newConnection.uri);
+        createServerDirectory(initPacket, userID, userPAT);
 
+    /// Check if creating the directories failed
     if (directoryList.isEmpty) {
       throw Exception("Could not create Server Directories");
     }
 
-    /*
-      Create the TextChannels
-    */
+    /// Create the clientSideConfig and push it to the config directory
+    SerenityClientsideConfig clientsideConfig = SerenityClientsideConfig(
+        initPacket.serverName,
+        uriController.text,
+        portController.text,
+        initPacket.textChannels,
+        initPacket.voiceChannels,
+        initPacket.saveContent);
+
+    /// Make the File
+    File clientsideConfigFile = File("${directoryList[1].path}/config")
+      ..createSync();
+
+    /// Save to file
+    clientsideConfigFile
+        .writeAsStringSync(jsonEncode(clientsideConfig.toMap()));
+
+    /// Create the TextChannels
     for (String channel in initPacket.textChannels) {
       /// Checks if the length is 4, if so it returns the chat directory
       /// Else it pipes in null
@@ -176,9 +199,9 @@ class AddserverView extends StatelessWidget {
         directoryList[1],
         directoryList[2],
         initPacket.saveContent == false ? directoryList[3] : null,
-        serverConfig,
+        clientsideConfig,
         textChannels,
-        serverConfig.voiceChannels,
+        clientsideConfig.voiceChannels,
         newConnection);
   }
 
@@ -193,11 +216,11 @@ class AddserverView extends StatelessWidget {
   ///
   ///Called by the initServer function
   ///
-  ///Returns {Assets,Config,Users,Chat,cliensideConfig} directory list if saving locally
+  ///Returns {Assets,Config,Users,Chat} directory list if saving locally
   ///
-  ///Returns {Assets,Config,Users,clientsideConfig} directory list if not saving locally
+  ///Returns {Assets,Config,Users} directory list if not saving locally
   ///
-  List<dynamic> createServerDirectory(
+  List<Directory> createServerDirectory(
       SerenityInitPacket initPacket, String userID, String userPAT) {
     /// Declare Variables to use
 
@@ -252,6 +275,7 @@ class AddserverView extends StatelessWidget {
         portController.text,
         initPacket.textChannels,
         initPacket.voiceChannels,
+        initPacket.saveContent,
       );
 
       /// Write the clientSideConfig to the serverConfig file
@@ -305,6 +329,7 @@ class AddserverView extends StatelessWidget {
           File('${serverChatsDirectory.path}/$textChannel.txt').createSync();
         }
 
+        /// Add the directories to the returnedList
         returnedList.add(serverAssetsDirectory);
         returnedList.add(serverConfigDirectory);
         returnedList.add(serverUsersDirectory);
@@ -314,6 +339,7 @@ class AddserverView extends StatelessWidget {
       return returnedList;
     }
 
+    /// Adds every directory except for the Chats Directory
     returnedList.add(serverAssetsDirectory);
     returnedList.add(serverConfigDirectory);
     returnedList.add(serverUsersDirectory);
