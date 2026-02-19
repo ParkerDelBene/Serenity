@@ -364,6 +364,7 @@ class SerenityServer {
       assetsDirectory.createSync();
       usersDirectory.createSync();
       chatsDirectory.createSync();
+      keysDirectory.createSync();
     } catch (e) {
       print(e);
       print("Error verifying Directories");
@@ -606,7 +607,8 @@ class SerenityServer {
         userPAT,
         userList,
         config.textChannels,
-        config.voiceChannels);
+        config.voiceChannels,
+        config.saveContent);
 
     /// Build the Packet
     SerenityPacket packet = SerenityPacket(

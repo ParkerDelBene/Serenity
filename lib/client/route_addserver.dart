@@ -3,10 +3,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:serenity/client/class_connection.dart';
+import 'package:serenity/client/class_serenity_clientside_config.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/view_serenity_server.dart';
 import 'package:serenity/client/view_text_channel.dart';
 import 'package:serenity/server/class_serenity_config.dart';
+import 'package:serenity/server/class_serenity_init_packet.dart';
+import 'package:serenity/server/class_serenity_user.dart';
+import 'package:win32/win32.dart';
 
 class AddserverView extends StatelessWidget {
   AddserverView({super.key});
@@ -14,14 +18,6 @@ class AddserverView extends StatelessWidget {
   final TextEditingController uriController = TextEditingController();
   final TextEditingController portController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  /*
-    Initialize the variables for the server and userID and the variable to let
-    the setup continue
-  */
-  String userID = "";
-  late final SerenityConfig serverConfig;
-  bool setupDone = false;
 
   @override
   Widget build(BuildContext context) {
@@ -63,42 +59,7 @@ class AddserverView extends StatelessWidget {
                 )),
               ),
               TextButton(
-                  onPressed: () async {
-                    /*
-                        Initialize the connection
-                      */
-                    Connection newConnection =
-                        Connection(uriController.text, portController.text, "");
-
-                    /*
-                      If the Connection failed then push the serverFailed Page
-                      Else, pull the first two mesasges from the server, which are the UUID
-                      of the user, and then the ServerConfig
-                    */
-                    if (!await newConnection.initialize()) {
-                      if (context.mounted) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    addServerFailed(context)));
-                      }
-                    } else {
-                      /*
-                        Get the stream and then read the first few messages that will
-                        initialize the Server Config and UUID
-                      */
-                      SerenityServer newServer =
-                          await initServer(newConnection);
-
-                      serverList.add(newServer);
-
-                      if (context.mounted) {
-                        Navigator.popUntil(
-                            context, (route) => route.settings.name == "/");
-                      }
-                    }
-                  },
+                  onPressed: () => setupConnectionHandler(context),
                   child: FittedBox(
                     child: Text('Connect'),
                   ))
@@ -125,35 +86,67 @@ class AddserverView extends StatelessWidget {
     );
   }
 
-  /*
-    Name initServer
+  /// Name setupConnectionHandler
+  ///
+  /// Last Date Updated: 02/18/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This function handles the initial connection setup from pressing
+  /// the connect textbutton
+  void setupConnectionHandler(BuildContext context) async {
+    ///
+    /// Initialize the connection
+    Connection newConnection = Connection.withPassword(
+        uriController.text, portController.text, passwordController.text);
 
-    Last Date Updated 01/22/26
+    /// If the Connection failed then push the serverFailed Page
+    /// Else, pull the first two mesasges from the server, which are the UUID
+    /// of the user, and then the ServerConfig
+    if (!await newConnection.initialize()) {
+      if (context.mounted) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => addServerFailed(context)));
+      }
+    } else {
+      ///Get the stream and then read the first few messages that will
+      ///initialize the Server Config and UUID
+      SerenityServer newServer = await initServer(newConnection);
 
-    Last Updater: Parker DelBene
+      serverList.add(newServer);
 
-    Function: This function takes in the connection, and then initializes the
-    server and spits out the serenity server
-  */
+      if (context.mounted) {
+        Navigator.popUntil(context, (route) => route.settings.name == "/");
+      }
+    }
+  }
+
+  /// Name: initServer
+  ///
+  /// Last Date Updated: 01/22/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This function takes in the connection, and then initializes the
+  /// server and spits out the serenity server
   Future<SerenityServer> initServer(Connection newConnection) async {
-    /*
-      Init Variables for use
-    */
+    /// Init Variables for use
     Map<String, TextChannel> textChannels = <String, TextChannel>{};
 
-    // get the initial Connection messages from the server
+    /// get the initial Connection messages from the server
     List<dynamic> initialConnectionMessages =
-        await SerenityServer.initialConnectionSetup(newConnection);
+        await SerenityServer.getInitialPacket(newConnection);
 
-    // Get the serverConfig and userID from the initial messages
-    SerenityConfig serverConfig = initialConnectionMessages[0];
-    String userID = initialConnectionMessages[1];
+    /// Get the userID, userPAT, and InitPacket from the initial messages
+    String userID = initialConnectionMessages[0];
+    String userPAT = initialConnectionMessages[1];
+    SerenityInitPacket initPacket = initialConnectionMessages[2];
 
-    /*
-      Call to create the necessary Server Directories
-    */
+    /// Call to create the necessary Server Directories
     List<Directory> directoryList =
-        await createServerDirectory(serverConfig, userID, newConnection.uri);
+        createServerDirectory(initPacket, userID, newConnection.uri);
 
     if (directoryList.isEmpty) {
       throw Exception("Could not create Server Directories");
@@ -162,10 +155,10 @@ class AddserverView extends StatelessWidget {
     /*
       Create the TextChannels
     */
-    for (String channel in serverConfig.textChannels) {
-      //Checks if the length is 4, if so it returns the chat directory
-      //Else it pipes in null
-      TextChannel newChannel = TextChannel(channel, !serverConfig.saveContent,
+    for (String channel in initPacket.textChannels) {
+      /// Checks if the length is 4, if so it returns the chat directory
+      /// Else it pipes in null
+      TextChannel newChannel = TextChannel(channel, !initPacket.saveContent,
           directoryList.length == 4 ? directoryList[3] : null);
 
       textChannels.addAll({channel: newChannel});
@@ -175,14 +168,14 @@ class AddserverView extends StatelessWidget {
       Create the Serenity Server and then return it.
     */
     return SerenityServer(
-        serverConfig.serverName,
+        initPacket.serverName,
         newConnection.uri,
         newConnection.port,
         userID,
         directoryList[0],
         directoryList[1],
         directoryList[2],
-        serverConfig.saveContent == false ? directoryList[3] : null,
+        initPacket.saveContent == false ? directoryList[3] : null,
         serverConfig,
         textChannels,
         serverConfig.voiceChannels,
@@ -200,16 +193,15 @@ class AddserverView extends StatelessWidget {
   ///
   ///Called by the initServer function
   ///
-  ///Returns {Assets,Config,Users,Chat} directory list if saving locally
+  ///Returns {Assets,Config,Users,Chat,cliensideConfig} directory list if saving locally
   ///
-  ///Returns {Assets,Config,Users} directory list if not saving locally
+  ///Returns {Assets,Config,Users,clientsideConfig} directory list if not saving locally
   ///
-  Future<List<Directory>> createServerDirectory(
-      SerenityConfig config, String userID, String uri) async {
+  List<dynamic> createServerDirectory(
+      SerenityInitPacket initPacket, String userID, String userPAT) {
+    /// Declare Variables to use
+
     List<Directory> returnedList = [];
-    /*
-      Declare Variables Used
-    */
     Directory serversDirectory;
     Directory serverDirectory;
     Directory serverAssetsDirectory;
@@ -217,65 +209,100 @@ class AddserverView extends StatelessWidget {
     Directory serverUsersDirectory;
     Directory serverUserDirectory;
     Directory serverChatsDirectory;
+    File serverBanner;
+    File serverIcon;
     File serverConfig;
-    File serverURI;
     File userIDFile;
+    File userPATFile;
 
     /*
       Create the directory structure for the server
     */
     try {
-      /*
-        Create the Servers Directory and then create the server by servername
-      */
-      serversDirectory = await Directory('./servers').create();
+      /// Create the Servers Directory and then create the server by servername
+      serversDirectory = Directory('./servers')..createSync();
 
       serverDirectory =
-          await Directory('${serversDirectory.path}/${config.serverName}')
-              .create();
-      serverAssetsDirectory =
-          await Directory('${serverDirectory.path}/assets').create();
+          Directory('${serversDirectory.path}/${initPacket.serverName}')
+            ..createSync();
+
+      /// Create the assets directory and populate the serverIcon and serverbanner
+      serverAssetsDirectory = Directory('${serverDirectory.path}/assets')
+        ..createSync();
+
+      serverIcon = File("${serverAssetsDirectory.path}/serverIcon.jpg")
+        ..createSync();
+      serverIcon.writeAsBytesSync(initPacket.serverIcon);
+
+      serverBanner = File("${serverAssetsDirectory.path}/serverBanner.jpg")
+        ..createSync();
+      serverBanner.writeAsBytesSync(initPacket.serverBanner);
 
       /*
         Create the Config directory and then create the config file
-        and save the URI.
       */
-      serverConfigDirectory =
-          await Directory('${serverDirectory.path}/config').create();
+      serverConfigDirectory = Directory('${serverDirectory.path}/config')
+        ..createSync();
 
-      serverConfig =
-          await File('${serverConfigDirectory.path}/config').create();
+      serverConfig = File('${serverConfigDirectory.path}/config')..createSync();
 
-      serverConfig.writeAsString(jsonEncode(config.toMap()));
+      /// Create the clienside config
+      SerenityClientsideConfig clientsideConfig = SerenityClientsideConfig(
+        uriController.text,
+        portController.text,
+        initPacket.textChannels,
+        initPacket.voiceChannels,
+      );
 
-      serverURI = await File('${serverConfigDirectory.path}/URI').create();
-
-      serverURI.writeAsString(uri);
+      /// Write the clientSideConfig to the serverConfig file
+      serverConfig.writeAsString(jsonEncode(clientsideConfig.toMap()));
 
       /*
-        Create the user directory and populate it with the UUID
+        Create the user directory and populate it with the UUID and PAT
       */
-      serverUsersDirectory =
-          await Directory('${serverDirectory.path}/users').create();
+      serverUsersDirectory = Directory('${serverDirectory.path}/users')
+        ..createSync();
 
-      serverUserDirectory =
-          await Directory('${serverUsersDirectory.path}/this').create();
+      serverUserDirectory = Directory('${serverUsersDirectory.path}/this')
+        ..createSync();
 
-      userIDFile = await File('${serverUserDirectory.path}/UUID').create();
+      userIDFile = File('${serverUserDirectory.path}/UUID')..createSync();
 
       userIDFile.writeAsString(userID);
 
-      /*
-        If the server is not saving chat on the server side then
-        create the chats directory and then populate it with text files for each
-        text channel
-      */
-      if (!config.saveContent) {
-        serverChatsDirectory =
-            await Directory('${serverDirectory.path}/chats').create();
+      userPATFile = File("${serverUserDirectory.path}/PAT")..createSync();
 
-        for (String textChannel in config.textChannels) {
-          await File('${serverChatsDirectory.path}/$textChannel.txt').create();
+      userPATFile.writeAsString(userPAT);
+
+      /// Then we need to populate the users directory with all of the users in
+      /// the initPacket
+
+      for (SerenityUser user in initPacket.userList) {
+        /// Create the userDirectory
+        Directory userDirectory =
+            Directory("${serverUsersDirectory.path}/${user.userID}")
+              ..createSync();
+
+        /// populate the userIcon, userBanner, and userName
+        File userIcon = File("${userDirectory.path}/userIcon.jpg")
+          ..createSync();
+        userIcon.writeAsBytesSync(user.userIcon);
+        File userBanner = File("${userDirectory.path}/userBanner.jpg")
+          ..createSync();
+        userBanner.writeAsBytesSync(user.userBanner);
+        File username = File("${userDirectory.path}/username")..createSync();
+        username.writeAsStringSync(user.userName);
+      }
+
+      /// If the server is not saving chat on the server side then
+      /// create the chats directory and then populate it with text files for each
+      /// text channel
+      if (initPacket.saveContent) {
+        serverChatsDirectory = Directory('${serverDirectory.path}/chats')
+          ..createSync();
+
+        for (String textChannel in initPacket.textChannels) {
+          File('${serverChatsDirectory.path}/$textChannel.txt').createSync();
         }
 
         returnedList.add(serverAssetsDirectory);

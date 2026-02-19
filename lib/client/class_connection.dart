@@ -1,11 +1,17 @@
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class Connection {
-  Connection(this.uri, this.port, this.userID);
+  /// Initialize with the uri, port, userID, and userPAT
+  Connection.withUserID(this.uri, this.port, this.userID, this.userPAT);
+
+  /// Initialize with the uri, port, and password
+  Connection.withPassword(this.uri, this.port, this.password) : userID = "", userPAT = "";
 
   final String uri;
   final String port;
   final String userID;
+  final String userPAT;
+  String password = "";
   late final bool connected;
   late WebSocketChannel _voiceSocket;
   late final WebSocketChannel _messageSocket;

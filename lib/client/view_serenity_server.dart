@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:serenity/client/class_connection.dart';
+import 'package:serenity/client/class_serenity_clientside_config.dart';
 import 'package:serenity/client/view_text_channel.dart';
 import 'package:serenity/client/widget_server_icon.dart';
 import 'package:serenity/server/class_serenity_config.dart';
+import 'package:serenity/server/class_serenity_init_packet.dart';
+import 'package:serenity/server/class_serenity_packet.dart';
 
 class SerenityServer extends StatefulWidget {
   SerenityServer(
@@ -35,6 +38,7 @@ class SerenityServer extends StatefulWidget {
     File serverConfigFile = File("${configDirectory.path}/config");
     File uriFile = File("${configDirectory.path}/URI");
     File userIDFile = File("${usersDirectory.path}/this/UUID");
+    File userPATFile = File("${usersDirectory.path}/this/PAT");
 
     /*
       Creating the SerenityConfig
@@ -53,11 +57,13 @@ class SerenityServer extends StatefulWidget {
     */
     String userID = userIDFile.readAsStringSync();
 
+    /// Get the userPAT
+    String userPAT = userPATFile.readAsStringSync();
     /*
       Establish the connection to the server
     */
-    Connection connection =
-        Connection(uri, serverConfig.port.toString(), userID);
+    Connection connection = Connection.withUserID(
+        uri, serverConfig.port.toString(), userID, userPAT);
 
     connection.initialize(); //Initialize the Conection;
 
@@ -97,7 +103,7 @@ class SerenityServer extends StatefulWidget {
   Directory configDirectory;
   Directory usersDirectory;
   Directory? chatsDirectory;
-  SerenityConfig serverConfig;
+  SerenityClientsideConfig serverConfig;
   Map<String, TextChannel> textChannels;
   List<String> voiceChannels;
   final Connection connection;
@@ -117,66 +123,46 @@ class SerenityServer extends StatefulWidget {
     }
   }
 
-  /*
-    Used to take the initial Connection Messages sent by the server
-
-    Always returns the list in order of userID, serverConfig
-  */
-  static Future<List<dynamic>> initialConnectionSetup(
-      Connection connection) async {
+  /// Name: getInitialPacket
+  ///
+  /// Date Last Updated: 02/18/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This funtion takes in the connection object. Pulls the first
+  /// incoming packet, which will always be a SerenityInitPacket.
+  ///
+  /// It then returns a list of userID, userPAT, and SerenityInitPacket
+  static Future<List<dynamic>> getInitialPacket(Connection connection) async {
     String userID = "";
-    SerenityConfig? serverConfig;
+    String userPAT = "";
+    SerenityInitPacket? initPacket;
 
-    connection.getMessageSocketStream().take(2).listen(
+    /// We know the first packet form the server is going to be the initPacket
+    /// So we go ahead and go through with decoding the data to a SerenityPacket
+    /// and then decoding the packet.data to a SerenityInitPacket
+    connection.getMessageSocketStream().first.then(
       (data) {
-        /*
-          Init Variables for use
-        */
-        int indexOfSemi = -1;
-        String messageType = "";
-        String message = "";
+        /// Get the packet data
+        SerenityPacket packet = SerenityPacket.fromMap(jsonDecode(data));
+        SerenityInitPacket incomingInitPacket =
+            SerenityInitPacket.fromMap(jsonDecode(packet.data));
 
-        /*
-          Turn the data into a string, separate the identifier from the data
-          and then run it through the switch
-        */
+        /// Get the userID
+        userID = incomingInitPacket.userID;
 
-        indexOfSemi = data.indexOf(';');
+        /// Get the userPAT
+        userPAT = incomingInitPacket.userPAT;
 
-        /*
-          Separate the identifier and the messagenitialConnectionSetup
-        */
-        messageType = data.substring(0, indexOfSemi);
-        message = data.substring(indexOfSemi + 1);
-
-        /*
-          Then we will wait until we have received the serverConfig, which will
-          always be the last message sent for the setup. Then we mark the setupDone
-          variable and continue with initializing the server.
-        */
-        switch (messageType) {
-          case "UUID":
-            userID = message;
-            break;
-          case "ServerConfig":
-            /*
-              Decode the incoming jsonMessage and create the ServerConfig
-            */
-            Map<String, dynamic> jsonString = jsonDecode(message);
-            serverConfig = SerenityConfig.fromMap(jsonString);
-
-            break;
-          default:
-            throw Exception("Invalid Setup Token");
-        }
+        initPacket = incomingInitPacket;
       },
     );
 
-    while (serverConfig == null) {
+    while (initPacket == null) {
       await Future.delayed(Duration(milliseconds: 250));
     }
 
-    return [userID, serverConfig];
+    return [userID, userPAT, initPacket];
   }
 }
 
@@ -334,7 +320,7 @@ class _SerenityServerState extends State<SerenityServer> {
   void _setupServerListeners() async {
     /// Getting the initial Messages.
     List<dynamic> initialConnectionMessage =
-        await SerenityServer.initialConnectionSetup(widget.connection);
+        await SerenityServer.getInitialPacket(widget.connection);
 
     ///Initialize the listener fo the incoming messages
     incomingTextChannelSubscription = widget.connection

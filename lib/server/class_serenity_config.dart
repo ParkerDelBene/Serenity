@@ -1,4 +1,3 @@
-
 class SerenityConfig {
   SerenityConfig(
     this.serverName,
@@ -65,9 +64,10 @@ class SerenityConfig {
       "serverName": serverName,
       "serverAddress": serverAddress,
       "password": password,
-      "assetDirestory": assetDirectory,
+      "assetDirectory": assetDirectory,
       "usersDirectory": usersDirectory,
       "chatsDirectory": chatsDirectory,
+      "keysDirectory": keysDirectory,
       "textChannels": textChannels,
       "voiceChannels": voiceChannels,
       "useSSL": useSSL,
