@@ -59,7 +59,7 @@ class SerenityConfig {
   /*
     Returns the Config File as a Map so it can be JSON Encoded.
   */
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       "serverName": serverName,
       "serverAddress": serverAddress,

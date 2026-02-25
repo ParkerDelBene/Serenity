@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/cmake_install.cmake",
+		"/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/flutter/cmake_install.cmake",
+		"/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/plugins/record_linux/cmake_install.cmake",
+		"/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/plugins/mp_audio_stream/cmake_install.cmake",
+		"/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/plugins/mp_audio_stream/shared/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

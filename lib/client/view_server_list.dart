@@ -23,7 +23,7 @@ class _ServerlistViewState extends State<ServerlistView> {
     return Container(
       width: viewSize.width,
       height: viewSize.height,
-      color: Colors.blueGrey,
+      color: primaryColor,
       child: SingleChildScrollView(
         child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints boxconstraints) {
@@ -41,8 +41,9 @@ class _ServerlistViewState extends State<ServerlistView> {
               height: maxWidth * serverIconPaddingRatio,
             ));
 
-            TextButton temp = TextButton(
-              onPressed: () {
+            InkWell temp = InkWell(
+              splashColor: Colors.transparent,
+              onTap: () {
                 activeServer.value = server;
               },
               child: server.toIcon(maxWidth),
@@ -98,7 +99,7 @@ class _ServerlistViewState extends State<ServerlistView> {
       decoration:
           const BoxDecoration(shape: BoxShape.circle, color: Colors.amber),
       child: InkWell(
-        onHover: (value) => {},
+        splashColor: Colors.transparent,
         onTap: () async {
           await Navigator.push(
               context,

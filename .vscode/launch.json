@@ -8,21 +8,21 @@
             "name": "Serenity",
             "request": "launch",
             "type": "dart",
-            "program": "lib/client/main.dart"
+            "program": "lib/main.dart"
         },
         {
             "name": "Serenity (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
-            "program": "lib/client/main.dart"
+            "program": "lib/main.dart"
         },
         {
             "name": "Serenity (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",
-            "program": "lib/client/main.dart"
+            "program": "lib/main.dart"
         }
     ]
 }

@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:serenity/client/globals.dart';
+import 'package:serenity/server/class_serenity_packet.dart';
+import 'package:serenity/server/class_serenity_user.dart';
 
 class TextChannel extends StatefulWidget {
   TextChannel(this.channelName, this.localSave, this.chatsDirectory,
@@ -33,12 +37,15 @@ class TextChannel extends StatefulWidget {
         activeChat.value = true;
       },
       child: Center(
-        child: Text(channelName),
+        child: Text(
+          channelName,
+          style: TextStyle(color: textColor),
+        ),
       ),
     );
   }
 
-  void addChat(String chat) {
+  void addChat(SerenityUser user, String chat) {
     _chatList.add(chat);
     _incomingChatAdd.value = true;
   }
@@ -53,7 +60,7 @@ class _TextChannelState extends State<TextChannel> {
   void initState() {
     super.initState();
 
-    widget.channelFile.createSync();
+    widget.channelFile.createSync(recursive: true);
 
     widget._incomingChatAdd.addListener(chatAddListener);
 
@@ -80,7 +87,7 @@ class _TextChannelState extends State<TextChannel> {
       return Container(
         width: maxWidth,
         height: maxHeight,
-        decoration: BoxDecoration(color: Colors.grey),
+        decoration: BoxDecoration(color: primaryColor),
         child: Column(
           children: [
             Expanded(
@@ -106,7 +113,7 @@ class _TextChannelState extends State<TextChannel> {
               width: maxWidth * .98,
               height: maxHeight * .05,
               decoration: BoxDecoration(
-                  color: Colors.blueGrey,
+                  color: secondaryColor,
                   borderRadius: BorderRadius.circular(10)),
               child: Row(
                 children: [
@@ -118,7 +125,7 @@ class _TextChannelState extends State<TextChannel> {
                       child: Text(
                         "+",
                         style: TextStyle(
-                            color: Colors.white,
+                            color: textColor,
                             fontSize: 25,
                             fontWeight: FontWeight.w100),
                       ),
@@ -171,11 +178,26 @@ class _TextChannelState extends State<TextChannel> {
     }
   }
 
-  /// PUlls the text from
+  /// Name: sendChat
+  ///
+  /// Date Last Updated: 02/23/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This function gets passed a String message, it creates a
+  /// SerenityPacket with type=text and data=message, it encodes the messages
+  /// and adds it to the outdoing chat queue. Then it clears the textfield,
+  /// and requests focus
   void sendChat(String message) {
-    message = message.trim();
-    widget._chatList.add(message);
-    widget.outgoingChat.add(message);
+    /// Create a SerenityPacket and attach the message
+    SerenityPacket packet = SerenityPacket(
+        SerenityPacketTypeEnum.text, "${widget.channelName};$message");
+
+    /// Send the packet
+    widget.outgoingChat.add(jsonEncode(packet));
+
+    /// Clear out the text channel and request focus.
+    /// Set the outgoingchat value to fire the listeners
     widget.chatTextField.clear();
     widget.outgoingChatAdd.value = true;
     widget.chatFocusNode.requestFocus();
@@ -219,7 +241,7 @@ class _TextChannelState extends State<TextChannel> {
     }
 
     /*
-      Read 30 chats to popualte the text, or the length of the cache, 
+      Read 30 chats to populate the text, or the length of the cache, 
       whichever is smaller.
     */
     int i;

@@ -1,16 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:serenity/client/class_connection.dart';
 import 'package:serenity/client/class_serenity_clientside_config.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/view_serenity_server.dart';
 import 'package:serenity/client/view_text_channel.dart';
-import 'package:serenity/server/class_serenity_config.dart';
 import 'package:serenity/server/class_serenity_init_packet.dart';
 import 'package:serenity/server/class_serenity_user.dart';
-import 'package:win32/win32.dart';
 
 class AddserverView extends StatelessWidget {
   AddserverView({super.key});
@@ -144,7 +141,7 @@ class AddserverView extends StatelessWidget {
 
     /// get the initial Connection messages from the server
     List<dynamic> initialConnectionMessages =
-        await SerenityServer.getInitialPacket(newConnection);
+        await SerenityServer.getSerenityInitPacket(newConnection);
 
     /// Get the userID, userPAT, and InitPacket from the initial messages
     String userID = initialConnectionMessages[0];
@@ -175,7 +172,7 @@ class AddserverView extends StatelessWidget {
 
     /// Save to file
     clientsideConfigFile
-        .writeAsStringSync(jsonEncode(clientsideConfig.toMap()));
+        .writeAsStringSync(jsonEncode(clientsideConfig.toJson()));
 
     /// Create the TextChannels
     for (String channel in initPacket.textChannels) {
@@ -187,11 +184,17 @@ class AddserverView extends StatelessWidget {
       textChannels.addAll({channel: newChannel});
     }
 
+    /// Get the ServerBanner and ServerIcon Files
+    File serverIconFile = File("${directoryList[0].path}/serverIcon.jpg");
+    File serverBannerFIle = File("${directoryList[0].path}/serverBanner.jpg");
+
     /*
       Create the Serenity Server and then return it.
     */
     return SerenityServer(
         initPacket.serverName,
+        serverIconFile.readAsBytesSync(),
+        serverBannerFIle.readAsBytesSync(),
         newConnection.uri,
         newConnection.port,
         userID,
@@ -232,8 +235,8 @@ class AddserverView extends StatelessWidget {
     Directory serverUsersDirectory;
     Directory serverUserDirectory;
     Directory serverChatsDirectory;
-    File serverBanner;
-    File serverIcon;
+    File serverBannerFile;
+    File serverIconFile;
     File userIDFile;
     File userPATFile;
 
@@ -252,13 +255,13 @@ class AddserverView extends StatelessWidget {
       serverAssetsDirectory = Directory('${serverDirectory.path}/assets')
         ..createSync();
 
-      serverIcon = File("${serverAssetsDirectory.path}/serverIcon.jpg")
+      serverIconFile = File("${serverAssetsDirectory.path}/serverIcon.jpg")
         ..createSync();
-      serverIcon.writeAsBytesSync(initPacket.serverIcon);
+      serverIconFile.writeAsBytesSync(initPacket.serverIcon);
 
-      serverBanner = File("${serverAssetsDirectory.path}/serverBanner.jpg")
+      serverBannerFile = File("${serverAssetsDirectory.path}/serverBanner.jpg")
         ..createSync();
-      serverBanner.writeAsBytesSync(initPacket.serverBanner);
+      serverBannerFile.writeAsBytesSync(initPacket.serverBanner);
 
       /*
         Create the Config directory and then create the config file

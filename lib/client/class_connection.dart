@@ -5,7 +5,9 @@ class Connection {
   Connection.withUserID(this.uri, this.port, this.userID, this.userPAT);
 
   /// Initialize with the uri, port, and password
-  Connection.withPassword(this.uri, this.port, this.password) : userID = "", userPAT = "";
+  Connection.withPassword(this.uri, this.port, this.password)
+      : userID = "",
+        userPAT = "";
 
   final String uri;
   final String port;
@@ -23,7 +25,8 @@ class Connection {
   Future<bool> initialize() async {
     try {
       _messageSocket = WebSocketChannel.connect(
-        Uri.parse("ws://$uri:$port?type=text&userID=$userID"),
+        Uri.parse(
+            "ws://$uri:$port?type=text&userID=$userID&userPAT=$userPAT&password=$password"),
       );
       await _messageSocket.ready;
       _messageStream = _messageSocket.stream.asBroadcastStream();

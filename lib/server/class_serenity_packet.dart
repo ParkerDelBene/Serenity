@@ -27,15 +27,15 @@ enum SerenityPacketTypeEnum {
 class SerenityPacket {
   const SerenityPacket(this.type, this.data);
   SerenityPacket.fromMap(Map<String, dynamic> json)
-      : type = json["type"],
+      : type = SerenityPacketTypeEnum.values.byName(json["type"]),
         data = json["data"];
 
   final SerenityPacketTypeEnum type;
-  final String data;
+  final dynamic data;
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
-      "type": type,
+      "type": type.name,
       "data": data,
     };
   }

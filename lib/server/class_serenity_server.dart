@@ -41,7 +41,7 @@ class SerenityServer {
 
     /// Listen functions pipes to the request Handler
     server.listen(
-      requestHandler,
+      (data) => requestHandler(data),
       onDone: () {},
       onError: (e) {
         print(e.toString());
@@ -58,91 +58,99 @@ class SerenityServer {
   /// Last Updater: Parker DelBene
   ///
   /// Function: This function handles the request
-  Future<bool> requestHandler(HttpRequest request) async {
-    (HttpRequest request) async {
-      /*
+  Future<void> requestHandler(HttpRequest request) async {
+    /*
         Get the type of request,
 
         Text types are the initial that handle all incoming text
         Voice connects to a specific channel.
       */
-      Map<String, List<String>> queryParameters =
-          request.uri.queryParametersAll;
-      String? type = queryParameters["type"]?[0];
-      String? userID = queryParameters["userID"]?[0];
-      String? password = queryParameters["password"]?[0];
-      String? userPAT = queryParameters["userPAT"]?[0];
-      InternetAddress? requestIP = request.connectionInfo?.remoteAddress;
-      bool firstConnect = false;
-      List<String> userData = [];
+    Map<String, List<String>> queryParameters = request.uri.queryParametersAll;
+    String? type = queryParameters["type"]?[0];
+    String? userID = queryParameters["userID"]?[0];
+    String? password = queryParameters["password"]?[0];
+    String? userPAT = queryParameters["userPAT"]?[0];
+    InternetAddress? requestIP = request.connectionInfo?.remoteAddress;
+    bool firstConnect = false;
+    List<String> userData = [];
 
-      print("Attempted request from ${requestIP?.address} with userID $userID");
+    print("Attempted request from ${requestIP?.address} with userID $userID");
 
-      /// Verify the type is not null
-      if (type == null) {
-        invalidRequestType(request);
+    /// Verify the type is not null
+    if (type == null) {
+      print("type is invalid");
+      invalidRequestType(request);
+      return;
+    }
+
+    /// Return if the requestIP is null
+    if (requestIP == null) {
+      print("requestIP is invalid");
+      invalidRequestType(request);
+      return;
+    }
+
+    /// If the user ID is null, then we need to verify the password supplied
+    /// is valid.
+    if (userID == null) {
+      print("userID is invalid");
+      invalidRequestType(request);
+      return;
+    }
+
+    /// If the userID is empty, then we check the password.
+    if (userID == "") {
+      bool result = password == null
+          ? invalidRequestType(request)
+          : passwordChecker(password);
+
+      if (!result) {
+        print("Invalid password");
         return;
       }
 
-      /// Return if the requestIP is null
-      if (requestIP == null) {
-        invalidRequestType(request);
-        return;
-      }
+      userData = generateClientData();
+      userID = userData[0];
+      userPAT = userData[1];
 
-      /// If the user ID is null, then we need to verify the password supplied
-      /// is valid.
-      if (userID == null) {
-        bool result = password == null
-            ? invalidRequestType(request)
-            : passwordChecker(password);
+      /// Set first connect to true to run through first time connection setup
+      print("first connect");
+      firstConnect = true;
+    }
 
-        if (!result) {
-          return;
-        }
+    /// If the userPAT is null then send invalid request and return
+    if (userPAT == null) {
+      invalidRequestType(request);
+      return;
+    }
 
-        userData = await generateClientData();
-        userID = userData[0];
-        userPAT = userData[1];
+    /// Check if we have client data and the PAT matches
+    if (!await checkClientData(userID, userPAT)) {
+      invalidRequestType(request);
+      return;
+    }
 
-        /// Set first connect to true to run through first time connection setup
-        firstConnect = true;
-      }
+    /// switch on type
+    switch (type) {
+      case 'text':
 
-      /// If the userPAT is null then send invalid request and return
-      if (userPAT == null) {
-        invalidRequestType(request);
-        return;
-      }
+        /// Branch on first connect
+        firstConnect
+            ? clientFirstConnect(request, userID, userPAT)
+            : clientTextConnect(request, userID);
+        break;
+      case 'voice':
+        clientVoiceConnect(request);
+        break;
+      default:
+        request.response.statusCode = HttpStatus.unauthorized;
+        request.response.reasonPhrase = 'Invalid Request Type';
+        request.response.flush();
+        request.response.close();
+        break;
+    }
 
-      /// Check if we have client data and the PAT matches
-      if (!await checkClientData(userID, userPAT)) {
-        invalidRequestType(request);
-        return;
-      }
-
-      /// switch on type
-      switch (type) {
-        case 'text':
-
-          /// Branch on first connect
-          firstConnect == true
-              ? clientFirstConnect(request, userID, userPAT)
-              : clientTextConnect(request, userID);
-          break;
-        case 'voice':
-          clientVoiceConnect(request);
-          break;
-        default:
-          request.response.statusCode = HttpStatus.unauthorized;
-          request.response.reasonPhrase = 'Invalid Request Type';
-          request.response.flush();
-          request.response.close();
-          break;
-      }
-    };
-
-    return true;
+    return;
   }
 
   bool invalidRequestType(HttpRequest request) {
@@ -193,12 +201,18 @@ class SerenityServer {
     /// Load the User information
     loadUsers();
 
+    /// Load the serverAssets
+    if (!loadServerAssets()) {
+      return false;
+    }
+
     /*
       Finally Bind the server before returning
     */
     try {
-      print("Binding to ${config.serverAddress} on port ${config.port}");
       if (config.useSSL) {
+        print(
+            "Binding securely to ${config.serverAddress} on port ${config.port}");
         SecurityContext securityContext = SecurityContext();
         securityContext.useCertificateChain("./keys/fullchain.pem");
         securityContext.usePrivateKey("./keys/privkey.pem");
@@ -206,6 +220,7 @@ class SerenityServer {
         server = await HttpServer.bindSecure(
             config.serverAddress, config.port, securityContext);
       } else {
+        print("Binding to ${config.serverAddress} on port ${config.port}");
         server = await HttpServer.bind(config.serverAddress, config.port);
       }
     } catch (e) {
@@ -276,6 +291,38 @@ class SerenityServer {
     return true;
   }
 
+  /// Name; loadServerAssets
+  ///
+  /// Date Last Updated: 02/19/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: checks for the serverIcon and banner, if they exist, load them.
+  /// if they don't, make the variables empty lists
+  bool loadServerAssets() {
+    File serverIconFile = File("${assetsDirectory.path}/serverIcon.jpg");
+    File serverBannerFile = File("${assetsDirectory.path}/serverBanner.jpg");
+
+    try {
+      if (!serverIconFile.existsSync()) {
+        serverIcon = Uint8List(0);
+      } else {
+        serverIcon = serverIconFile.readAsBytesSync();
+      }
+
+      if (!serverBannerFile.existsSync()) {
+        serverBanner = Uint8List(0);
+      } else {
+        serverBanner = serverBannerFile.readAsBytesSync();
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+
+    return true;
+  }
+
   /// Name: createServerPassword
   ///
   /// Last Updater: Parker DelBene
@@ -325,7 +372,7 @@ class SerenityServer {
   /// Function: Takes the current config and writes it back to the config file.
   Future<bool> writeConfigToFile() async {
     try {
-      await File("./server.config").writeAsString(jsonEncode(config.toMap()));
+      await File("./server.config").writeAsString(jsonEncode(config.toJson()));
     } catch (e) {
       print(e);
       print("Error writing Config File");
@@ -394,11 +441,23 @@ class SerenityServer {
         print("Loaded userId : $userID");
 
         /// Grab the rest of the data from the files in the
-        String userName = File("${entity.path}/username").readAsStringSync();
-        Uint8List userIcon =
-            File("${entity.path}/userIcon.jpg").readAsBytesSync();
-        Uint8List userBanner =
-            File("${entity.path}/userBanner.jpg").readAsBytesSync();
+        File userNameFile = File("${entity.path}/username");
+        String userName = "";
+        if (userNameFile.existsSync()) {
+          userName = userNameFile.readAsStringSync();
+        }
+
+        File userIconFile = File("${entity.path}/userIcon.jpg");
+        Uint8List userIcon = Uint8List(0);
+        if (userIconFile.existsSync()) {
+          userIcon = userIconFile.readAsBytesSync();
+        }
+
+        File userBannerFile = File("${entity.path}/userBanner.jpg");
+        Uint8List userBanner = Uint8List(0);
+        if (userBannerFile.existsSync()) {
+          userBanner = userBannerFile.readAsBytesSync();
+        }
 
         SerenityUser user =
             SerenityUser(userID, userName, userIcon, userBanner);
@@ -561,15 +620,16 @@ class SerenityServer {
       userList,
       config.textChannels,
       config.voiceChannels,
+      config.saveContent,
     );
 
     /// Pack the update packet in a Serenity Packet
     SerenityPacket packet = SerenityPacket(
         SerenityPacketTypeEnum.serenityUpdatePacket,
-        jsonEncode(updatePacket.toMap()));
+        jsonEncode(updatePacket.toJson()));
 
     /// Send the packet
-    webSocket.add(jsonEncode(packet.toMap()));
+    webSocket.add(jsonEncode(packet.toJson()));
 
     /// Pass the listen method to messageHandler
     ///
@@ -593,6 +653,7 @@ class SerenityServer {
   void clientFirstConnect(
       HttpRequest request, String userID, String userPAT) async {
     /// Upgrade the request to a websocket
+    print("Upgrading Request");
     WebSocket webSocket = await WebSocketTransformer.upgrade(request);
 
     /// add the userID to the text client Map
@@ -613,10 +674,10 @@ class SerenityServer {
     /// Build the Packet
     SerenityPacket packet = SerenityPacket(
         SerenityPacketTypeEnum.serenityInitPacket,
-        jsonEncode(initPacket.toMap()));
+        jsonEncode(initPacket.toJson()));
 
     /// Send the Packet
-    webSocket.add(jsonEncode(packet.toMap()));
+    webSocket.add(jsonEncode(packet.toJson()));
 
     /// Wipe the userPAT just in case
     userPAT = "";
@@ -628,6 +689,14 @@ class SerenityServer {
         onDone: () => textDisconnectHandler(userID));
   }
 
+  /// Name: messageHandler
+  ///
+  /// Date Last Update: 02/23/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This takes in the userID and message, decodes the message into a
+  /// SerenityPacket, and then switches on the packet type.
   void messageHandler(String userID, dynamic message) {
     SerenityPacket packet = SerenityPacket.fromMap(jsonDecode(message));
 
@@ -676,7 +745,7 @@ class SerenityServer {
       return;
     }
 
-    /// Then find the endex of that user
+    /// Then find the index of that user
     int indexOfOldUser = userList.indexWhere((user) => user.userID == userID);
 
     /// If the userID cannot be found, then we need to add the
@@ -739,10 +808,9 @@ class SerenityServer {
   /// the rest of the clients on the server.
   void writeTextHandler(String userID, dynamic message) {
     textClients.forEach((client, webSocket) {
-      if (userID != client) {
-        webSocket.add(jsonEncode(
-            SerenityPacket(SerenityPacketTypeEnum.text, message).toMap()));
-      }
+      webSocket.add(jsonEncode(
+          SerenityPacket(SerenityPacketTypeEnum.text, "$userID;$message")
+              .toJson()));
     });
   }
 }

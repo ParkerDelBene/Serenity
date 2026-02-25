@@ -28,7 +28,7 @@ class SerenityClientsideConfig {
   final List<String> voiceChannels;
   final bool saveContent;
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       "serverName": serverName,
       "serverURI": serverURI,

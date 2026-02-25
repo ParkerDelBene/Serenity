@@ -38,17 +38,17 @@ class SerenityInitPacket {
   final List<String> voiceChannels;
   final bool saveContent;
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     /// create the List of user data
     List<String> jsonUserList = [];
     for (SerenityUser user in userList) {
-      jsonUserList.add(jsonEncode(user.toMap()));
+      jsonUserList.add(jsonEncode(user.toJson()));
     }
 
     return {
       "serverName": serverName,
-      "serverIcon": serverIcon,
-      "serverBanner": serverBanner,
+      "serverIcon": serverIcon.toList(),
+      "serverBanner": serverBanner.toList(),
       "userID": userID,
       "userPAT": userPAT,
       "userList": jsonUserList,
@@ -60,11 +60,12 @@ class SerenityInitPacket {
 
   SerenityInitPacket.fromMap(Map<String, dynamic> map)
       : serverName = map['serverName'],
-        serverIcon = map['serverIcon'],
-        serverBanner = map['serverBanner'],
+        serverIcon = Uint8List.fromList(List<int>.from(map['serverIcon'])),
+        serverBanner = Uint8List.fromList(List<int>.from(map['serverBanner'])),
         userID = map['userID'],
         userPAT = map['userPAT'],
-        userList = List<SerenityUser>.from(map['userList']),
+        userList =
+            SerenityUser.userListFromMap(List<String>.from(map["userList"])),
         textChannels = List<String>.from(map['textChannels']),
         voiceChannels = List<String>.from(map['voiceChannels']),
         saveContent = map['saveContent'];

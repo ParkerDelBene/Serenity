@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 /// Name: SerenityUser
@@ -19,23 +20,43 @@ class SerenityUser {
   const SerenityUser(
       this.userID, this.userName, this.userIcon, this.userBanner);
 
+  SerenityUser.fromMap(Map<String, dynamic> json)
+      : userID = json["userID"],
+        userName = json["userName"],
+        userIcon = Uint8List.fromList(List<int>.from(json["userIcon"])),
+        userBanner = Uint8List.fromList(List<int>.from(json["userBanner"]));
+
   final String userID;
   final String userName;
   final Uint8List userIcon;
   final Uint8List userBanner;
 
-  SerenityUser.fromMap(Map<String, dynamic> json)
-      : userID = json["userID"],
-        userName = json["userName"],
-        userIcon = json["userIcon"],
-        userBanner = json["userBanner"];
+  /// Name: userListFromMap
+  ///
+  /// Date Last Updated: 02/18/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This function takes in a List of json encoded SerenityUsers,
+  /// decodes them, and returns them as a List of SerenityUsers
+  static List<SerenityUser> userListFromMap(List<dynamic> jsonList) {
+    List<SerenityUser> userList = [];
 
-  Map<String, dynamic> toMap() {
+    /// For each Json String in the list, decode it and call SerenityUser.fromMap
+    for (String json in jsonList) {
+      Map<String, dynamic> userJson = jsonDecode(json);
+      userList.add(SerenityUser.fromMap(userJson));
+    }
+
+    return userList;
+  }
+
+  Map<String, dynamic> toJson() {
     return {
       "userID": userID,
       "userName": userName,
-      "userIcon": userIcon,
-      "userBanner": userBanner
+      "userIcon": userIcon.toList(),
+      "userBanner": userBanner.toList()
     };
   }
 }

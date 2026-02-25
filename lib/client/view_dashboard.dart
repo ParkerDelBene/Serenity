@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/view_server_list.dart';
+import 'package:serenity/client/widget_view_divider.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -30,12 +31,16 @@ class _DashboardState extends State<Dashboard> {
       body: Container(
         height: dashboardSize.height,
         width: dashboardSize.width,
-        decoration: BoxDecoration(color: Colors.white),
+        decoration: BoxDecoration(color: primaryColor),
         child: Row(
           children: [
             SizedBox(
               width: maxScreenWidth * .04,
               child: ServerlistView(),
+            ),
+            ViewDivider(true),
+            SizedBox(
+              width: 1,
             ),
             Expanded(
                 child: SizedBox(
