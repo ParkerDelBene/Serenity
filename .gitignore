@@ -1,0 +1,36 @@
+#debug rn artifacts
+/servers
+/user
+
+# Flutter/Dart/Pub 
+.dart_tool/
+.packages
+.pub-cache/
+build/
+pubspec.lock (ignore only in libraries)
+
+# Android
+/android/.gradle/
+/android/app/build/
+*.keystore
+
+# iOS
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Flutter.podspec
+/ios/Pods/
+/ios/.symlinks/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Secrets
+.env
