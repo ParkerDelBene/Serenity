@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'globals.dart';
 
-class SerenityServerIcon extends StatelessWidget {
-  const SerenityServerIcon(this.iconName, this.iconImage, this.maxWidth,
+class SerenityImageIcon extends StatelessWidget {
+  const SerenityImageIcon(this.iconName, this.iconImage, this.maxWidth,
       {super.key});
 
   final String iconName;
@@ -25,11 +25,11 @@ class SerenityServerIcon extends StatelessWidget {
         height: maxWidth * serverIconRatio,
         width: maxWidth * serverIconRatio,
         decoration:
-            const BoxDecoration(shape: BoxShape.circle, color: secondaryColor),
+            BoxDecoration(shape: BoxShape.circle, color: secondaryColor),
         child: Center(
             child: Text(
           temp,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: channelTextStyle,
         )),
       );
     } else {

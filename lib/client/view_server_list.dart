@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:serenity/client/route_addserver.dart';
+import 'package:serenity/client/dialog_addserver.dart';
+import 'package:serenity/client/dialog_invalid_server_connection.dart';
+import 'package:serenity/client/view_serenity_server.dart';
+import 'package:serenity/client/widget_clickable_widget.dart';
+import 'package:serenity/client/widget_serenity_image_icon.dart';
 import 'globals.dart';
 
 class ServerlistView extends StatefulWidget {
@@ -10,110 +14,75 @@ class ServerlistView extends StatefulWidget {
 }
 
 class _ServerlistViewState extends State<ServerlistView> {
-  Size viewSize = Size(0, 0);
-  List<Widget> widgetList = [];
-
   @override
   Widget build(BuildContext context) {
-    viewSize = MediaQuery.sizeOf(context);
-
     /*
       Branch on the Aspect Ratio
     */
-    return Container(
-      width: viewSize.width,
-      height: viewSize.height,
-      color: primaryColor,
-      child: SingleChildScrollView(
-        child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints boxconstraints) {
-          double maxWidth = boxconstraints.maxWidth;
-          /*
-            Building the ServerList
-          */
-          widgetList = [];
-
-          /*
-            For each server, generate the icon, adding a padding box above it.
-          */
-          for (final server in serverList) {
-            widgetList.add(SizedBox(
-              height: maxWidth * serverIconPaddingRatio,
-            ));
-
-            InkWell temp = InkWell(
-              splashColor: Colors.transparent,
-              onTap: () {
-                activeServer.value = server;
-              },
-              child: server.toIcon(maxWidth),
-            );
-            widgetList.add(temp);
-          }
-
-          /*
-            Then, add the add server widget with a padding box
-          */
-          widgetList.add(SizedBox(
-            height: maxWidth * serverIconPaddingRatio,
-          ));
-          widgetList.add(addServer(maxWidth));
-
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.start, children: widgetList);
-        }),
-      ),
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: ListView.separated(
+                itemCount: serverList.length + 1,
+                separatorBuilder: (context, index) => Divider(
+                  color: Colors.transparent,
+                ),
+                itemBuilder: (context, index) {
+                  if (index == serverList.length) {
+                    return GestureDetector(
+                      onTap: () => addServer(context),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child:
+                            SerenityImageIcon("+", null, constraints.maxWidth),
+                      ),
+                    );
+                  }
+                  return ClickableWidget(
+                    () => serverIconClickHandler(serverList[index], context),
+                    serverList[index].toIcon(constraints.maxWidth),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
-  Widget verticalView() {
-    return Container(
-      width: viewSize.width,
-      height: viewSize.height,
-      color: Colors.blueGrey,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: widgetList,
-        ),
-      ),
-    );
+  /// Name: serverIconClickHandler
+  ///
+  /// Date Last Updated: 03/02/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This function handles what happens when a serverIcon is clicked.
+  Future<void> serverIconClickHandler(
+      SerenityServer server, BuildContext context) async {
+    /// If the server is connected, then set it as the active server
+    if (server.connection.connected) {
+      activeServer.value = server;
+    } else {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return InvalidServerConnection(server);
+          });
+    }
   }
 
-  Widget horizontalView() {
-    return Container(
-      width: viewSize.width,
-      height: viewSize.height,
-      color: Colors.purple,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: widgetList,
-      ),
-    );
-  }
-
-  Widget addServer(double maxWidth) {
-    return Container(
-      height: maxWidth * serverIconRatio,
-      width: maxWidth * serverIconRatio,
-      decoration:
-          const BoxDecoration(shape: BoxShape.circle, color: Colors.amber),
-      child: InkWell(
-        splashColor: Colors.transparent,
-        onTap: () async {
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => AddserverView()));
-          //Rebuild the serverlist on return
-          if (mounted) {
-            setState(() {});
-          }
-        },
-        child: Center(
-          child: Icon(Icons.add),
-        ),
-      ),
+  Future<void> addServer(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AddserverView();
+      },
     );
   }
 }

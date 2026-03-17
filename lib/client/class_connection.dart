@@ -14,15 +14,15 @@ class Connection {
   final String userID;
   final String userPAT;
   String password = "";
-  late final bool connected;
+  late bool connected;
   late WebSocketChannel _voiceSocket;
-  late final WebSocketChannel _messageSocket;
+  late WebSocketChannel _messageSocket;
   late Stream _messageStream;
   late WebSocketSink _messageSink;
   late WebSocketSink _voiceSink;
   late Stream _voiceStream;
 
-  Future<bool> initialize() async {
+  Future<bool> connect() async {
     try {
       _messageSocket = WebSocketChannel.connect(
         Uri.parse(

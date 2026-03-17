@@ -8,17 +8,22 @@ class ViewDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double thickness = maxScreenWidth * .005;
+    double thickness = maxScreenWidth * .00005;
+    double size = thickness + 5;
 
     if (vertical) {
       return VerticalDivider(
         color: highlightColor,
-        width: thickness,
+        thickness: thickness,
+        width: size,
       );
     } else {
       return Divider(
         color: highlightColor,
-        height: thickness,
+        thickness: thickness,
+        height: size,
+        indent: 10,
+        endIndent: 10,
       );
     }
   }

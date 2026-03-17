@@ -6,8 +6,7 @@
 .dart_tool/
 .packages
 .pub-cache/
-build/
-pubspec.lock (ignore only in libraries)
+/build/
 
 # Android
 /android/.gradle/

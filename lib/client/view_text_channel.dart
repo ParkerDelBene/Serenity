@@ -2,17 +2,24 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:serenity/client/globals.dart';
+import 'package:serenity/client/widget_text_channel_message.dart';
 import 'package:serenity/server/class_serenity_packet.dart';
 import 'package:serenity/server/class_serenity_user.dart';
 
 class TextChannel extends StatefulWidget {
-  TextChannel(this.channelName, this.localSave, this.chatsDirectory,
+  TextChannel(
+      this.channelName, this.localSave, this.chatsDirectory, this.userList,
       {super.key}) {
     if (localSave && chatsDirectory != null) {
-      channelFile = File("${chatsDirectory!.path}/$channelName");
+      channelFile = File("${chatsDirectory!.path}/$channelName")..createSync();
+
+      /// Set the timer for flipping the saveChat ValueNotifier
+      saveChatTimer =
+          Timer.periodic(Duration(seconds: 30), (timer) => _saveNewChats());
+
+      _readChatFile();
     }
   }
 
@@ -20,13 +27,17 @@ class TextChannel extends StatefulWidget {
   final bool localSave;
   final Directory? chatsDirectory;
   late final File channelFile;
-  final List<String> _chatList = [];
+  final List<TextChannelMessage> _chatList = [];
+  final List<TextChannelMessage> _newChats = [];
   final Queue<String> outgoingChat = Queue();
   final ValueNotifier<bool> _incomingChatAdd = ValueNotifier(false);
   final ValueNotifier<bool> outgoingChatAdd = ValueNotifier(false);
   final ValueNotifier<bool> activeChat = ValueNotifier(false);
+  final ValueNotifier<bool> saveChat = ValueNotifier(false);
   final TextEditingController chatTextField = TextEditingController();
   final FocusNode chatFocusNode = FocusNode();
+  final Map<String, SerenityUser> userList;
+  late final Timer saveChatTimer;
 
   @override
   State<StatefulWidget> createState() => _TextChannelState();
@@ -34,51 +45,105 @@ class TextChannel extends StatefulWidget {
   Widget toIcon() {
     return TextButton(
       onPressed: () {
-        activeChat.value = true;
+        activeChat.value = !activeChat.value;
       },
       child: Center(
         child: Text(
           channelName,
-          style: TextStyle(color: textColor),
+          style: channelTextStyle,
         ),
       ),
     );
   }
 
   void addChat(SerenityUser user, String chat) {
-    _chatList.add(chat);
-    _incomingChatAdd.value = true;
+    TextChannelMessage message = TextChannelMessage(user, chat);
+    _chatList.add(message);
+    _newChats.add(message);
+    _incomingChatAdd.value = !_incomingChatAdd.value;
+  }
+
+  /// Name: _readChatFile
+  ///
+  /// Date Last Updated: 03/12/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This function reads the local chat file and populates the
+  /// chatList
+  Future<void> _readChatFile() async {
+    int chatFileSize;
+    List<String> chatFileLines = [];
+    /*
+      If the chatfile has no data, then just return
+    */
+    try {
+      chatFileSize = await channelFile.length();
+
+      /// Read the channelFile
+      chatFileLines = await channelFile.readAsLines();
+    } on FileSystemException {
+      return;
+    }
+
+    if (chatFileSize == 0) {
+      return;
+    }
+
+    /// Populate the chat
+    for (String chat in chatFileLines) {
+      _chatList.add(TextChannelMessage.fromJson(jsonDecode(chat), userList));
+    }
+
+    /// Clear the newChats
+    _newChats.clear();
+
+    _incomingChatAdd.value = !_incomingChatAdd.value;
+
+    return;
+  }
+
+  /*
+    This function is called by the timer in the initstate and will save the new
+    chats periodically to the chatFile
+  */
+
+  void _saveNewChats() async {
+    // Check if there are no new chats
+    if (_newChats.isEmpty) {
+      return;
+    }
+
+    IOSink fileSink = channelFile.openWrite(mode: FileMode.append);
+    for (TextChannelMessage chat in _newChats) {
+      fileSink.writeln(jsonEncode(chat));
+    }
+
+    _newChats.clear();
+
+    fileSink.close();
   }
 }
 
-class _TextChannelState extends State<TextChannel> {
+class _TextChannelState extends State<TextChannel>
+    with AutomaticKeepAliveClientMixin {
   List<String> chatFileCache = [];
   int chatFileCacheIndex = 0;
   int numNewChats = 0;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
 
-    widget.channelFile.createSync(recursive: true);
-
     widget._incomingChatAdd.addListener(chatAddListener);
-
-    /*
-      Read the chat file and update the chatlog, noting the index where it stopped
-      loading.
-    */
-    readChatFile(chatFileCacheIndex).then(
-      (result) => readChatFileCompletionHandler(result),
-    );
-
-    /*
-    */
-    Timer.periodic(Duration(seconds: 30), (timer) => saveNewChats(timer));
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       double maxWidth = constraints.maxWidth;
@@ -90,6 +155,7 @@ class _TextChannelState extends State<TextChannel> {
         decoration: BoxDecoration(color: primaryColor),
         child: Column(
           children: [
+            /// The Area for the Messages
             Expanded(
               child: SizedBox(
                 width: maxWidth * .98,
@@ -102,20 +168,26 @@ class _TextChannelState extends State<TextChannel> {
                   itemCount: widget._chatList.length,
                   itemBuilder: (context, index) {
                     //return the list from the back of the list to forward,
-                    //Since the chats at the abck are the most recent
-                    return Text(widget
-                        ._chatList[widget._chatList.length - (index + 1)]);
+                    //Since the chats at the back are the most recent
+                    return widget
+                        ._chatList[widget._chatList.length - (index + 1)];
                   },
                 ),
               ),
             ),
+
+            /// The container for the Textfield
             Container(
               width: maxWidth * .98,
               height: maxHeight * .05,
               decoration: BoxDecoration(
                   color: secondaryColor,
                   borderRadius: BorderRadius.circular(10)),
-              child: Row(
+              child:
+
+                  /// The Row allows us to add icons to the beginning and end of the
+                  /// textfield area
+                  Row(
                 children: [
                   SizedBox(
                     width: maxHeight * .04,
@@ -138,9 +210,9 @@ class _TextChannelState extends State<TextChannel> {
                     child: TextField(
                       controller: widget.chatTextField,
                       decoration: InputDecoration.collapsed(
-                        hintText: "Message #${widget.channelName}",
-                        border: InputBorder.none,
-                      ),
+                          hintText: "Message #${widget.channelName}",
+                          border: InputBorder.none,
+                          hintStyle: channelTextStyle),
                       focusNode: widget.chatFocusNode,
                       cursorColor: Colors.white,
                       cursorWidth: 1,
@@ -155,6 +227,8 @@ class _TextChannelState extends State<TextChannel> {
                 ],
               ),
             ),
+
+            /// Padding at the bottom
             SizedBox(
               height: 10,
             )
@@ -169,12 +243,8 @@ class _TextChannelState extends State<TextChannel> {
   */
   void chatAddListener() {
     //Increment Num of new Chats for File Saving purposes.
-    if (widget._incomingChatAdd.value) {
-      numNewChats++;
-      if (mounted) {
-        setState(() {});
-      }
-      widget._incomingChatAdd.value = false;
+    if (mounted) {
+      setState(() {});
     }
   }
 
@@ -201,104 +271,5 @@ class _TextChannelState extends State<TextChannel> {
     widget.chatTextField.clear();
     widget.outgoingChatAdd.value = true;
     widget.chatFocusNode.requestFocus();
-
-    // Increment num of new chats for File Saving purposes
-    numNewChats++;
-
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  /* 
-    Reads the chatfile in sections and updates the chatlog for the channel.
-  */
-  Future<int> readChatFile(int index) async {
-    int chatFileSize;
-    /*
-      If the chatfile has no data, then just return
-    */
-    try {
-      chatFileSize = widget.channelFile.lengthSync();
-    } catch (e) {
-      return index;
-    }
-
-    if (chatFileSize == 0) {
-      return index;
-    }
-
-    /*
-      If the chatFileCache is empty, then read the file.
-      If not, then continue on as if the chatfile has been read.
-    */
-    if (chatFileCache.isEmpty) {
-      try {
-        chatFileCache = await widget.channelFile.readAsLines();
-      } catch (e) {
-        return -1;
-      }
-    }
-
-    /*
-      Read 30 chats to populate the text, or the length of the cache, 
-      whichever is smaller.
-    */
-    int i;
-    int maximumReadSize = min(index + 30, chatFileCache.length);
-    for (i = index; i < maximumReadSize; i++) {
-      widget._chatList.add(chatFileCache[i]);
-    }
-
-    return index + i;
-  }
-
-  /*
-    Handler for the completion of reading the chatFile, if there is an error it 
-    does something, else it marks down the index where it stopped and calls 
-    setState if the TextChannel is mounted.
-  */
-  void readChatFileCompletionHandler(int result) {
-    /*
-        Unimplemented
-
-        Do something if there is an error idk
-      */
-    if (result == -1) {
-      return;
-    }
-
-    chatFileCacheIndex = result;
-
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  /*
-    This function is called by the timer in the initstate and will save the new
-    chats periodically to the chatFile
-  */
-
-  void saveNewChats(Timer timer) async {
-    // Check if there are no new chats
-    if (numNewChats == 0) {
-      return;
-    }
-
-    // Check if the client is not saving the chats locally
-    if (!widget.localSave) {
-      numNewChats = 0;
-      return;
-    }
-
-    IOSink fileSink = widget.channelFile.openWrite(mode: FileMode.append);
-    for (int i = numNewChats; i > 0; i--) {
-      fileSink.writeln(widget._chatList[widget._chatList.length - i]);
-    }
-
-    numNewChats = 0;
-
-    fileSink.close();
   }
 }

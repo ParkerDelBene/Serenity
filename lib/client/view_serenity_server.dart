@@ -4,8 +4,9 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:serenity/client/class_connection.dart';
-import 'package:serenity/client/class_serenity_clientside_config.dart';
-import 'package:serenity/client/globals.dart';
+import 'package:serenity/client/class_serenityserver_client_config.dart';
+import 'package:serenity/client/globals.dart' as global;
+import 'package:serenity/client/view_server_user_list.dart';
 import 'package:serenity/client/view_text_channel.dart';
 import 'package:serenity/client/widget_serenity_image_icon.dart';
 import 'package:serenity/client/widget_view_divider.dart';
@@ -13,22 +14,21 @@ import 'package:serenity/server/class_serenity_init_packet.dart';
 import 'package:serenity/server/class_serenity_packet.dart';
 import 'package:serenity/server/class_serenity_update_packet.dart';
 import 'package:serenity/server/class_serenity_user.dart';
+import 'package:uuid/validation.dart';
 
 class SerenityServer extends StatefulWidget {
   SerenityServer(
-      this.serverName,
+      this.serverConfig,
+      this.localUser,
       this.serverIcon,
       this.serverBanner,
-      this.uri,
-      this.port,
-      this.userID,
       this.assetsDirectory,
       this.configDirectory,
       this.usersDirectory,
       this.chatsDirectory,
-      this.serverConfig,
       this.textChannels,
       this.voiceChannels,
+      this.userList,
       this.connection,
       {super.key});
 
@@ -49,8 +49,8 @@ class SerenityServer extends StatefulWidget {
 
     ///Creating the SerenityClientsideConfig
     String serverConfigString = serverConfigFile.readAsStringSync();
-    SerenityClientsideConfig serverConfig =
-        SerenityClientsideConfig.fromMap(jsonDecode(serverConfigString));
+    SerenityServerClientConfig serverConfig =
+        SerenityServerClientConfig.fromMap(jsonDecode(serverConfigString));
 
     /*
       Getting UUID of this
@@ -66,55 +66,47 @@ class SerenityServer extends StatefulWidget {
     Connection connection = Connection.withUserID(
         serverConfig.serverURI, serverConfig.port, userID, userPAT);
 
-    connection.initialize(); //Initialize the Conection;
-
-    /*
-      Generate the Text Channels
-    */
-    Map<String, TextChannel> textChannels = {};
-    for (String channel in serverConfig.textChannels) {
-      textChannels.addAll({
-        channel: TextChannel(channel, !serverConfig.saveContent, chatsDirectory)
-      });
-    }
+    connection.connect(); //Initialize the Conection;
 
     /// Making sure the Iconfile and BannerFile exist
     serverIconFile.createSync();
     serverBannerFile.createSync();
 
+    /// Load the users
+    Map<String, SerenityUser> userList = _loadUserData(usersDirectory, userID);
+
     /*
       Return the Serenity Server Object
     */
     return SerenityServer(
-        serverConfig.serverName,
-        serverIconFile.readAsBytesSync(),
-        serverBannerFile.readAsBytesSync(),
-        serverConfig.serverURI,
-        serverConfig.port.toString(),
-        userID,
-        assetsDirectory,
-        configDirectory,
-        usersDirectory,
-        chatsDirectory,
-        serverConfig,
-        textChannels,
-        serverConfig.voiceChannels,
-        connection);
+      serverConfig,
+
+      /// The localUSerID should always exist
+      userList[userID]!,
+      serverIconFile.readAsBytesSync(),
+      serverBannerFile.readAsBytesSync(),
+      assetsDirectory,
+      configDirectory,
+      usersDirectory,
+      chatsDirectory,
+      {},
+      serverConfig.voiceChannels,
+      userList,
+      connection,
+    );
   }
 
-  String serverName;
+  SerenityServerClientConfig serverConfig;
+  final SerenityUser localUser;
   Uint8List serverIcon;
   Uint8List serverBanner;
-  final String uri;
-  final String? port;
-  final String userID;
   Directory assetsDirectory;
   Directory configDirectory;
   Directory usersDirectory;
   Directory? chatsDirectory;
-  SerenityClientsideConfig serverConfig;
-  Map<String, TextChannel> textChannels;
-  List<String> voiceChannels;
+  final Map<String, TextChannel> textChannels;
+  final List<String> voiceChannels;
+  final Map<String, SerenityUser> userList;
   final Connection connection;
 
   @override
@@ -125,9 +117,9 @@ class SerenityServer extends StatefulWidget {
   */
   Widget toIcon(double maxWidth) {
     if (serverIcon.isEmpty) {
-      return SerenityServerIcon(serverName, null, maxWidth);
+      return SerenityImageIcon(serverConfig.serverName, null, maxWidth);
     } else {
-      return SerenityServerIcon(serverName, serverIcon, maxWidth);
+      return SerenityImageIcon(serverConfig.serverName, serverIcon, maxWidth);
     }
   }
 
@@ -141,8 +133,8 @@ class SerenityServer extends StatefulWidget {
           child: FittedBox(
             fit: BoxFit.fitWidth,
             child: Text(
-              serverName,
-              style: TextStyle(fontSize: 20, color: highlightColor),
+              serverConfig.serverName,
+              style: TextStyle(fontSize: 20, color: global.highlightColor),
             ),
           ),
         ),
@@ -192,13 +184,70 @@ class SerenityServer extends StatefulWidget {
 
     return [userID, userPAT, initPacket];
   }
+
+  /// Name: loadUserData
+  ///
+  /// Date Last Updated: 02/26/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: it takes in the user Directory, then loads all of the users in
+  /// the directory
+  ///
+  /// If it finds invalid users or incomplete userData, it deletes the userData
+  static Map<String, SerenityUser> _loadUserData(
+      Directory usersDirectory, String localUserID) {
+    Map<String, SerenityUser> userList = {};
+    List<FileSystemEntity> entityList = usersDirectory.listSync();
+    List<Directory> invalidUser = [];
+
+    for (FileSystemEntity entity in entityList) {
+      /// If the entity is not a directory, return
+      if (entity is! Directory) {
+        continue;
+      }
+
+      String userIDDirectory = entity.path.replaceAll(entity.parent.path, "");
+
+      /// Check if the directory name is a valid uuid
+      if (!UuidValidation.isValidUUID(fromString: userIDDirectory)) {
+        invalidUser.add(entity);
+        continue;
+      }
+
+      /// Get all the user Data from the Files
+      try {
+        File usernameFile = File("${entity.path}/userName");
+        String userName = usernameFile.readAsStringSync();
+        File userIconFile = File("${entity.path}/userIcon.jpg");
+        Uint8List userIcon = userIconFile.readAsBytesSync();
+        File userBannerFile = File("${entity.path}/userBanner.jpg");
+        Uint8List userBanner = userBannerFile.readAsBytesSync();
+
+        /// Create the user
+        SerenityUser newUser =
+            SerenityUser(userIDDirectory, userName, userIcon, userBanner);
+
+        /// Add them to the userList
+        userList.addAll({newUser.userID: newUser});
+      } on FileSystemException {
+        invalidUser.add(entity);
+      }
+    }
+
+    SerenityUser local = SerenityUser(localUserID, global.localUser.userName,
+        global.localUser.userIcon, global.localUser.userBanner);
+
+    userList.addAll({local.userID: local});
+
+    return userList;
+  }
 }
 
 class _SerenityServerState extends State<SerenityServer> {
   List<Widget> channelWidgets = [];
   TextChannel? activeChannel;
   late StreamSubscription incomingTextChannelSubscription;
-  Map<String, SerenityUser> userList = {};
 
   /*
     Initialize the listeners for textChannels and voiceChannels
@@ -233,8 +282,13 @@ class _SerenityServerState extends State<SerenityServer> {
 
       channelWidgets.add(ViewDivider(false));
 
+      /// Add the Voice Channels
       for (String channel in widget.voiceChannels) {
-        channelWidgets.add(Text(channel));
+        channelWidgets.add(InkWell(
+            child: Text(
+          channel,
+          style: global.channelTextStyle,
+        )));
       }
     }
 
@@ -244,9 +298,9 @@ class _SerenityServerState extends State<SerenityServer> {
           The area for the text and voice channels list
         */
         Container(
-          decoration: BoxDecoration(color: primaryColor),
+          decoration: BoxDecoration(color: global.primaryColor),
           height: size.height,
-          width: maxScreenWidth * .1,
+          width: global.maxScreenWidth * .15,
           child: Column(
             children: [
               widget.serverBannerWidget(),
@@ -268,10 +322,14 @@ class _SerenityServerState extends State<SerenityServer> {
             child: activeChannel ?? Container(),
           ),
         ),
+        ViewDivider(true),
         /*
           Area to see people who are online
         */
-        SizedBox()
+        SizedBox(
+          width: global.maxScreenWidth * .125,
+          child: ServerUserList(widget.userList),
+        )
       ],
     );
   }
@@ -398,7 +456,8 @@ class _SerenityServerState extends State<SerenityServer> {
       message to the channel
     */
     if (widget.textChannels.containsKey(channelName)) {
-      widget.textChannels[channelName]?.addChat(userList[userID]!, chatMessage);
+      widget.textChannels[channelName]
+          ?.addChat(widget.userList[userID]!, chatMessage);
     }
   }
 
@@ -406,16 +465,10 @@ class _SerenityServerState extends State<SerenityServer> {
     listens to the active chat and swaps the active one, and deactivates the old one.
   */
   void _activeChatListener(TextChannel channel) {
-    if (channel.activeChat.value) {
-      if (activeChannel != null) {
-        activeChannel?.activeChat.value = false;
-      }
+    activeChannel = channel;
 
-      activeChannel = channel;
-
-      if (mounted) {
-        setState(() {});
-      }
+    if (mounted) {
+      setState(() {});
     }
   }
 
@@ -463,14 +516,16 @@ class _SerenityServerState extends State<SerenityServer> {
   /// It can update the serverIcon, serverBanner, textChannels, voiceChannels
   Future<void> _updatePacketHandler(SerenityUpdatePacket updatePacket) async {
     /// If the serverName has changes, we need to modify the server directory
-    if (updatePacket.serverName != widget.serverName) {
+    if (updatePacket.serverName != widget.serverConfig.serverName) {
       /// Create the new server directory
-      Directory newServerDirectory =
-          Directory("./servers/${updatePacket.serverName}")..createSync();
+      Directory newServerDirectory = Directory(
+          "${global.applicationDirectory.path}/servers/${updatePacket.serverName}")
+        ..createSync();
 
       /// Get all of the FileSystem Entities within the old server
-      List<FileSystemEntity> entityList =
-          Directory("./servers/${widget.serverName}").listSync(recursive: true);
+      List<FileSystemEntity> entityList = Directory(
+              "${global.applicationDirectory.path}/servers/${widget.serverConfig.serverName}")
+          .listSync(recursive: true);
       List<File> fileList = [];
       List<Directory> directoryList = [];
 
@@ -490,8 +545,8 @@ class _SerenityServerState extends State<SerenityServer> {
       /// The files can recursively create their directories
       for (File file in fileList) {
         /// create the new path, changing the old serverName to the new one.
-        String newPath =
-            file.path.replaceAll(widget.serverName, updatePacket.serverName);
+        String newPath = file.path.replaceAll(
+            widget.serverConfig.serverName, updatePacket.serverName);
 
         /// Recursively create the new file. Then we are going to copy the old
         /// file to the new one.
@@ -508,8 +563,8 @@ class _SerenityServerState extends State<SerenityServer> {
       /// Were not, then create them
       for (Directory directory in directoryList) {
         /// Create the new path, changing the old serverName to the new one
-        String newPath = directory.path
-            .replaceAll(widget.serverName, updatePacket.serverName);
+        String newPath = directory.path.replaceAll(
+            widget.serverConfig.serverName, updatePacket.serverName);
 
         /// create the new directory, createSync does nothing if the directory
         /// already exists, so there is no reason to check if it exists, just try
@@ -525,39 +580,40 @@ class _SerenityServerState extends State<SerenityServer> {
       /// path
       widget.assetsDirectory.deleteSync(recursive: true);
       widget.assetsDirectory = Directory(widget.assetsDirectory.path
-          .replaceAll(widget.serverName, updatePacket.serverName));
+          .replaceAll(widget.serverConfig.serverName, updatePacket.serverName));
 
       widget.configDirectory.deleteSync(recursive: true);
       widget.configDirectory = Directory(widget.configDirectory.path
-          .replaceAll(widget.serverName, updatePacket.serverName));
+          .replaceAll(widget.serverConfig.serverName, updatePacket.serverName));
 
       widget.usersDirectory.deleteSync(recursive: true);
       widget.usersDirectory = Directory(widget.usersDirectory.path
-          .replaceAll(widget.serverName, updatePacket.serverName));
+          .replaceAll(widget.serverConfig.serverName, updatePacket.serverName));
 
       /// If we have a chats directory, and the updatePacket tells us that the
       /// server is not saving content, then move the chats directory over
       if (widget.chatsDirectory != null && !updatePacket.saveContent) {
         widget.chatsDirectory?.deleteSync();
         widget.chatsDirectory = Directory(widget.chatsDirectory!.path
-            .replaceAll(widget.serverName, updatePacket.serverName));
+            .replaceAll(
+                widget.serverConfig.serverName, updatePacket.serverName));
       }
 
       ///Delete the parent Directory
-      Directory("./servers/${widget.serverName}").deleteSync(recursive: true);
+      Directory(
+              "${global.applicationDirectory.path}/servers/${widget.serverConfig.serverName}")
+          .deleteSync(recursive: true);
     }
 
     // Replace the serverConfig
-    widget.serverConfig = SerenityClientsideConfig(
+    widget.serverConfig = SerenityServerClientConfig(
         updatePacket.serverName,
         widget.serverConfig.serverURI,
         widget.serverConfig.port,
+        widget.serverConfig.userID,
         updatePacket.textChannels,
         updatePacket.voiceChannels,
         updatePacket.saveContent);
-
-    /// Replace ServerName
-    widget.serverName = widget.serverConfig.serverName;
 
     /// Save the new Config File
     File("${widget.configDirectory.path}/config")
@@ -565,11 +621,18 @@ class _SerenityServerState extends State<SerenityServer> {
 
     /// Add back the text channels
     widget.textChannels.clear();
+    int key = 1;
     for (String channel in widget.serverConfig.textChannels) {
       widget.textChannels.addAll({
         channel: TextChannel(
-            channel, !widget.serverConfig.saveContent, widget.chatsDirectory)
+          channel,
+          !widget.serverConfig.saveContent,
+          widget.chatsDirectory,
+          widget.userList,
+          key: Key("Channel $key"),
+        )
       });
+      key++;
     }
 
     /// Setup text channel listeners again.
@@ -579,7 +642,7 @@ class _SerenityServerState extends State<SerenityServer> {
     widget.voiceChannels.clear();
     widget.voiceChannels.addAll(widget.serverConfig.voiceChannels);
 
-    /// Finally, load all of the users from the updatePacket
+    /// load all of the users from the updatePacket
     for (SerenityUser user in updatePacket.userList) {
       _userInfoHandler(user);
     }
@@ -609,25 +672,52 @@ class _SerenityServerState extends State<SerenityServer> {
   /// Function: This function takes in a SerenityUser, creating them if we do not
   /// have them yet, and updating their information if we do have them.
   void _userInfoHandler(SerenityUser userInfo) async {
-    /// If we have not received out info, then update the user.
-    if (userInfo.userID != widget.userID) {
-      /// Go ahead and just create the directory, if it exists it wont do anything.
-      Directory userDirectory =
-          Directory("${widget.usersDirectory.path}/${userInfo.userID}")
-            ..createSync();
-
-      /// Create the usernameFile and write the username to it as a String
-      File usernameFile = File("${userDirectory.path}/username")..createSync();
-      usernameFile.writeAsStringSync(userInfo.userName);
-
-      /// Create the userIcon and userBanner files and populate them with the data
-      File userIconFile = File("${userDirectory.path}/userIcon.jpg");
-      userIconFile.writeAsBytesSync(userInfo.userIcon);
-      File userBannerFile = File("${userDirectory.path}/userBanner.jpg");
-      userBannerFile.writeAsBytesSync(userInfo.userBanner);
-
-      userList.addAll({userInfo.userID: userInfo});
+    /// If we received our info, then Load our userProfile and return
+    if (userInfo.userID == widget.serverConfig.userID) {
+      return;
     }
+
+    SerenityUser? localUser = widget.userList[userInfo.userID];
+
+    /// if we do not have the user, then create a new user and save the data
+    if (localUser == null) {
+      saveUserInfo(userInfo);
+      widget.userList.addAll({userInfo.userID: userInfo});
+      return;
+    }
+
+    /// if the localUser is the same as the incoming user. Return;
+    if (localUser == userInfo) {
+      return;
+    }
+
+    /// Replace the user in the Map, then save the new info.
+    widget.userList[userInfo.userID] = userInfo;
+
+    saveUserInfo(userInfo);
+  }
+
+  /// Name: saveUserInfo
+  ///
+  /// Date Last Updated: 02/26/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: this function takes in a SerenityUser, saves their information,
+  void saveUserInfo(SerenityUser user) async {
+    /// Create the user Directory
+    Directory userDirectory =
+        Directory("${widget.usersDirectory.path}/${user.userID}")..createSync();
+
+    /// Save all the userInformation
+    File userNameFile = File("${userDirectory.path}/username")..createSync();
+    userNameFile.writeAsStringSync(user.userName);
+    File userIconFile = File("${userDirectory.path}/userIcon.jpg")
+      ..createSync();
+    userIconFile.writeAsBytesSync(user.userIcon);
+    File userBannerFIle = File("${userDirectory.path}/userBanner.jpg")
+      ..createSync();
+    userBannerFIle.writeAsBytesSync(user.userBanner);
   }
 
   /// Name: _sendUpdatedUserInfo
@@ -639,8 +729,11 @@ class _SerenityServerState extends State<SerenityServer> {
   /// Function: This user send the localUser's Info to the server to be updated
   void _sendUpdatedUSerInfo() {
     /// Create the userInfo, using the userID for the server
-    SerenityUser userInfo = SerenityUser(widget.userID, localUser.userName,
-        localUser.userIcon, localUser.userBanner);
+    SerenityUser userInfo = SerenityUser(
+        widget.serverConfig.userID,
+        global.localUser.userName,
+        global.localUser.userIcon,
+        global.localUser.userBanner);
 
     /// Create the SerenityPacket
     SerenityPacket packet =

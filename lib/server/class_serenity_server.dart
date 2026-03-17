@@ -53,7 +53,7 @@ class SerenityServer {
 
   /// Name: initialHandshakeHandler
   ///
-  /// Date Last Updated: 02/04/26
+  /// Date Last Updated: 03/12/26
   ///
   /// Last Updater: Parker DelBene
   ///
@@ -71,7 +71,7 @@ class SerenityServer {
     String? password = queryParameters["password"]?[0];
     String? userPAT = queryParameters["userPAT"]?[0];
     InternetAddress? requestIP = request.connectionInfo?.remoteAddress;
-    bool firstConnect = false;
+    bool firstConnect;
     List<String> userData = [];
 
     print("Attempted request from ${requestIP?.address} with userID $userID");
@@ -90,8 +90,7 @@ class SerenityServer {
       return;
     }
 
-    /// If the user ID is null, then we need to verify the password supplied
-    /// is valid.
+    /// Return if the userID is null
     if (userID == null) {
       print("userID is invalid");
       invalidRequestType(request);
@@ -99,6 +98,8 @@ class SerenityServer {
     }
 
     /// If the userID is empty, then we check the password.
+    ///
+    /// If the password was correct, then we generate the user data.
     if (userID == "") {
       bool result = password == null
           ? invalidRequestType(request)
@@ -106,6 +107,7 @@ class SerenityServer {
 
       if (!result) {
         print("Invalid password");
+        invalidRequestType(request);
         return;
       }
 
@@ -114,18 +116,33 @@ class SerenityServer {
       userPAT = userData[1];
 
       /// Set first connect to true to run through first time connection setup
-      print("first connect");
       firstConnect = true;
     }
 
-    /// If the userPAT is null then send invalid request and return
-    if (userPAT == null) {
-      invalidRequestType(request);
-      return;
+    /// If the userID was not empty then we need to check the PAT is not null
+    /// and then check the client data
+    else {
+      firstConnect = false;
+
+      /// If the userPAT is null then send invalid request and return
+      if (userPAT == null) {
+        invalidRequestType(request);
+        return;
+      }
+
+      /// Check if we have client data and the PAT matches
+      if (!await checkClientData(userID, userPAT)) {
+        invalidRequestType(request);
+        return;
+      }
     }
 
-    /// Check if we have client data and the PAT matches
-    if (!await checkClientData(userID, userPAT)) {
+    /// Upgrade the Connection
+    WebSocket webSocket;
+    if (WebSocketTransformer.isUpgradeRequest(request)) {
+      print("Upgrade the Request");
+      webSocket = await WebSocketTransformer.upgrade(request);
+    } else {
       invalidRequestType(request);
       return;
     }
@@ -136,17 +153,14 @@ class SerenityServer {
 
         /// Branch on first connect
         firstConnect
-            ? clientFirstConnect(request, userID, userPAT)
-            : clientTextConnect(request, userID);
+            ? clientFirstConnect(webSocket, userID, userPAT)
+            : clientTextConnect(webSocket, userID);
         break;
       case 'voice':
         clientVoiceConnect(request);
         break;
       default:
-        request.response.statusCode = HttpStatus.unauthorized;
-        request.response.reasonPhrase = 'Invalid Request Type';
-        request.response.flush();
-        request.response.close();
+        invalidRequestType(request);
         break;
     }
 
@@ -154,6 +168,7 @@ class SerenityServer {
   }
 
   bool invalidRequestType(HttpRequest request) {
+    print("Invalid Request");
     request.response.statusCode = HttpStatus.unauthorized;
     request.response.reasonPhrase = 'Invalid Request Type';
     request.response.flush();
@@ -605,9 +620,10 @@ class SerenityServer {
   /// Function: Accepts the request and upgrades to a websocket, sends the
   /// initial messages, and then calls listen on the websocket, piping the
   /// messages to the messageHandler
-  void clientTextConnect(HttpRequest request, String userID) async {
+  void clientTextConnect(WebSocket webSocket, String userID) async {
     /// Upgrade the request to a websocket
-    WebSocket webSocket = await WebSocketTransformer.upgrade(request);
+    print("Upgrading Request");
+    print("Request Upgraded");
 
     /// add the userID to the text client Map
     textClients.addAll({userID: webSocket});
@@ -651,10 +667,11 @@ class SerenityServer {
   /// when a user first connects to the server. Then it pipes the websocket
   /// stream to the messageHandler function
   void clientFirstConnect(
-      HttpRequest request, String userID, String userPAT) async {
+      WebSocket webSocket, String userID, String userPAT) async {
     /// Upgrade the request to a websocket
-    print("Upgrading Request");
-    WebSocket webSocket = await WebSocketTransformer.upgrade(request);
+    print("Upgrading First Connect Request");
+
+    print("Request Upgraded");
 
     /// add the userID to the text client Map
     textClients.addAll({userID: webSocket});

@@ -5,10 +5,12 @@ import 'package:serenity/client/view_dashboard.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/view_serenity_server.dart';
 import 'package:serenity/server/class_serenity_user.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
-  loadServers();
+void main() async {
+  await getApplicationDirectory();
   loadLocalUser();
+  loadServers();
   runApp(const MyApp());
 }
 
@@ -23,7 +25,11 @@ class MyApp extends StatelessWidget {
         if (constraints.maxWidth != 0) {
           return MaterialApp(
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              primaryColor: primaryColor,
+              highlightColor: highlightColor,
+              scrollbarTheme: ScrollbarThemeData(
+                thumbColor: WidgetStatePropertyAll(secondaryColor),
+              ),
               useMaterial3: true,
             ),
             home: const MainPage(),
@@ -62,7 +68,7 @@ class MainPage extends StatelessWidget {
 /// Function: If the local user data exists, it loads the data. If it does not,
 /// it creates the standard user files.
 void loadLocalUser() {
-  Directory localUserDirectory = Directory("./user");
+  Directory localUserDirectory = Directory("${applicationDirectory.path}/user");
   File localUsernameFile = File("${localUserDirectory.path}/userName");
   File localUserIconFile = File("${localUserDirectory.path}/userIcon.jpg");
   File localUserBannerFile = File("${localUserDirectory.path}/userBanner.jpg");
@@ -93,7 +99,8 @@ void loadLocalUser() {
   /// any servers.
   */
 void loadServers() {
-  Directory serversDirectory = Directory('./servers');
+  Directory serversDirectory =
+      Directory('${applicationDirectory.path}/servers');
   bool serversDirectoryCreated = serversDirectory.existsSync();
   List<FileSystemEntity> listOfServers = [];
 
@@ -112,4 +119,9 @@ void loadServers() {
       serverList.add(SerenityServer.fromDirectory(entity));
     }
   }
+}
+
+Future<void> getApplicationDirectory() async {
+  Directory documentsDirectory = await getApplicationDocumentsDirectory();
+  applicationDirectory = Directory("${documentsDirectory.path}/Serenity")..createSync();
 }

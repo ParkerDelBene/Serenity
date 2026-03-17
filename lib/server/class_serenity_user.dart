@@ -59,4 +59,29 @@ class SerenityUser {
       "userBanner": userBanner.toList()
     };
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! SerenityUser) {
+      return false;
+    }
+
+    if (other.userID != userID) {
+      return false;
+    }
+
+    if (other.userName != userName) {
+      return false;
+    }
+
+    if (other.userIcon != userIcon) {
+      return false;
+    }
+
+    if (other.userBanner != userBanner) {
+      return false;
+    }
+
+    return true;
+  }
 }
