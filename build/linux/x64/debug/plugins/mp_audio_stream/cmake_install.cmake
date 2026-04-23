@@ -1,8 +1,8 @@
-# Install script for directory: /home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/mp_audio_stream/linux
+# Install script for directory: /home/cryptichook/Coding Folder/Serenity/linux/flutter/ephemeral/.plugin_symlinks/mp_audio_stream/linux
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle")
+  set(CMAKE_INSTALL_PREFIX "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -44,13 +44,13 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/plugins/mp_audio_stream/shared/cmake_install.cmake")
+  include("/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/plugins/mp_audio_stream/shared/cmake_install.cmake")
 
 endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/plugins/mp_audio_stream/install_local_manifest.txt"
+  file(WRITE "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/plugins/mp_audio_stream/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

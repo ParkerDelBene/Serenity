@@ -1,6 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/widget_clickable_widget.dart';
+import 'package:serenity/client/widget_serenity_image_icon.dart';
 import 'package:serenity/client/widget_view_divider.dart';
 
 /// Name: OptionsMenu
@@ -21,7 +26,24 @@ class OptionsMenu extends StatefulWidget {
 
 class _OptionsMenuState extends State<OptionsMenu> {
   @override
+  void initState() {
+    super.initState();
+
+    optionMenuWidgetBuilder();
+  }
+
+  /// A list of the widget builders, w
+  List<Widget Function()> optionMenuWidgetBuilders = [];
+  int activeOptionMenuBuilder = 0;
+
+  /// Setting up a temporary user that we can edit and then save over when we save from this menu.
+  String newUserName = "";
+  Uint8List newUserIcon = Uint8List(0);
+  Uint8List newUserBanner = Uint8List(0);
+
+  @override
   Widget build(BuildContext context) {
+    /// Setting up variables to use while building the option menu
     Size size = MediaQuery.sizeOf(context);
     double dialogWidth = size.width * .5;
 
@@ -34,6 +56,7 @@ class _OptionsMenuState extends State<OptionsMenu> {
           Expanded(
             child: Row(
               children: [
+                /// Menu for selecting the options
                 SizedBox(
                   width: dialogWidth * .25,
                   child: ListView.separated(
@@ -46,7 +69,12 @@ class _OptionsMenuState extends State<OptionsMenu> {
                     },
                     itemBuilder: (context, index) {
                       return ClickableWidget(
-                        () {},
+                        /// If the index is within the length of the menuWidgets, then we switch the
+                        /// Active menu, else do nothing.
+                        /// This is kind of redundant in production but whatever.
+                        () => index < optionMenuWidgetBuilders.length
+                            ? activeOptionMenuBuilder = index
+                            : activeOptionMenuBuilder,
                         Text(
                           OptionsMenu._settingsMenus[index],
                           style: channelTextStyle,
@@ -57,7 +85,9 @@ class _OptionsMenuState extends State<OptionsMenu> {
                   ),
                 ),
                 ViewDivider(true),
-                Expanded(child: Container())
+
+                /// Area for putting the option view
+                Expanded(child: optionMenuWidgetBuilders[0]())
               ],
             ),
           ),
@@ -72,6 +102,19 @@ class _OptionsMenuState extends State<OptionsMenu> {
     );
   }
 
+  /// Name: optionMenuWidgetBuilder
+  ///
+  /// Date Last Updated: 04/21/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This function is a wrapper that initializes the optionMenuWidgets list with
+  /// the various menus. It is called within the initState.
+  void optionMenuWidgetBuilder() {
+    optionMenuWidgetBuilders.add(userConfigWidget);
+  }
+
+  /// Widget for building the bottom buttons in a row
   Widget bottomNavButtons() {
     double widthSpacing = 25;
 
@@ -104,6 +147,7 @@ class _OptionsMenuState extends State<OptionsMenu> {
     );
   }
 
+  /// Widget for decorating the bottom buttons
   Widget bottomNavButtonWidget(Widget child) {
     return Expanded(
       child: Container(
@@ -112,6 +156,63 @@ class _OptionsMenuState extends State<OptionsMenu> {
             borderRadius: BorderRadius.circular(15),
           ),
           child: child),
+    );
+  }
+
+  /// Name: userConfigWidget
+  ///
+  /// Date Last Updated: 04/21/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This widget displays the options for changing the local user settings
+  Widget userConfigWidget() {
+    /// Setting up the username controller and populating it with the current username
+    TextEditingController userNameController = TextEditingController();
+    userNameController.text = localUser.userName;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          children: [
+            Row(
+              children: [
+                /// CLickable Widget to select a new userIcon
+                ClickableWidget(
+                  () async {
+                    FilePickerResult? result =
+                        await FilePicker.pickFiles(type: FileType.image);
+
+                    if (result != null) {
+                      File file = File(result.files.single.path!);
+                      newUserIcon = file.readAsBytesSync();
+
+                      if (mounted) {
+                        setState(() {});
+                      }
+                    }
+                  },
+                  SerenityImageIcon(
+                      localUser.userName,
+                      newUserIcon.isEmpty ? null : newUserIcon,
+                      constraints.maxWidth * .25),
+                ),
+
+                /// Textfield to modify the userName
+                Expanded(
+                  child: TextField(
+                    controller: userNameController,
+                    style: channelTextStyle,
+                    onEditingComplete: () {
+                      newUserName = userNameController.text;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

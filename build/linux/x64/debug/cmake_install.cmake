@@ -1,8 +1,8 @@
-# Install script for directory: /home/cryptichook/Coding_Folder/Serenity/linux
+# Install script for directory: /home/cryptichook/Coding Folder/Serenity/linux
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle")
+  set(CMAKE_INSTALL_PREFIX "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -44,128 +44,128 @@ endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   
-  file(REMOVE_RECURSE "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/")
+  file(REMOVE_RECURSE "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/")
   
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
-  if(EXISTS "$ENV{DESTDIR}/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/serenity" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/serenity")
+  if(EXISTS "$ENV{DESTDIR}/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/serenity" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/serenity")
     file(RPATH_CHECK
-         FILE "$ENV{DESTDIR}/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/serenity"
+         FILE "$ENV{DESTDIR}/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/serenity"
          RPATH "$ORIGIN/lib")
   endif()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/serenity")
+   "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/serenity")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle" TYPE EXECUTABLE FILES "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/intermediates_do_not_run/serenity")
-  if(EXISTS "$ENV{DESTDIR}/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/serenity" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/serenity")
+  file(INSTALL DESTINATION "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle" TYPE EXECUTABLE FILES "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/intermediates_do_not_run/serenity")
+  if(EXISTS "$ENV{DESTDIR}/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/serenity" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/serenity")
     file(RPATH_CHANGE
-         FILE "$ENV{DESTDIR}/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/serenity"
-         OLD_RPATH "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/plugins/record_linux:/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral:"
+         FILE "$ENV{DESTDIR}/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/serenity"
+         OLD_RPATH "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/plugins/record_linux:/home/cryptichook/Coding Folder/Serenity/linux/flutter/ephemeral:"
          NEW_RPATH "$ORIGIN/lib")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/usr/bin/llvm-strip" "$ENV{DESTDIR}/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/serenity")
+      execute_process(COMMAND "/usr/bin/llvm-strip" "$ENV{DESTDIR}/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/serenity")
     endif()
   endif()
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/data/icudtl.dat")
+   "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/data/icudtl.dat")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/data" TYPE FILE FILES "/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/icudtl.dat")
+  file(INSTALL DESTINATION "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/data" TYPE FILE FILES "/home/cryptichook/Coding Folder/Serenity/linux/flutter/ephemeral/icudtl.dat")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/lib/libflutter_linux_gtk.so")
+   "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/lib/libflutter_linux_gtk.so")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/lib" TYPE FILE FILES "/home/cryptichook/Coding_Folder/Serenity/linux/flutter/ephemeral/libflutter_linux_gtk.so")
+  file(INSTALL DESTINATION "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/lib" TYPE FILE FILES "/home/cryptichook/Coding Folder/Serenity/linux/flutter/ephemeral/libflutter_linux_gtk.so")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/lib/librecord_linux_plugin.so")
+   "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/lib/librecord_linux_plugin.so")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/lib" TYPE FILE FILES "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/plugins/record_linux/librecord_linux_plugin.so")
+  file(INSTALL DESTINATION "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/lib" TYPE FILE FILES "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/plugins/record_linux/librecord_linux_plugin.so")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/lib/libmp_audio_stream.so")
+   "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/lib/libmp_audio_stream.so")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/lib" TYPE FILE FILES "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/plugins/mp_audio_stream/shared/libmp_audio_stream.so")
+  file(INSTALL DESTINATION "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/lib" TYPE FILE FILES "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/plugins/mp_audio_stream/shared/libmp_audio_stream.so")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/lib/")
+   "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/lib/")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/lib" TYPE DIRECTORY FILES "/home/cryptichook/Coding_Folder/Serenity/build/native_assets/linux/")
+  file(INSTALL DESTINATION "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/lib" TYPE DIRECTORY FILES "/home/cryptichook/Coding Folder/Serenity/build/native_assets/linux/")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   
-  file(REMOVE_RECURSE "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/data/flutter_assets")
+  file(REMOVE_RECURSE "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/data/flutter_assets")
   
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/data/flutter_assets")
+   "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/data/flutter_assets")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/bundle/data" TYPE DIRECTORY FILES "/home/cryptichook/Coding_Folder/Serenity/build//flutter_assets")
+  file(INSTALL DESTINATION "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/bundle/data" TYPE DIRECTORY FILES "/home/cryptichook/Coding Folder/Serenity/build//flutter_assets")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/flutter/cmake_install.cmake")
-  include("/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/plugins/record_linux/cmake_install.cmake")
-  include("/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/plugins/mp_audio_stream/cmake_install.cmake")
+  include("/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/flutter/cmake_install.cmake")
+  include("/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/plugins/record_linux/cmake_install.cmake")
+  include("/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/plugins/mp_audio_stream/cmake_install.cmake")
 
 endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/install_local_manifest.txt"
+  file(WRITE "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()
 if(CMAKE_INSTALL_COMPONENT)
@@ -181,6 +181,6 @@ else()
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/home/cryptichook/Coding_Folder/Serenity/build/linux/x64/debug/${CMAKE_INSTALL_MANIFEST}"
+  file(WRITE "/home/cryptichook/Coding Folder/Serenity/build/linux/x64/debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()
