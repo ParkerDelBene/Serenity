@@ -48,10 +48,9 @@ class Connection {
     _voiceSocket.sink.close();
   }
 
-  Future<bool> connectVoice(String uri, String? port, String channel) async {
+  Future<bool> connectVoice(String channel) async {
     try {
-      _voiceSocket =
-          WebSocketChannel.connect(Uri.parse("ws://$uri:${port ?? '12345'}}"));
+      _voiceSocket = WebSocketChannel.connect(Uri.parse("ws://$uri:$port"));
 
       await _voiceSocket.ready;
     } catch (e) {

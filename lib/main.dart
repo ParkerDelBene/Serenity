@@ -1,10 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:serenity/client/class_serenityclient_user.dart';
 import 'package:serenity/client/view_dashboard.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/view_serenity_server.dart';
-import 'package:serenity/server/class_serenity_user.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
@@ -53,6 +52,9 @@ class MainPage extends StatelessWidget {
       maxScreenHeight = maxSize.height;
       maxScreenWidth = maxSize.width;
       screenSizeInitialized = true;
+
+      smallImageIconSize = maxScreenWidth * serverIconRatio;
+      largeImageIconSize = maxScreenWidth * serverIconRatio * 2;
     }
 
     return Dashboard();
@@ -84,7 +86,7 @@ void loadLocalUser() {
   localUserBannerFile.createSync();
   localUserIconFile.createSync();
 
-  localUser = SerenityUser(
+  localUser = SerenityClientUser(
       "",
       localUsernameFile.readAsStringSync(),
       localUserIconFile.readAsBytesSync(),
@@ -123,5 +125,6 @@ void loadServers() {
 
 Future<void> getApplicationDirectory() async {
   Directory documentsDirectory = await getApplicationDocumentsDirectory();
-  applicationDirectory = Directory("${documentsDirectory.path}/Serenity")..createSync();
+  applicationDirectory = Directory("${documentsDirectory.path}/Serenity")
+    ..createSync();
 }

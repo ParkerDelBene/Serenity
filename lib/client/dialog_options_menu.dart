@@ -36,10 +36,13 @@ class _OptionsMenuState extends State<OptionsMenu> {
   List<Widget Function()> optionMenuWidgetBuilders = [];
   int activeOptionMenuBuilder = 0;
 
-  /// Setting up a temporary user that we can edit and then save over when we save from this menu.
-  String newUserName = "";
-  Uint8List newUserIcon = Uint8List(0);
-  Uint8List newUserBanner = Uint8List(0);
+  /// Setting up a temporary user variables that we can edit and then save over when we save from this menu.
+  String newUserName = localUser.userName;
+  SerenityImageIcon newUserIcon = SerenityImageIcon(
+    localUser.userName,
+    localUser.userIcon.iconImage.value,
+  );
+  Uint8List newUserBanner = localUser.userBanner;
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +137,10 @@ class _OptionsMenuState extends State<OptionsMenu> {
         SizedBox(width: widthSpacing),
         bottomNavButtonWidget(
           ClickableWidget(
-            () => Navigator.pop(context),
+            () {
+              saveSettings();
+              Navigator.pop(context);
+            },
             Text(
               "Save",
               style: channelTextStyle,
@@ -145,6 +151,43 @@ class _OptionsMenuState extends State<OptionsMenu> {
         SizedBox(width: widthSpacing),
       ],
     );
+  }
+
+  /// Name: saveSettings
+  ///
+  /// Date Last Updated: 05/20/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This function is a wrapper that calls the functions for saving the various configs.
+  void saveSettings() {
+    saveUserSettings();
+  }
+
+  /// Name: saveUserSettings
+  ///
+  /// Date Last Updated: 05/20/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This function creates a new user, sets the localUser to the new one, and then saves.
+  void saveUserSettings() {
+    /// Update the LocalUser
+    localUser.userName = newUserName;
+    localUser.userBanner = newUserBanner;
+    localUser.userIcon.iconImage.value = newUserIcon.iconImage.value;
+
+    /// Get the localuser Directory and the various files
+    Directory localUserDirectory =
+        Directory("${applicationDirectory.path}/user");
+    File userNameFile = File("${localUserDirectory.path}/userName");
+    File userBannerFile = File("${localUserDirectory.path}/userBanner.jpg");
+    File userIconFile = File("${localUserDirectory.path}/userIcon.jpg");
+
+    /// Save the Files.
+    userNameFile.writeAsStringSync(localUser.userName);
+    userBannerFile.writeAsBytesSync(localUser.userBanner);
+    userIconFile.writeAsBytesSync(localUser.userIcon.iconImage.value);
   }
 
   /// Widget for decorating the bottom buttons
@@ -174,39 +217,77 @@ class _OptionsMenuState extends State<OptionsMenu> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Column(
+          spacing: 20,
           children: [
-            Row(
+            SizedBox(
+              height: 1,
+            ),
+            Stack(
               children: [
-                /// CLickable Widget to select a new userIcon
-                ClickableWidget(
-                  () async {
+                /// The section for clicking the banner widget.
+                /// Lives underneath the rest of the profile selection
+                Positioned.fill(
+                  child: ClickableWidget(() async {
                     FilePickerResult? result =
                         await FilePicker.pickFiles(type: FileType.image);
 
                     if (result != null) {
                       File file = File(result.files.single.path!);
-                      newUserIcon = file.readAsBytesSync();
+                      newUserBanner = file.readAsBytesSync();
 
                       if (mounted) {
                         setState(() {});
                       }
                     }
                   },
-                  SerenityImageIcon(
-                      localUser.userName,
-                      newUserIcon.isEmpty ? null : newUserIcon,
-                      constraints.maxWidth * .25),
+                      newUserBanner.isEmpty
+                          ? Container()
+                          : Image.memory(newUserBanner)),
                 ),
+                Row(
+                  spacing: 30,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 1,
+                    ),
 
-                /// Textfield to modify the userName
-                Expanded(
-                  child: TextField(
-                    controller: userNameController,
-                    style: channelTextStyle,
-                    onEditingComplete: () {
-                      newUserName = userNameController.text;
-                    },
-                  ),
+                    /// CLickable Widget to select a new userIcon
+                    ClickableWidget(
+                      () async {
+                        FilePickerResult? result =
+                            await FilePicker.pickFiles(type: FileType.image);
+
+                        if (result != null) {
+                          File file = File(result.files.single.path!);
+                          newUserIcon.iconImage.value = file.readAsBytesSync();
+
+                          if (mounted) {
+                            setState(() {});
+                          }
+                        }
+                      },
+                      SizedBox(
+                          width: constraints.maxWidth * .5, child: newUserIcon),
+                    ),
+
+                    /// Textfield to modify the userName
+                    Expanded(
+                      child: TextField(
+                        controller: userNameController,
+                        style: channelTextStyle,
+                        onEditingComplete: () {
+                          newUserName = userNameController.text;
+                        },
+                        onChanged: (value) {
+                          newUserName = value;
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 1,
+                    ),
+                  ],
                 ),
               ],
             ),

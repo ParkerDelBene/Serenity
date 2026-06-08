@@ -29,6 +29,9 @@ migrate_working_dir/
 .pub/
 /build/
 
+# Continue Rule Files
+.continue/
+
 # Symbolication related
 app.*.symbols
 

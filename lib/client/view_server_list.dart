@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:serenity/client/dialog_addserver.dart';
 import 'package:serenity/client/dialog_invalid_server_connection.dart';
 import 'package:serenity/client/view_serenity_server.dart';
@@ -38,15 +39,16 @@ class _ServerlistViewState extends State<ServerlistView> {
                       onTap: () => addServer(context),
                       child: MouseRegion(
                         cursor: SystemMouseCursors.click,
-                        child:
-                            SerenityImageIcon("+", null, constraints.maxWidth),
+                        child: SerenityImageIcon(
+                          "+",
+                          Uint8List(0),
+                        ),
                       ),
                     );
                   }
                   return ClickableWidget(
-                    () => serverIconClickHandler(serverList[index], context),
-                    serverList[index].toIcon(constraints.maxWidth),
-                  );
+                      () => serverIconClickHandler(serverList[index], context),
+                      serverList[index].serverIcon);
                 },
               ),
             ),
@@ -60,7 +62,7 @@ class _ServerlistViewState extends State<ServerlistView> {
   ///
   /// Date Last Updated: 03/02/26
   ///
-  /// Last Updater: Parker DelBene
+  /// Last Updater: Parker DelBeneimport 'package:serenity/server/class_serenity_user.dart';
   ///
   /// Function: This function handles what happens when a serverIcon is clicked.
   Future<void> serverIconClickHandler(

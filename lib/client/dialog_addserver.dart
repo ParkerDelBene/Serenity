@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:serenity/client/class_connection.dart';
+import 'package:serenity/client/class_serenityclient_user.dart';
 import 'package:serenity/client/class_serenityserver_client_config.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/view_serenity_server.dart';
 import 'package:serenity/client/view_text_channel.dart';
+import 'package:serenity/client/widget_serenity_image_icon.dart';
 import 'package:serenity/server/class_serenity_init_packet.dart';
 import 'package:serenity/server/class_serenity_user.dart';
 
@@ -205,8 +207,9 @@ class AddserverView extends StatelessWidget {
         .writeAsStringSync(jsonEncode(clientsideConfig.toJson()));
 
     /// Get a map of the users
-    Map<String, SerenityUser> userList = <String, SerenityUser>{
-      for (SerenityUser user in initPacket.userList) user.userID: user
+    Map<String, SerenityClientUser> userList = <String, SerenityClientUser>{
+      for (SerenityUser user in initPacket.userList)
+        user.userID: SerenityClientUser.fromSerenityUSer(user)
     };
 
     /// Add our user to the userMap
@@ -234,7 +237,8 @@ class AddserverView extends StatelessWidget {
 
       /// The localUser should always exist
       userList[userID]!,
-      serverIconFile.readAsBytesSync(),
+      SerenityImageIcon(
+          clientsideConfig.serverName, serverIconFile.readAsBytesSync()),
       serverBannerFIle.readAsBytesSync(),
       directoryList[0],
       directoryList[1],

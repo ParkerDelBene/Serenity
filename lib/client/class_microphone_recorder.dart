@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:record/record.dart';
 
-
 class MicrophoneRecorder {
   MicrophoneRecorder();
 
@@ -25,14 +24,16 @@ class MicrophoneRecorder {
       If device.id == '0', start the stream with the system
       default device
     */
-    
+
     if (device.id == '0') {
-      
       audioStream = await microphone.startStream(RecordConfig());
       return true;
     }
 
     audioStream = await microphone.startStream(RecordConfig(device: device));
+
+    /// Convert to a broadcast stream.
+    audioStream = audioStream.asBroadcastStream();
     return true;
   }
 

@@ -3,10 +3,10 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:serenity/client/class_serenityclient_user.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/widget_text_channel_message.dart';
 import 'package:serenity/server/class_serenity_packet.dart';
-import 'package:serenity/server/class_serenity_user.dart';
 
 class TextChannel extends StatefulWidget {
   TextChannel(
@@ -36,7 +36,7 @@ class TextChannel extends StatefulWidget {
   final ValueNotifier<bool> saveChat = ValueNotifier(false);
   final TextEditingController chatTextField = TextEditingController();
   final FocusNode chatFocusNode = FocusNode();
-  final Map<String, SerenityUser> userList;
+  final Map<String, SerenityClientUser> userList;
   late final Timer saveChatTimer;
 
   @override
@@ -56,7 +56,7 @@ class TextChannel extends StatefulWidget {
     );
   }
 
-  void addChat(SerenityUser user, String chat) {
+  void addChat(SerenityClientUser user, String chat) {
     TextChannelMessage message = TextChannelMessage(user, chat);
     _chatList.add(message);
     _newChats.add(message);

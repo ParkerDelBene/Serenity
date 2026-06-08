@@ -3,7 +3,6 @@ import 'package:serenity/client/dialog_options_menu.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/view_server_list.dart';
 import 'package:serenity/client/widget_clickable_widget.dart';
-import 'package:serenity/client/widget_serenity_image_icon.dart';
 import 'package:serenity/client/widget_view_divider.dart';
 
 class Dashboard extends StatefulWidget {
@@ -30,8 +29,6 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     dashboardSize = MediaQuery.sizeOf(context);
 
-    double localUserWidgetWidth = maxScreenWidth * .15;
-
     return Scaffold(
       backgroundColor: primaryColor,
       body: Stack(
@@ -54,61 +51,7 @@ class _DashboardState extends State<Dashboard> {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: 20, bottom: 20),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: secondaryColor,
-                    borderRadius: BorderRadius.circular(10)),
-                width: localUserWidgetWidth,
-                height: maxScreenHeight * .075,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ClickableWidget(
-                      () {},
-                      SerenityImageIcon(
-                        localUser.userName,
-                        localUser.userIcon.isEmpty ? null : localUser.userIcon,
-                        localUserWidgetWidth * .25,
-                      ),
-                    ),
-                    ClickableWidget(
-                      () {},
-                      Icon(
-                        Icons.mic,
-                        color: highlightColor,
-                      ),
-                    ),
-                    ClickableWidget(
-                      () {},
-                      Icon(
-                        Icons.headphones,
-                        color: highlightColor,
-                      ),
-                    ),
-                    ClickableWidget(
-                      () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Dialog(
-                                child: OptionsMenu(),
-                              );
-                            });
-                      },
-                      Icon(
-                        Icons.settings,
-                        color: highlightColor,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
+          floatingUserMenu(),
         ],
       ),
     );
@@ -118,5 +61,58 @@ class _DashboardState extends State<Dashboard> {
     if (mounted) {
       setState(() {});
     }
+  }
+
+  Widget floatingUserMenu() {
+    double width = maxScreenWidth * .15;
+    double height = maxScreenHeight * .075;
+
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Padding(
+        padding: EdgeInsets.only(left: 20, bottom: 20),
+        child: Container(
+          decoration: BoxDecoration(
+              color: secondaryColor, borderRadius: BorderRadius.circular(10)),
+          width: width,
+          height: height,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ClickableWidget(() {}, localUser.userIcon),
+              ClickableWidget(
+                () {},
+                Icon(
+                  Icons.mic,
+                  color: highlightColor,
+                ),
+              ),
+              ClickableWidget(
+                () {},
+                Icon(
+                  Icons.headphones,
+                  color: highlightColor,
+                ),
+              ),
+              ClickableWidget(
+                () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          child: OptionsMenu(),
+                        );
+                      });
+                },
+                Icon(
+                  Icons.settings,
+                  color: highlightColor,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

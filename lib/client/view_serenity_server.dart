@@ -4,10 +4,12 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:serenity/client/class_connection.dart';
+import 'package:serenity/client/class_serenityclient_user.dart';
 import 'package:serenity/client/class_serenityserver_client_config.dart';
 import 'package:serenity/client/globals.dart' as global;
 import 'package:serenity/client/view_server_user_list.dart';
 import 'package:serenity/client/view_text_channel.dart';
+import 'package:serenity/client/view_voice_channel.dart';
 import 'package:serenity/client/widget_serenity_image_icon.dart';
 import 'package:serenity/client/widget_view_divider.dart';
 import 'package:serenity/server/class_serenity_init_packet.dart';
@@ -73,7 +75,8 @@ class SerenityServer extends StatefulWidget {
     serverBannerFile.createSync();
 
     /// Load the users
-    Map<String, SerenityUser> userList = _loadUserData(usersDirectory, userID);
+    Map<String, SerenityClientUser> userList =
+        _loadUserData(usersDirectory, userID);
 
     /*
       Return the Serenity Server Object
@@ -83,45 +86,37 @@ class SerenityServer extends StatefulWidget {
 
       /// The localUSerID should always exist
       userList[userID]!,
-      serverIconFile.readAsBytesSync(),
+      SerenityImageIcon(
+        serverConfig.serverName,
+        serverIconFile.readAsBytesSync(),
+      ),
       serverBannerFile.readAsBytesSync(),
       assetsDirectory,
       configDirectory,
       usersDirectory,
       chatsDirectory,
       {},
-      serverConfig.voiceChannels,
+      {},
       userList,
       connection,
     );
   }
 
   SerenityServerClientConfig serverConfig;
-  final SerenityUser localUser;
-  Uint8List serverIcon;
+  final SerenityClientUser localUser;
+  SerenityImageIcon serverIcon;
   Uint8List serverBanner;
   Directory assetsDirectory;
   Directory configDirectory;
   Directory usersDirectory;
   Directory? chatsDirectory;
   final Map<String, TextChannel> textChannels;
-  final List<String> voiceChannels;
-  final Map<String, SerenityUser> userList;
+  final Map<String, VoiceChannel> voiceChannels;
+  final Map<String, SerenityClientUser> userList;
   final Connection connection;
 
   @override
   State<SerenityServer> createState() => _SerenityServerState();
-
-  /*
-    Needs Full Implementation
-  */
-  Widget toIcon(double maxWidth) {
-    if (serverIcon.isEmpty) {
-      return SerenityImageIcon(serverConfig.serverName, null, maxWidth);
-    } else {
-      return SerenityImageIcon(serverConfig.serverName, serverIcon, maxWidth);
-    }
-  }
 
   /// Name:
   Widget serverBannerWidget() {
@@ -195,9 +190,9 @@ class SerenityServer extends StatefulWidget {
   /// the directory
   ///
   /// If it finds invalid users or incomplete userData, it deletes the userData
-  static Map<String, SerenityUser> _loadUserData(
+  static Map<String, SerenityClientUser> _loadUserData(
       Directory usersDirectory, String localUserID) {
-    Map<String, SerenityUser> userList = {};
+    Map<String, SerenityClientUser> userList = {};
     List<FileSystemEntity> entityList = usersDirectory.listSync();
     List<Directory> invalidUser = [];
 
@@ -225,8 +220,8 @@ class SerenityServer extends StatefulWidget {
         Uint8List userBanner = userBannerFile.readAsBytesSync();
 
         /// Create the user
-        SerenityUser newUser =
-            SerenityUser(userIDDirectory, userName, userIcon, userBanner);
+        SerenityClientUser newUser =
+            SerenityClientUser(userIDDirectory, userName, userIcon, userBanner);
 
         /// Add them to the userList
         userList.addAll({newUser.userID: newUser});
@@ -235,8 +230,11 @@ class SerenityServer extends StatefulWidget {
       }
     }
 
-    SerenityUser local = SerenityUser(localUserID, global.localUser.userName,
-        global.localUser.userIcon, global.localUser.userBanner);
+    SerenityClientUser local = SerenityClientUser(
+        localUserID,
+        global.localUser.userName,
+        global.localUser.userIcon.iconImage.value,
+        global.localUser.userBanner);
 
     userList.addAll({local.userID: local});
 
@@ -246,7 +244,7 @@ class SerenityServer extends StatefulWidget {
 
 class _SerenityServerState extends State<SerenityServer> {
   List<Widget> channelWidgets = [];
-  TextChannel? activeChannel;
+  Widget? activeChannel;
   late StreamSubscription incomingTextChannelSubscription;
 
   /*
@@ -283,13 +281,9 @@ class _SerenityServerState extends State<SerenityServer> {
       channelWidgets.add(ViewDivider(false));
 
       /// Add the Voice Channels
-      for (String channel in widget.voiceChannels) {
-        channelWidgets.add(InkWell(
-            child: Text(
-          channel,
-          style: global.channelTextStyle,
-        )));
-      }
+      widget.voiceChannels.forEach((name, channel) {
+        channelWidgets.add(channel.voiceChannelIcon);
+      });
     }
 
     return Row(
@@ -464,7 +458,7 @@ class _SerenityServerState extends State<SerenityServer> {
   /*
     listens to the active chat and swaps the active one, and deactivates the old one.
   */
-  void _activeChatListener(TextChannel channel) {
+  void _activeChannelListener(Widget channel) {
     activeChannel = channel;
 
     if (mounted) {
@@ -500,7 +494,32 @@ class _SerenityServerState extends State<SerenityServer> {
         _outgoingTextChannelListener(channel);
       });
       channel.activeChat.addListener(() {
-        _activeChatListener(channel);
+        _activeChannelListener(channel);
+      });
+    });
+  }
+
+  /// Name: _setupVoiceChannelListeners
+  ///
+  /// Date Last Updated: 06/05/26
+  ///
+  /// Last Updater: Parker DelBene
+  ///
+  /// Function: This initializes the listeners for the Voice Channels
+  void _setupVoiceChannelListeners() {
+    widget.voiceChannels.forEach((channelName, channel) {
+      channel.connected.addListener(() {
+        /// If connected is true, then we connect the voice
+        if (channel.connected.value) {
+          widget.connection.connectVoice(channel.channelName);
+        }nnn
+        else{
+          widget.connection.disconnectVoice();
+        }
+      });
+
+      channel.activeChannel.addListener(() {
+        _activeChannelListener(channel);
       });
     });
   }
@@ -651,7 +670,7 @@ class _SerenityServerState extends State<SerenityServer> {
     File serverIconFile = File("${widget.assetsDirectory.path}/serverIcon.jpg")
       ..createSync();
     serverIconFile.writeAsBytesSync(updatePacket.serverIcon);
-    widget.serverIcon = updatePacket.serverIcon;
+    widget.serverIcon.iconImage.value = updatePacket.serverIcon;
     File serverBannerFile =
         File("${widget.assetsDirectory.path}/serverBanner.jpg")..createSync();
     serverBannerFile.writeAsBytesSync(updatePacket.serverBanner);
@@ -677,24 +696,26 @@ class _SerenityServerState extends State<SerenityServer> {
       return;
     }
 
-    SerenityUser? localUser = widget.userList[userInfo.userID];
+    SerenityClientUser? localUser = widget.userList[userInfo.userID];
 
     /// if we do not have the user, then create a new user and save the data
     if (localUser == null) {
-      saveUserInfo(userInfo);
-      widget.userList.addAll({userInfo.userID: userInfo});
+      _saveUserInfo(userInfo);
+      widget.userList.addAll(
+          {userInfo.userID: SerenityClientUser.fromSerenityUSer(userInfo)});
       return;
     }
 
     /// if the localUser is the same as the incoming user. Return;
-    if (localUser == userInfo) {
+    if (localUser.isUserEqual(userInfo)) {
       return;
     }
 
     /// Replace the user in the Map, then save the new info.
-    widget.userList[userInfo.userID] = userInfo;
+    widget.userList[userInfo.userID] =
+        SerenityClientUser.fromSerenityUSer(userInfo);
 
-    saveUserInfo(userInfo);
+    _saveUserInfo(userInfo);
   }
 
   /// Name: saveUserInfo
@@ -704,7 +725,7 @@ class _SerenityServerState extends State<SerenityServer> {
   /// Last Updater: Parker DelBene
   ///
   /// Function: this function takes in a SerenityUser, saves their information,
-  void saveUserInfo(SerenityUser user) async {
+  void _saveUserInfo(SerenityUser user) async {
     /// Create the user Directory
     Directory userDirectory =
         Directory("${widget.usersDirectory.path}/${user.userID}")..createSync();
@@ -732,7 +753,7 @@ class _SerenityServerState extends State<SerenityServer> {
     SerenityUser userInfo = SerenityUser(
         widget.serverConfig.userID,
         global.localUser.userName,
-        global.localUser.userIcon,
+        global.localUser.userIcon.iconImage.value,
         global.localUser.userBanner);
 
     /// Create the SerenityPacket

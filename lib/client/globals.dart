@@ -1,20 +1,28 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:serenity/client/class_serenityclient_user.dart';
 import 'package:serenity/client/view_serenity_server.dart';
-import 'package:serenity/server/class_serenity_user.dart';
 
 /// Globals used for the server views
 List<SerenityServer> serverList = [];
 ValueNotifier<SerenityServer?> activeServer = ValueNotifier(null);
-double serverIconRatio = .8;
+
+/// Ratio for server icon size
 double serverIconPaddingRatio = .2;
+double serverIconRatio = .025;
+
+/// Padding ratio for server icon size
 double serverTextChannelRatio = .5;
 
 /// Globals used for the screen size
 double maxScreenHeight = 0;
 double maxScreenWidth = 0;
 bool screenSizeInitialized = false;
+
+/// Globals for the icon size calculateds from the max screenSize
+double smallImageIconSize = 0;
+double largeImageIconSize = 0;
 
 /// Color Pallet const
 Color primaryColor = Color(0xFF18181B);
@@ -32,5 +40,5 @@ TextStyle channelTextStyle = TextStyle(
 late final Directory applicationDirectory;
 
 /// globals used for the localUser
-late SerenityUser localUser;
+late SerenityClientUser localUser;
 ValueNotifier<bool> updateLocalUser = ValueNotifier(false);

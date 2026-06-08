@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:serenity/client/class_serenityclient_user.dart';
 import 'package:serenity/client/globals.dart';
-import 'package:serenity/client/widget_serenity_image_icon.dart';
 import 'package:serenity/client/widget_view_divider.dart';
-import 'package:serenity/server/class_serenity_user.dart';
 
 class ServerUserList extends StatefulWidget {
   const ServerUserList(this.userList, {super.key});
 
-  final Map<String, SerenityUser> userList;
+  final Map<String, SerenityClientUser> userList;
 
   @override
   State<StatefulWidget> createState() => _ServerUserListState();
@@ -16,7 +15,6 @@ class ServerUserList extends StatefulWidget {
 class _ServerUserListState extends State<ServerUserList> {
   @override
   Widget build(BuildContext context) {
-
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         double maxWidth = constraints.maxWidth;
@@ -48,14 +46,13 @@ class _ServerUserListState extends State<ServerUserList> {
                     itemCount: widget.userList.length,
                     itemBuilder: (context, index) {
                       /// Get the user at the specific index
-                      SerenityUser user =
+                      SerenityClientUser user =
                           widget.userList.values.elementAt(index);
 
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SerenityImageIcon(user.userName,
-                              user.userIcon.isEmpty ? null : user.userIcon, 50),
+                          user.userIcon,
                           SizedBox(
                             width: 10,
                           ),
