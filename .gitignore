@@ -53,10 +53,6 @@ app.*.map.json
 xcuserdata/
 *.xccheckout
 
-# Build artifacts
-build/
-DerivedData/
-
 # Flutter-related files
 *.lock
 !pubspec.lock
@@ -67,7 +63,7 @@ DerivedData/
 
 # Dart
 .pub/
-build/
+/build/
 .packages
 .dart_tool/
 
