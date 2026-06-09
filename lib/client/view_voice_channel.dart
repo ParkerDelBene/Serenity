@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_sound/public/flutter_sound.dart';
+import 'package:audiopc/audiopc.dart';
 import 'package:serenity/client/class_microphone_recorder.dart';
 import 'package:serenity/client/class_serenityclient_user.dart';
 import 'package:serenity/client/globals.dart';
@@ -11,10 +11,9 @@ import 'package:serenity/client/widget_view_divider.dart';
 
 /// A class to hold the various settings for the voice channel.
 class VoiceChannelSettings {
-  const VoiceChannelSettings(this.codec, this.interleaved, this.numChannels,
+  const VoiceChannelSettings(this.interleaved, this.numChannels,
       this.sampleRate, this.bufferSize);
 
-  final Codec codec;
   final bool interleaved;
   final int numChannels;
   final int sampleRate;
@@ -27,6 +26,8 @@ class VoiceChannel extends StatefulWidget {
     voiceChannelIcon.activeVoiceChannel.addListener(voiceChannelConnectHandler);
   }
 
+  static final VoiceChannelSettings defaultSettings = VoiceChannelSettings(false, 2, 48000, 1024);
+
   final String channelName;
   final Map<String, SerenityClientUser> userList;
   final VoiceChannelIcon voiceChannelIcon;
@@ -34,7 +35,7 @@ class VoiceChannel extends StatefulWidget {
   final ValueNotifier<bool> activeChannel = ValueNotifier<bool>(false);
   final ValueNotifier<Uint8List> outgoingVoiceData =
       ValueNotifier<Uint8List>(Uint8List(0));
-  final Map<String, FlutterSoundPlayer> userAudioPlayers = {};
+  final Map<String, AudioPlayer> userAudioPlayers = {};
   final VoiceChannelSettings voiceSettings;
   final MicrophoneRecorder microphone = MicrophoneRecorder();
   final ValueNotifier<bool> microphoneInitialized = ValueNotifier<bool>(false);
@@ -53,13 +54,7 @@ class VoiceChannel extends StatefulWidget {
 
     /// Initialize an AudioPlayer for each user connected to the voiceChannel
     userList.forEach((userID, user) {
-      FlutterSoundPlayer player = FlutterSoundPlayer();
-      player.startPlayerFromStream(
-          codec: voiceSettings.codec,
-          interleaved: voiceSettings.interleaved,
-          numChannels: voiceSettings.numChannels,
-          sampleRate: voiceSettings.sampleRate,
-          bufferSize: voiceSettings.bufferSize);
+      AudioPlayer player = AudioPlayer();
 
       userAudioPlayers.addAll({userID: player});
     });
@@ -92,13 +87,7 @@ class VoiceChannel extends StatefulWidget {
     userList.addAll({user.userID: user});
 
     /// Create the audio player
-    FlutterSoundPlayer player = FlutterSoundPlayer();
-    player.startPlayerFromStream(
-        codec: voiceSettings.codec,
-        interleaved: voiceSettings.interleaved,
-        numChannels: voiceSettings.numChannels,
-        sampleRate: voiceSettings.sampleRate,
-        bufferSize: voiceSettings.bufferSize);
+    AudioPlayer player = AudioPlayer();
 
     /// Add the player to the list.
     userAudioPlayers.addAll({user.userID: player});
@@ -111,10 +100,10 @@ class VoiceChannel extends StatefulWidget {
 
     /// If there is a user audio player for this user, then remove it
     if (connected.value) {
-      FlutterSoundPlayer? player = userAudioPlayers.remove(user.userID);
+      AudioPlayer? player = userAudioPlayers.remove(user.userID);
 
       if (player != null) {
-        player.closePlayer();
+        player.dispose();
       }
     }
     voiceChannelIcon.updateUserList.value = true;
@@ -122,7 +111,7 @@ class VoiceChannel extends StatefulWidget {
 
   void playAudio(String userID, Uint8List data) {
     if (userAudioPlayers.containsKey(userID)) {
-      userAudioPlayers[userID]!.feedUint8FromStream(data);
+      userAudioPlayers[userID]!.playMemory(data);
     }
   }
 

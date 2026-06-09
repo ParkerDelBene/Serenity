@@ -512,7 +512,7 @@ class _SerenityServerState extends State<SerenityServer> {
         /// If connected is true, then we connect the voice
         if (channel.connected.value) {
           widget.connection.connectVoice(channel.channelName);
-        }nnn
+        }
         else{
           widget.connection.disconnectVoice();
         }
@@ -659,7 +659,9 @@ class _SerenityServerState extends State<SerenityServer> {
 
     // Add back the voice channels
     widget.voiceChannels.clear();
-    widget.voiceChannels.addAll(widget.serverConfig.voiceChannels);
+    for (var channelName in widget.serverConfig.voiceChannels) {
+      widget.voiceChannels.addAll({channelName:VoiceChannel(channelName, {}, VoiceChannel.defaultSettings)});
+    }
 
     /// load all of the users from the updatePacket
     for (SerenityUser user in updatePacket.userList) {

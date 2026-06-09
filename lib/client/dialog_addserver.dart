@@ -7,6 +7,7 @@ import 'package:serenity/client/class_serenityserver_client_config.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/view_serenity_server.dart';
 import 'package:serenity/client/view_text_channel.dart';
+import 'package:serenity/client/view_voice_channel.dart';
 import 'package:serenity/client/widget_serenity_image_icon.dart';
 import 'package:serenity/server/class_serenity_init_packet.dart';
 import 'package:serenity/server/class_serenity_user.dart';
@@ -169,6 +170,7 @@ class AddserverView extends StatelessWidget {
   Future<SerenityServer> initServer(Connection newConnection) async {
     /// Init Variables for use
     Map<String, TextChannel> textChannels = <String, TextChannel>{};
+    Map<String, VoiceChannel> voiceChannels = <String, VoiceChannel>{};
 
     /// get the initial Connection messages from the server
     List<dynamic> initialConnectionMessages =
@@ -225,6 +227,13 @@ class AddserverView extends StatelessWidget {
       textChannels.addAll({channel: newChannel});
     }
 
+    /// Create the VoiceChannels
+    for (String channel in initPacket.voiceChannels){
+      VoiceChannel newChannel = VoiceChannel(channel, {}, VoiceChannel.defaultSettings);
+
+      voiceChannels.addAll({channel:newChannel});
+    }
+
     /// Get the ServerBanner and ServerIcon Files
     File serverIconFile = File("${directoryList[0].path}/serverIcon.jpg");
     File serverBannerFIle = File("${directoryList[0].path}/serverBanner.jpg");
@@ -245,7 +254,7 @@ class AddserverView extends StatelessWidget {
       directoryList[2],
       initPacket.saveContent ? null : directoryList[3],
       textChannels,
-      clientsideConfig.voiceChannels,
+      voiceChannels,
       userList,
       newConnection,
     );

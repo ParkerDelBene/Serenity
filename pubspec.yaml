@@ -44,7 +44,7 @@ dependencies:
   crypto: ^3.0.7
   path_provider: ^2.1.5
   file_picker: ^11.0.2
-  flutter_sound: ^9.30.0
+  audiopc: ^0.1.2+1
   
 
 dev_dependencies:
