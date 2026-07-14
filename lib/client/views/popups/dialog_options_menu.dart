@@ -1,14 +1,15 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:audiopc/audiopc.dart';
+import 'package:flutter_soloud/flutter_soloud.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:serenity/client/class_microphone_recorder.dart';
+import 'package:serenity/client/data/microphone_recorder.dart';
 import 'package:serenity/client/globals.dart';
-import 'package:serenity/client/widget_clickable_widget.dart';
-import 'package:serenity/client/widget_serenity_image_icon.dart';
-import 'package:serenity/client/widget_view_divider.dart';
+import 'package:serenity/client/views/popups/voice_options_menu.dart/voice_settings_menu.dart';
+import 'package:serenity/client/views/widgets/clickable_widget.dart';
+import 'package:serenity/client/views/widgets/serenity_image_icon.dart';
+import 'package:serenity/client/views/widgets/view_divider.dart';
 
 /// Name: OptionsMenu
 ///
@@ -77,9 +78,14 @@ class _OptionsMenuState extends State<OptionsMenu> {
                         /// If the index is within the length of the menuWidgets, then we switch the
                         /// Active menu, else do nothing.
                         /// This is kind of redundant in production but whatever.
-                        () => index < optionMenuWidgetBuilders.length
-                            ? activeOptionMenuBuilder = index
-                            : activeOptionMenuBuilder,
+                        () {
+                          if (index < optionMenuWidgetBuilders.length) {
+                            activeOptionMenuBuilder = index;
+                            if (mounted) {
+                              setState(() {});
+                            }
+                          }
+                        },
                         Text(
                           OptionsMenu._settingsMenus[index],
                           style: channelTextStyle,
@@ -92,7 +98,7 @@ class _OptionsMenuState extends State<OptionsMenu> {
                 ViewDivider(true),
 
                 /// Area for putting the option view
-                Expanded(child: optionMenuWidgetBuilders[1]())
+                Expanded(child: VoiceSettingsMenu()),
               ],
             ),
           ),
@@ -117,7 +123,7 @@ class _OptionsMenuState extends State<OptionsMenu> {
   /// the various menus. It is called within the initState.
   void optionMenuWidgetBuilder() {
     optionMenuWidgetBuilders.add(userConfigWidget);
-    optionMenuWidgetBuilders.add(voiceSettingsWidget);
+    optionMenuWidgetBuilders.add(userConfigWidget);
   }
 
   /// Widget for building the bottom buttons in a row
@@ -297,33 +303,6 @@ class _OptionsMenuState extends State<OptionsMenu> {
           ],
         );
       },
-    );
-  }
-
-  /// Name: voiceSettingsWidget
-  ///
-  /// Date Last Updated: 06/09/26
-  ///
-  /// Last Updater: Parker DelBene
-  ///
-  /// Function: This widget displays the options for changing the local voice settings
-  Widget voiceSettingsWidget() {
-    return Column(
-      children: [
-        TextButton(
-            onPressed: () async {
-              MicrophoneRecorder microphone = MicrophoneRecorder();
-              await microphone.startStream();
-              AudioPlayer player = AudioPlayer();
-              microphone.audioStream.listen((data) {
-                player.playMemory(data);
-              });
-            },
-            child: Text(
-              "TestMicrophone",
-              style: channelTextStyle,
-            ))
-      ],
     );
   }
 }

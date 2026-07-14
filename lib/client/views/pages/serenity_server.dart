@@ -3,15 +3,15 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:serenity/client/class_connection.dart';
-import 'package:serenity/client/class_serenityclient_user.dart';
-import 'package:serenity/client/class_serenityserver_client_config.dart';
+import 'package:serenity/client/data/connection.dart';
+import 'package:serenity/client/data/serenityclient_user.dart';
+import 'package:serenity/client/data/serenityserver_client_config.dart';
 import 'package:serenity/client/globals.dart' as global;
-import 'package:serenity/client/view_server_user_list.dart';
-import 'package:serenity/client/view_text_channel.dart';
-import 'package:serenity/client/view_voice_channel.dart';
-import 'package:serenity/client/widget_serenity_image_icon.dart';
-import 'package:serenity/client/widget_view_divider.dart';
+import 'package:serenity/client/views/pages/server_user_list.dart';
+import 'package:serenity/client/views/pages/text_channel.dart';
+import 'package:serenity/client/views/pages/voice_channel.dart';
+import 'package:serenity/client/views/widgets/serenity_image_icon.dart';
+import 'package:serenity/client/views/widgets/view_divider.dart';
 import 'package:serenity/server/class_serenity_init_packet.dart';
 import 'package:serenity/server/class_serenity_packet.dart';
 import 'package:serenity/server/class_serenity_update_packet.dart';
@@ -512,8 +512,7 @@ class _SerenityServerState extends State<SerenityServer> {
         /// If connected is true, then we connect the voice
         if (channel.connected.value) {
           widget.connection.connectVoice(channel.channelName);
-        }
-        else{
+        } else {
           widget.connection.disconnectVoice();
         }
       });
@@ -660,7 +659,9 @@ class _SerenityServerState extends State<SerenityServer> {
     // Add back the voice channels
     widget.voiceChannels.clear();
     for (var channelName in widget.serverConfig.voiceChannels) {
-      widget.voiceChannels.addAll({channelName:VoiceChannel(channelName, {}, VoiceChannel.defaultSettings)});
+      widget.voiceChannels.addAll({
+        channelName: VoiceChannel(channelName, {}, VoiceChannel.defaultSettings)
+      });
     }
 
     /// load all of the users from the updatePacket

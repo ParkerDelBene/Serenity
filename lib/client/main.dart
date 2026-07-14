@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:serenity/client/class_serenityclient_user.dart';
-import 'package:serenity/client/view_dashboard.dart';
+import 'package:serenity/client/data/serenityclient_user.dart';
+import 'package:serenity/client/views/pages/dashboard.dart';
 import 'package:serenity/client/globals.dart';
-import 'package:serenity/client/view_serenity_server.dart';
+import 'package:serenity/client/views/pages/serenity_server.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() async {

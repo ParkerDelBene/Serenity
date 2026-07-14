@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:serenity/client/widget_serenity_image_icon.dart';
+import 'package:serenity/client/views/widgets/serenity_image_icon.dart';
 import 'package:serenity/server/class_serenity_user.dart';
 
 class SerenityClientUser {

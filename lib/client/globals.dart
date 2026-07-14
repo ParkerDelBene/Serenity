@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:serenity/client/class_serenityclient_user.dart';
-import 'package:serenity/client/view_serenity_server.dart';
+import 'package:serenity/client/data/serenityclient_user.dart';
+import 'package:serenity/client/views/pages/serenity_server.dart';
 
 /// Globals used for the server views
 List<SerenityServer> serverList = [];
@@ -23,6 +23,8 @@ bool screenSizeInitialized = false;
 /// Globals for the icon size calculateds from the max screenSize
 double smallImageIconSize = 0;
 double largeImageIconSize = 0;
+
+ThemeData theme = ThemeData();
 
 /// Color Pallet const
 Color primaryColor = Color(0xFF18181B);

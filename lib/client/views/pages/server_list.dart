@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:serenity/client/dialog_addserver.dart';
-import 'package:serenity/client/dialog_invalid_server_connection.dart';
-import 'package:serenity/client/view_serenity_server.dart';
-import 'package:serenity/client/widget_clickable_widget.dart';
-import 'package:serenity/client/widget_serenity_image_icon.dart';
-import 'globals.dart';
+import 'package:serenity/client/views/popups/addserver.dart';
+import 'package:serenity/client/views/popups/invalid_server_connection.dart';
+import 'package:serenity/client/views/pages/serenity_server.dart';
+import 'package:serenity/client/views/widgets/clickable_widget.dart';
+import 'package:serenity/client/views/widgets/serenity_image_icon.dart';
+import '../../globals.dart';
 
 class ServerlistView extends StatefulWidget {
   const ServerlistView({super.key});

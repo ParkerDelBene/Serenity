@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'globals.dart';
+import '../../globals.dart';
 
 class SerenityImageIcon extends StatefulWidget {
   SerenityImageIcon(this.iconName, Uint8List iconImageData, {super.key})

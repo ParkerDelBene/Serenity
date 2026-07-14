@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:serenity/client/class_connection.dart';
-import 'package:serenity/client/class_serenityclient_user.dart';
-import 'package:serenity/client/class_serenityserver_client_config.dart';
+import 'package:serenity/client/data/connection.dart';
+import 'package:serenity/client/data/serenityclient_user.dart';
+import 'package:serenity/client/data/serenityserver_client_config.dart';
 import 'package:serenity/client/globals.dart';
-import 'package:serenity/client/view_serenity_server.dart';
-import 'package:serenity/client/view_text_channel.dart';
-import 'package:serenity/client/view_voice_channel.dart';
-import 'package:serenity/client/widget_serenity_image_icon.dart';
+import 'package:serenity/client/views/pages/serenity_server.dart';
+import 'package:serenity/client/views/pages/text_channel.dart';
+import 'package:serenity/client/views/pages/voice_channel.dart';
+import 'package:serenity/client/views/widgets/serenity_image_icon.dart';
 import 'package:serenity/server/class_serenity_init_packet.dart';
 import 'package:serenity/server/class_serenity_user.dart';
 
@@ -228,10 +228,11 @@ class AddserverView extends StatelessWidget {
     }
 
     /// Create the VoiceChannels
-    for (String channel in initPacket.voiceChannels){
-      VoiceChannel newChannel = VoiceChannel(channel, {}, VoiceChannel.defaultSettings);
+    for (String channel in initPacket.voiceChannels) {
+      VoiceChannel newChannel =
+          VoiceChannel(channel, {}, VoiceChannel.defaultSettings);
 
-      voiceChannels.addAll({channel:newChannel});
+      voiceChannels.addAll({channel: newChannel});
     }
 
     /// Get the ServerBanner and ServerIcon Files

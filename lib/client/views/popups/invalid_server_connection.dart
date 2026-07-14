@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:serenity/client/globals.dart';
-import 'package:serenity/client/view_serenity_server.dart';
+import 'package:serenity/client/views/pages/serenity_server.dart';
 
 class InvalidServerConnection extends StatelessWidget {
   const InvalidServerConnection(this.server, {super.key});

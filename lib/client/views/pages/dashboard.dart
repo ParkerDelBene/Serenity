@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:serenity/client/dialog_options_menu.dart';
+import 'package:serenity/client/views/popups/dialog_options_menu.dart';
 import 'package:serenity/client/globals.dart';
-import 'package:serenity/client/view_server_list.dart';
-import 'package:serenity/client/widget_clickable_widget.dart';
-import 'package:serenity/client/widget_view_divider.dart';
+import 'package:serenity/client/views/pages/server_list.dart';
+import 'package:serenity/client/views/widgets/clickable_widget.dart';
+import 'package:serenity/client/views/widgets/view_divider.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
