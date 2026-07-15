@@ -63,9 +63,8 @@ class VoiceChannel extends StatefulWidget {
   }
 
   void startMicrophone() async {
-    await microphone.startStream();
     microphoneSubscription.value =
-        microphone.outputStream.listen(microphoneHandler);
+        microphone.gatedAudio.listen(microphoneHandler);
   }
 
   void stopMicrophone() {

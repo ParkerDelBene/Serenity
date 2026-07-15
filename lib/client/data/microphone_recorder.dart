@@ -5,14 +5,16 @@ import 'package:record/record.dart';
 class MicrophoneRecorder {
   MicrophoneRecorder() {
     _startStream();
+    gatedAudio = _gatedAudio();
   }
 
-  static final int MAXINT16 = 32767;
+  static final int maxInt16 = 32767;
 
   final AudioRecorder _microphone = AudioRecorder();
   bool listening = false;
   bool status = false;
   late Stream<Uint8List> _internalMicrophoneStream;
+  late Stream<Uint8List> gatedAudio;
   late Timer _voiceTimeoutTimer =
       Timer(_timeoutDuration, _voiceTimeoutCallback);
   bool _voiceActivity = false;
@@ -83,7 +85,7 @@ class MicrophoneRecorder {
       final view = bytes.buffer.asInt16List();
       for (int value in view) {
         /// Apply Gain
-        value = (value * _gainPercentage).clamp(-MAXINT16, MAXINT16).toInt();
+        value = (value * _gainPercentage).clamp(-maxInt16, maxInt16).toInt();
       }
 
       return [bytes];
@@ -96,7 +98,7 @@ class MicrophoneRecorder {
 
   /// Processes a stream of byte arrays, only emitting those containing
   /// a Uint16 value exceeding the threshold.
-  Stream<Uint8List> gatedAudio() {
+  Stream<Uint8List> _gatedAudio() {
     return _internalMicrophoneStream.expand((bytes) {
       // We use expand to effectively "filter" by returning an empty iterable
       // if the condition isn't met, or a single-item iterable if it is.
@@ -118,7 +120,7 @@ class MicrophoneRecorder {
 
   bool _containsValueAboveThreshold(ByteBuffer bytes) {
     // Uint16View allows you to read 2-byte chunks as unsigned 16-bit integers
-    int threshold = (_gatePercentage * MAXINT16).toInt();
+    int threshold = (_gatePercentage * maxInt16).toInt();
     final view = bytes.asInt16List();
     for (int value in view) {
       /// Apply Gain

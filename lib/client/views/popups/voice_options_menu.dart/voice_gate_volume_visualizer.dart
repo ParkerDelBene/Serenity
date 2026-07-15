@@ -26,7 +26,7 @@ class VoiceGateVolumeVisualizer extends StatelessWidget {
 
         // Map intensity 0.0 to 1.0
         final double intensity =
-            (maxPeak / MicrophoneRecorder.MAXINT16).clamp(0.0, 1.0);
+            (maxPeak / MicrophoneRecorder.maxInt16).clamp(0.0, 1.0);
 
         // Interpolate between Blue (Low) and Red/Yellow (High)
         final Color baseColor = Color.lerp(Colors.blue, Colors.red, intensity)!;
