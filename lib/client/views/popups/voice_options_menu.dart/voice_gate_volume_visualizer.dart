@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
-import 'package:serenity/client/data/microphone_recorder.dart';
+import 'package:serenity/client/data/audio/microphone_recorder.dart';
 
 class VoiceGateVolumeVisualizer extends StatelessWidget {
   final Stream<Uint8List> audioStream;

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
-import 'package:serenity/client/data/microphone_recorder.dart';
+import 'package:serenity/client/data/audio/microphone_recorder.dart';
 import 'package:serenity/client/data/serenityclient_user.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/views/widgets/clickable_widget.dart';
@@ -64,7 +64,7 @@ class VoiceChannel extends StatefulWidget {
 
   void startMicrophone() async {
     microphoneSubscription.value =
-        microphone.gatedAudio.listen(microphoneHandler);
+        microphone.getGatedAudio().listen(microphoneHandler);
   }
 
   void stopMicrophone() {

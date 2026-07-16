@@ -5,7 +5,6 @@ import 'package:record/record.dart';
 class MicrophoneRecorder {
   MicrophoneRecorder() {
     _startStream();
-    gatedAudio = _gatedAudio();
   }
 
   static final int maxInt16 = 32767;
@@ -14,7 +13,7 @@ class MicrophoneRecorder {
   bool listening = false;
   bool status = false;
   late Stream<Uint8List> _internalMicrophoneStream;
-  late Stream<Uint8List> gatedAudio;
+  Stream<Uint8List>? gatedAudio;
   late Timer _voiceTimeoutTimer =
       Timer(_timeoutDuration, _voiceTimeoutCallback);
   bool _voiceActivity = false;
@@ -50,6 +49,12 @@ class MicrophoneRecorder {
     _gainPercentage = percentage;
   }
 
+  Stream<Uint8List> getGatedAudio() {
+    gatedAudio ??= _gatedAudio();
+
+    return gatedAudio!;
+  }
+
   Future<bool> _startStream() async {
     // If we don't have permission return false;
     if (!await _microphone.hasPermission()) {
@@ -83,9 +88,10 @@ class MicrophoneRecorder {
       // if the condition isn't met, or a single-item iterable if it is.
 
       final view = bytes.buffer.asInt16List();
-      for (int value in view) {
+      for (int i = 0; i < view.length; i++) {
         /// Apply Gain
-        value = (value * _gainPercentage).clamp(-maxInt16, maxInt16).toInt();
+        view[i] =
+            (view[i] * _gainPercentage).clamp(-maxInt16, maxInt16).toInt();
       }
 
       return [bytes];

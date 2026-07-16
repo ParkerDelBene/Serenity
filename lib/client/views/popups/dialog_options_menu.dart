@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter_soloud/flutter_soloud.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:serenity/client/data/microphone_recorder.dart';
+import 'package:serenity/client/data/audio/microphone_recorder.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/views/popups/voice_options_menu.dart/voice_settings_menu.dart';
 import 'package:serenity/client/views/widgets/clickable_widget.dart';

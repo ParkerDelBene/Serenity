@@ -38,8 +38,8 @@ class _VoiceControlSliderState extends State<VoiceControlSlider> {
       children: [
         Slider(
           value: _currentValue,
-          min: 0.0,
-          max: 1.0,
+          min: widget.min,
+          max: widget.max,
           divisions: 100,
           label: "${(_currentValue)}",
           activeColor: Theme.of(context).primaryColorLight,

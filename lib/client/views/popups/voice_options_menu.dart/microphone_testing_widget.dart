@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
-import 'package:serenity/client/data/microphone_recorder.dart';
+import 'package:serenity/client/data/audio/microphone_recorder.dart';
 import 'package:serenity/client/views/popups/voice_options_menu.dart/voice_gate_control_slider.dart';
 import 'package:serenity/client/views/popups/voice_options_menu.dart/voice_gate_volume_visualizer.dart';
 
@@ -79,7 +79,7 @@ class _MicrophoneTestingWidgetState extends State<MicrophoneTestingWidget> {
           channels: Channels.stereo);
       SoLoud.instance.play(audioSource, volume: 2.0);
 
-      audioSourceSubscription = microphone.gatedAudio.listen((data) {
+      audioSourceSubscription = microphone.getGatedAudio().listen((data) {
         SoLoud.instance.addAudioDataStream(audioSource, data);
       });
 
