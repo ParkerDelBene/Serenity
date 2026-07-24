@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:serenity/client/data/serenityclient_user.dart';
+import 'package:serenity/client/data/communication/serenityclient_user.dart';
 import 'package:serenity/client/views/pages/serenity_server.dart';
 
 /// Globals used for the server views

@@ -3,10 +3,10 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:serenity/client/data/serenityclient_user.dart';
+import 'package:serenity/client/data/communication/serenityclient_user.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/views/widgets/text_channel_message.dart';
-import 'package:serenity/server/class_serenity_packet.dart';
+import 'package:serenity/server/communication/class_serenity_packet.dart';
 
 class TextChannel extends StatefulWidget {
   TextChannel(
@@ -261,7 +261,7 @@ class _TextChannelState extends State<TextChannel>
   void sendChat(String message) {
     /// Create a SerenityPacket and attach the message
     SerenityPacket packet = SerenityPacket(
-        SerenityPacketTypeEnum.text, "${widget.channelName};$message");
+        SerenityPacketTypeEnum.message, "${widget.channelName};$message");
 
     /// Send the packet
     widget.outgoingChat.add(jsonEncode(packet));

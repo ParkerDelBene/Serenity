@@ -3,18 +3,18 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:serenity/client/data/connection.dart';
-import 'package:serenity/client/data/serenityclient_user.dart';
-import 'package:serenity/client/data/serenityserver_client_config.dart';
+import 'package:serenity/client/data/communication/connection.dart';
+import 'package:serenity/client/data/communication/serenityclient_user.dart';
+import 'package:serenity/client/data/config/serenityserver_client_config.dart';
 import 'package:serenity/client/globals.dart' as global;
 import 'package:serenity/client/views/pages/server_user_list.dart';
 import 'package:serenity/client/views/pages/text_channel.dart';
 import 'package:serenity/client/views/pages/voice_channel.dart';
 import 'package:serenity/client/views/widgets/serenity_image_icon.dart';
 import 'package:serenity/client/views/widgets/view_divider.dart';
-import 'package:serenity/server/class_serenity_init_packet.dart';
-import 'package:serenity/server/class_serenity_packet.dart';
-import 'package:serenity/server/class_serenity_update_packet.dart';
+import 'package:serenity/server/communication/packet_types/class_serenity_init_packet.dart';
+import 'package:serenity/server/communication/class_serenity_packet.dart';
+import 'package:serenity/server/communication/packet_types/class_serenity_update_packet.dart';
 import 'package:serenity/server/class_serenity_user.dart';
 import 'package:uuid/validation.dart';
 
@@ -363,7 +363,7 @@ class _SerenityServerState extends State<SerenityServer> {
 
     switch (serenityPacket.type) {
       /// If it is a text packet, send the data to the _chatChannelHandler
-      case SerenityPacketTypeEnum.text:
+      case SerenityPacketTypeEnum.message:
         _chatChannelHandler(serenityPacket.data);
         break;
 

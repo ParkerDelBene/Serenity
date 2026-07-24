@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:serenity/client/data/serenityclient_user.dart';
+import 'package:serenity/client/data/communication/serenityclient_user.dart';
 import 'package:serenity/client/globals.dart';
 
 class TextChannelMessage extends StatelessWidget {

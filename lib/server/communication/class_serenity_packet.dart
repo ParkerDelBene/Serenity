@@ -5,7 +5,7 @@
 ///
 /// serenityInitPacket = sending over the initPacket
 ///
-/// text = sending a chat message Format-> channelName;message
+/// message = sending a chat message Format-> channelName;message
 ///
 /// userInfo = sending / receiving serenityUser data
 enum SerenityPacketTypeEnum {
@@ -13,11 +13,11 @@ enum SerenityPacketTypeEnum {
   serenityUpdatePacket,
   serverIcon,
   serverBanner,
-  text,
+  message,
   userInfo,
 }
 
-/// The SerenityPacket is uses as the data passed along the text Channel to
+/// The SerenityPacket is used as the data passed along the text Channel to
 /// filter the types of data. It is not used with voice data to mitigate
 /// overhead.
 ///

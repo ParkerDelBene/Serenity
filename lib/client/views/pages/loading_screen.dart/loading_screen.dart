@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:serenity/client/data/serenityclient_user.dart';
+import 'package:serenity/client/data/communication/serenityclient_user.dart';
 import 'package:serenity/client/globals.dart';
 import 'package:serenity/client/views/pages/dashboard.dart';
 import 'package:serenity/client/views/pages/serenity_server.dart';

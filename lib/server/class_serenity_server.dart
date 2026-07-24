@@ -1,15 +1,14 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
-import 'package:serenity/server/class_serenity_init_packet.dart';
-import 'package:serenity/server/class_serenity_packet.dart';
-import 'package:serenity/server/class_serenity_update_packet.dart';
+import 'package:serenity/server/communication/packet_types/class_serenity_init_packet.dart';
+import 'package:serenity/server/communication/class_serenity_packet.dart';
+import 'package:serenity/server/communication/packet_types/class_serenity_update_packet.dart';
 import 'package:serenity/server/class_serenity_user.dart';
 import 'package:uuid/uuid.dart';
 
-import 'class_serenity_config.dart';
+import 'config/class_serenity_config.dart';
 
 class SerenityServer {
   SerenityServer();
@@ -19,7 +18,7 @@ class SerenityServer {
   late final HttpServer server;
   String errorString = "";
   Map<String, WebSocket> textClients = {};
-  HashMap<String, List<WebSocket>> voiceChannels = HashMap();
+  Map<String, List<WebSocket>> voiceChannels = {};
   late SerenityConfig config;
   late Directory usersDirectory;
   late Directory assetsDirectory;
@@ -30,10 +29,8 @@ class SerenityServer {
   late Uint8List serverBanner;
 
   Future<bool> initialize() async {
-    /*
-      Run the startup check to verify all of the server directories have been
-      created and that the server config file is formatted correctly.
-    */
+    // Run the startup check to verify all of the server directories have been
+    // created and that the server config file is formatted correctly.
     if (!await startupCheck()) {
       print('Failed Startup Check');
       return false;
@@ -720,7 +717,7 @@ class SerenityServer {
     /// Switch on the packet type
     switch (packet.type) {
       /// If the type is text, then pass the userID and text data to the
-      case SerenityPacketTypeEnum.text:
+      case SerenityPacketTypeEnum.message:
         writeTextHandler(userID, packet.data);
         break;
 
@@ -826,7 +823,7 @@ class SerenityServer {
   void writeTextHandler(String userID, dynamic message) {
     textClients.forEach((client, webSocket) {
       webSocket.add(jsonEncode(
-          SerenityPacket(SerenityPacketTypeEnum.text, "$userID;$message")
+          SerenityPacket(SerenityPacketTypeEnum.message, "$userID;$message")
               .toJson()));
     });
   }
