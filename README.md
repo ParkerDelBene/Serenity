@@ -1,16 +1,23 @@
-# serenity
+# Serenity
 
-A new Flutter project.
+    This is a work in progress VoIP application inspired by Discord and written in Dart/Flutter
 
-## Getting Started
+# FEATURES
 
-This project is a starting point for a Flutter application.
+    Text communication via Text Channels
+    Customizable user profile via custom Icon, Banner, and Username
+    Customizable server name, icon, and banner
+    Voice communication via Voice Channels
+    Crossplatform server implementation written in Dart
 
-A few resources to get you started if this is your first Flutter project:
+# BUILT WITH
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+    Record dart package for microphone input with custom audio gain / gate
+    Websocket_channel package for socket communication to server.
+    Sqlite3 for persistent server side storage 
+    SoLoud package for audio playback and filters.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Platforms
+
+    Windows and Linux Compatible
+    MacOS untested
